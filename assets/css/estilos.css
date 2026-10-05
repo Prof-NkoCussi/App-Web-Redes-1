@@ -875,7 +875,7 @@ code.cod-sql { background: var(--sql-suave); color: var(--sql-texto); box-shadow
 .portada__hero .tit__sub { margin-top: 8px; }
 .portada__datos { font-size: 15px; color: var(--gris); line-height: 1.5; }
 .portada__datos strong { color: var(--gris-sub); font-weight: 600; }
-.portada__escuela { font-size: 17px; }
+.portada__datos .portada__escuela { font-size: 17px; color: var(--tinta); }
 
 .bloque h2 { margin-bottom: 12px; }
 .lista-tp { display: grid; gap: 10px; }
