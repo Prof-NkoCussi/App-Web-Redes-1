@@ -774,8 +774,12 @@ button.boton:disabled { opacity: .45; cursor: not-allowed; }
 .secuencia--compacta .paso .ico { width: 46px; height: 46px; }
 .comparar.comparar--compacto h4 { font-size: 20px; }
 .comparar.comparar--compacto p { font-size: 15.5px; }
-.captura__intro, .sim__intro { font-size: 16px; line-height: 1.4; }
-.captura__intro { margin: 8px 0; }
+.sim__intro { font-size: 16px; line-height: 1.4; }
+.captura { margin-top: 8px; }
+/* Recuadro de definición, más chico que una introducción de lámina */
+.intro.intro--def { margin-top: 6px; padding: 8px 14px; gap: 14px; }
+.intro.intro--def p { font-size: 15px; line-height: 1.4; padding-left: 14px; }
+.intro--def .ico { width: 44px; height: 44px; }
 .tabla-puertos { margin-top: 10px; }
 
 /* Tabla para completar en una sola fila (Puerto · 80 · 443 …) */

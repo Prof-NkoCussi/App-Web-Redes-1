@@ -107,6 +107,11 @@
       <rect x="17.5" y="9" width="13" height="26" style="fill:var(--ac);stroke:none"/>
       <path d="M22 39.5h4"/>
     </symbol>
+    <symbol id="i-lupa" viewBox="0 0 48 48">
+      <circle cx="20" cy="20" r="9" style="fill:var(--ac);stroke:none"/>
+      <circle cx="20" cy="20" r="13"/>
+      <path d="M29.5 29.5 41 41" style="stroke-width:4.5"/>
+    </symbol>
     <symbol id="i-lapiz" viewBox="0 0 48 48">
       <path d="M33 6l9 9-25 25-9-9z" style="fill:var(--ac)"/>
       <path d="M8 31 5.5 42.5 17 40z" style="fill:var(--blanco)"/>
@@ -641,10 +646,9 @@
 
     <section aria-labelledby="tp-captura">
       <h3 class="subtitulo" id="tp-captura">Una captura anotada</h3>
-      <p class="captura__intro">Wireshark captura los paquetes que pasan por la placa de red. Así se ve la carga de www.redesdelaula.com:</p>
       <figure class="captura" aria-labelledby="cap-t">
         <figcaption class="sr-only" id="cap-t">Esquema de una captura de Wireshark con una consulta DNS, su respuesta, un GET de HTTP y su respuesta 200 OK</figcaption>
-        <div class="captura__barra" aria-hidden="true">Wireshark</div>
+        <div class="captura__barra" aria-hidden="true">Wireshark · carga de www.redesdelaula.com</div>
         <p class="captura__filtro"><span>Filtro:</span>dns or http</p>
         <table>
           <caption class="sr-only">Paquetes capturados</caption>
@@ -661,6 +665,10 @@
           </tbody>
         </table>
       </figure>
+      <div class="intro intro--def">
+        <svg class="ico ico--l" aria-hidden="true" focusable="false"><use href="#i-lupa"/></svg>
+        <p><strong>Wireshark</strong> es un analizador de paquetes de red, gratuito y de código abierto. Captura el tráfico que pasa por la placa de red y permite revisarlo paquete por paquete, en el momento o más tarde.</p>
+      </div>
     </section>
 
     <footer class="pie">
