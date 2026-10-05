@@ -1,23 +1,27 @@
-# Base de Datos I · Cuadernillo web
+# Redes I · Cuadernillo web
 
-Cuadernillo de actividades de **Base de Datos I** (5º año)
+Cuadernillo de actividades de **Redes I** (5.º año)
+
+Técnico en Programación · C.T.P. "Olga B. de Arko" · Ushuaia
 
 **Prof. Nicolás A. Cussi**
 
-👉 **Entrá acá:** https://prof-nkocussi.github.io/App-Web-Base-de-Datos-1/
+👉 **Entrá acá:** https://prof-nkocussi.github.io/App-Web-Redes-1/
 
 ## Qué es
 
-Una versión web de cuadernillo "Bases de Datos y SQL · Desde cero", pensada para leer desde la Pc o el celular. Está organizada en trabajos prácticos (TP). Cada TP tiene:
+Una versión web del cuadernillo de Redes I, pensada para leer desde la computadora o el celular. Está organizada en trabajos prácticos (TP). Cada TP tiene:
 
 1. **Láminas** con la teoría, una por tema.
-2. **Para profundizar**: una página que amplía cada lámina con ejemplos.
-3. **Actividades para hacer en la carpeta**.
+2. **Simulador** (en los TPs que lo tienen): una parte interactiva para probar lo que se ve en las láminas.
+3. **Para profundizar**: una página que amplía cada lámina con ejemplos.
+4. **Actividades para hacer en la carpeta** y, en los TP8, TP9 y TP10, también **en la computadora**.
+5. **Paso a paso**: el mismo tema en formato guiado, un paso por pantalla.
 
 ## Cómo se usa
 
 - Abrí el link y elegí un TP en el índice.
-- Con la barra de arriba saltás a cada lámina, a "Para profundizar" o a las actividades.
+- Con la barra de arriba saltás a cada lámina, al simulador, a "Para profundizar", a las actividades o al paso a paso.
 - El botón **PDF** guarda el TP en hojas A4 (usa la opción de imprimir del navegador: elegí "Guardar como PDF").
 - El índice marca con **✓ Visto** los TPs que ya abriste. Eso se guarda solo en tu dispositivo.
 
@@ -25,29 +29,32 @@ Una versión web de cuadernillo "Bases de Datos y SQL · Desde cero", pensada pa
 
 | TP | Tema | Estado |
 |---|---|---|
-| **Módulo 1 · Conceptos de bases de datos** | | |
-| 1 | Del dato a la base de datos | ✅ Disponible |
-| 2 | Componentes de una tabla | ✅ Disponible |
-| 3 | Archivos de texto | ✅ Disponible |
-| **Módulo 2 · Operaciones con planilla de cálculo** | | |
-| 4 | La planilla como base de datos | Próximamente |
-| 5 | Buscar y resumir datos | Próximamente |
-| **Módulo 3 · Bases de datos relacionales** | | |
-| 6 | Software de gestión | Próximamente |
-| 7 | Modelo relacional y claves | Próximamente |
-| 8 | Relaciones, formularios e informes | Próximamente |
-| 9 | Primeros pasos con XAMPP y SQL | Próximamente |
-| Integrador | Caso práctico: diseñamos y creamos una base de datos | Próximamente |
+| **Unidad 1 · Fundamentos, infraestructura y direccionamiento** | | |
+| 1 | Señales, medios de transmisión y topologías | Material en Classroom |
+| 2 | Clasificación de redes, componentes y diseño de una red escolar | Material en Classroom |
+| 3 | Cableado 568A/568B y modelos OSI y TCP/IP | Material en Classroom |
+| 4 | Direccionamiento IPv4, subnetting e IPv6 | Material en Classroom |
+| 5 | Enrutamiento y NAT, PAT | Material en Classroom |
+| 6 | Recursos compartidos en red | Material en Classroom |
+| **Unidad 2 · Protocolos, seguridad y aplicaciones** | | |
+| 7 | Transporte y protocolos de aplicación | Próximamente |
+| 8 | Diagnóstico de red | Próximamente |
+| 9 | APIs REST | Próximamente |
+| 10 | Proyecto integrador Yarvi | Próximamente |
+| 11 | Seguridad en redes | Próximamente |
 
 ## Estructura del repositorio
 
 ```
-index.html               portada e índice de TPs
-unidades/tpNN.html       una página por TP
-assets/css/estilos.css   estilos y paleta de colores
-assets/js/actividades.js botón PDF, barra de navegación y marca de "Visto"
-assets/fonts/            tipografías
-assets/img/              imágenes
+index.html                  portada e índice de TPs
+unidades/tpNN.html          una página por TP
+unidades/tpNN-pasos.html    versión paso a paso de cada TP
+assets/css/estilos.css      estilos y paleta de colores
+assets/js/actividades.js    botón PDF, barra de navegación y marca de "Visto"
+assets/js/simuladores.js    simuladores
+assets/fonts/               tipografías
+assets/img/                 imágenes
+REGLAS.md                   criterios con los que se arma el cuadernillo
 ```
 
 Es un sitio estático: HTML, CSS y JavaScript, sin instalación ni servidor. Para verlo en tu computadora, descargá el repositorio y abrí `index.html` en el navegador.
