@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Redes I — Cuadernillo de actividades · Prof. Nicolás A. Cussi</title>
+  <meta name="description" content="Cuadernillo de actividades de Redes I (5.º año), organizado en 11 TPs y 2 unidades. Técnico en Programación, C.T.P. “Olga B. de Arko”, Ushuaia.">
+  <meta name="theme-color" content="#26C9A1">
+  <link rel="preload" href="assets/fonts/barlow-condensed-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/estilos.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Red en estrella: tres equipos conectados a un nodo central -->
+    <symbol id="i-red-solido" viewBox="0 0 48 48">
+      <path d="M24 24V15M24 24L9 36M24 24l15 12" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round"/>
+      <g style="fill:currentColor;stroke:none">
+        <circle cx="24" cy="24" r="5"/>
+        <rect x="17" y="1" width="14" height="10" rx="2"/>
+        <path d="M22.5 10.5h3V13h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+        <rect x="2" y="31" width="14" height="10" rx="2"/>
+        <path d="M7.5 40.5h3V43h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+        <rect x="32" y="31" width="14" height="10" rx="2"/>
+        <path d="M37.5 40.5h3V43h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<a class="saltar" href="#indice">Saltar al índice</a>
+
+<main class="portada">
+  <div class="cab" aria-hidden="true">
+    <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+    <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+    <span class="cab__raya"></span>
+  </div>
+
+  <header class="portada__hero">
+    <h1>Redes <span>I</span></h1>
+    <p class="tit__sub">Cuadernillo de actividades · 5.º año</p>
+  </header>
+
+  <p class="portada__datos">
+    <strong class="portada__escuela">Técnico en Programación · C.T.P.&nbsp;“Olga&nbsp;B.&nbsp;de&nbsp;Arko” · Ushuaia</strong><br>
+    <strong>Prof. Nicolás A. Cussi</strong>
+  </p>
+
+  <aside class="idea" aria-label="Cómo usar el cuadernillo">
+    <span class="idea__ico" aria-hidden="true">
+      <svg class="ico" viewBox="0 0 48 48" focusable="false">
+        <path d="M24 2.5v4M10 8.5l2.8 2.8M38 8.5l-2.8 2.8M4 22h4M40 22h4"/>
+        <path d="M24 12a10 10 0 0 0-6.2 17.8c1.4 1.2 2.2 2.6 2.2 4.2v1h8v-1c0-1.6.8-3 2.2-4.2A10 10 0 0 0 24 12z" style="fill:var(--ac)"/>
+        <path d="M20 39h8M21.5 43h5"/>
+      </svg>
+    </span>
+    <p><strong>Cómo usarlo:</strong> cada TP tiene sus láminas, un simulador para probar, una página “Para profundizar” y, al final, las actividades.</p>
+  </aside>
+
+  <section class="bloque" id="indice" aria-labelledby="u1">
+    <h2 class="subtitulo" id="u1">Unidad 1 · Fundamentos, infraestructura y direccionamiento</h2>
+    <ul class="lista-tp">
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">1</span>
+          <span class="tp__titulo">TP N°1 — Señales, medios de transmisión y topologías</span>
+          <span class="tp__temas">Señal analógica y digital · Medios (UTP, fibra óptica, Wi-Fi, Bluetooth) · Topologías (estrella, malla, bus)</span>
+          <span class="tp__meta">Láminas 1–3 · Material en Classroom</span>
+        </div>
+      </li>
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">2</span>
+          <span class="tp__titulo">TP N°2 — Clasificación de redes, componentes y diseño de una red escolar</span>
+          <span class="tp__temas">PAN, LAN, MAN, WAN; pública y privada; Half-Duplex y Full-Duplex · Componentes (switch, router, access point, patch panel, rack) · Diseño de la red de la escuela</span>
+          <span class="tp__meta">Láminas 4–6 · Material en Classroom</span>
+        </div>
+      </li>
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">3</span>
+          <span class="tp__titulo">TP N°3 — Cableado 568A/568B y modelos OSI y TCP/IP</span>
+          <span class="tp__temas">Normas 568A y 568B, cable directo y cruzado · Modelo OSI · TCP/IP y encapsulación</span>
+          <span class="tp__meta">Láminas 7–9 · Material en Classroom</span>
+        </div>
+      </li>
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">4</span>
+          <span class="tp__titulo">TP N°4 — Direccionamiento IPv4, subnetting e IPv6</span>
+          <span class="tp__temas">IPv4 (estático y dinámico, público y privado, clases) · Subnetting · IPv6</span>
+          <span class="tp__meta"><span class="etq etq--sim">Simulador</span> Láminas 10–12 · Material en Classroom</span>
+        </div>
+      </li>
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">5</span>
+          <span class="tp__titulo">TP N°5 — Enrutamiento y NAT, PAT</span>
+          <span class="tp__temas">Enrutamiento (función del router, estático y dinámico) · NAT (agotamiento de IPv4 y objetivos) · Tipos de NAT (estática, dinámica y PAT)</span>
+          <span class="tp__meta"><span class="etq etq--sim">Simulador</span> Láminas 13–15 · Material en Classroom</span>
+        </div>
+      </li>
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">6</span>
+          <span class="tp__titulo">TP N°6 — Recursos compartidos en red</span>
+          <span class="tp__temas">Carpetas compartidas y permisos · Rutas UNC · Impresora compartida</span>
+          <span class="tp__meta"><span class="etq etq--sim">Simulador</span> Láminas 16–18 · Material en Classroom</span>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="bloque" aria-labelledby="u2">
+    <h2 class="subtitulo" id="u2">Unidad 2 · Protocolos, seguridad y aplicaciones</h2>
+    <ul class="lista-tp">
+      <li>
+        <a class="tp" href="unidades/tp07.html">
+          <span class="tp__num" aria-hidden="true">7</span>
+          <span class="tp__titulo">TP N°7 — Transporte y protocolos de aplicación</span>
+          <span class="tp__temas">TCP y UDP, con el handshake de tres pasos · Puertos · DNS y DHCP · HTTP y HTTPS · FTP, SSH y correo</span>
+          <span class="tp__meta"><span class="etq etq--sim">Simulador</span> Láminas 19–23 <span class="tp__visto" data-visto="7" hidden>· ✓ Visto</span></span>
+        </a>
+      </li>
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">8</span>
+          <span class="tp__titulo">TP N°8 — Diagnóstico de red</span>
+          <span class="tp__temas"><code class="cod-cmd">ipconfig</code> y <code class="cod-cmd">ping</code> · <code class="cod-cmd">tracert</code>, <code class="cod-cmd">nslookup</code>, <code class="cod-cmd">netstat</code> y diagnóstico por capas · Dentro del router</span>
+          <span class="tp__meta"><span class="etq etq--sim">Simulador</span> <span class="etq etq--compu">En la compu</span> Láminas 24–26 · Próximamente</span>
+        </div>
+      </li>
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">9</span>
+          <span class="tp__titulo">TP N°9 — APIs REST</span>
+          <span class="tp__temas">Cliente-servidor, recursos y endpoints · Verbos HTTP y códigos de respuesta · JSON y <code>fetch</code></span>
+          <span class="tp__meta"><span class="etq etq--sim">Simulador</span> <span class="etq etq--compu">En la compu</span> Láminas 27–29 · Próximamente</span>
+        </div>
+      </li>
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">10</span>
+          <span class="tp__titulo">TP N°10 — Proyecto integrador Yarvi</span>
+          <span class="tp__temas">Arquitectura del sistema · MQTT · Del botón al motor: endpoints y <code>fetch</code></span>
+          <span class="tp__meta"><span class="etq etq--compu">En la compu</span> Láminas 30–32 · Próximamente</span>
+        </div>
+      </li>
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">11</span>
+          <span class="tp__titulo">TP N°11 — Seguridad en redes</span>
+          <span class="tp__temas">Amenazas (sniffing, spoofing, Man-in-the-Middle, DoS) · Firewall, DMZ y VPN · HTTPS, certificados y Wi-Fi (WPA2, WPA3, redes públicas)</span>
+          <span class="tp__meta">Láminas 33–35 · Próximamente</span>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <footer class="pie">
+    <span class="pie__linea"></span>
+    <span>Redes I — Prof. Nicolás A. Cussi</span>
+    <span class="pie__linea"></span>
+  </footer>
+</main>
+
+<script src="assets/js/actividades.js"></script>
+</body>
+</html>

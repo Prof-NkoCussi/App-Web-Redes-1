@@ -327,4 +327,11 @@ TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primer
 - **TP9:** qué API va en el simulador y en los ejemplos (dólar o PokéAPI). Hay que probarla desde el laboratorio y revisar la respuesta real antes de escribir el ejemplo.
 - **TP10:** copiar el .docx del Yarvi y el código de la plantilla en `_fuente/tp10/`.
 - **Paso a paso:** link del cuestionario de Google Forms de cada TP.
-- **Paleta:** OK de Nicolás sobre el index.
+
+## Portada principal (5/10)
+
+- `index.html` es la **portada principal**: REDES I, "5° Año • Cuadernillo Digital", el colegio, el docente y el botón "Entrar al cuadernillo". Sus estilos van dentro del mismo archivo. **No se toca** salvo que Nicolás lo pida.
+- `indice.html` es el **índice de TPs** (antes era `index.html`). Todo lo que este archivo dice sobre "el índice", "la portada con los TPs" o `index.html` se aplica ahora a `indice.html`.
+- En cada TP, el botón "Índice" apunta a `../indice.html`. Lo mismo en las páginas `tpNN-pasos.html`.
+- Al terminar un TP, se activa en `indice.html`.
+- En la portada, el contenedor de "5° Año • Cuadernillo Digital" usa fondo `--acento-numero` con texto blanco (3,6:1, solo para ese texto grande).

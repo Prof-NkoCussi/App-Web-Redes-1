@@ -3,169 +3,157 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Redes I — Cuadernillo de actividades · Prof. Nicolás A. Cussi</title>
-  <meta name="description" content="Cuadernillo de actividades de Redes I (5.º año), organizado en 11 TPs y 2 unidades. Técnico en Programación, C.T.P. “Olga B. de Arko”, Ushuaia.">
+  <title>Redes I — Cuadernillo Digital · Prof. Nicolás A. Cussi</title>
+  <meta name="description" content="Cuadernillo digital de Redes I. Colegio Técnico Provincial &quot;Olga B. de Arko&quot;, Ushuaia. Prof. Nicolás A. Cussi.">
   <meta name="theme-color" content="#26C9A1">
   <link rel="preload" href="assets/fonts/barlow-condensed-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/estilos.css">
+  <style>
+    /* Portada principal: solo se usa en esta página */
+    .tapa-pagina { background: var(--blanco, #fff); }
+    .tapa { background: var(--blanco, #fff); }
+    .tapa {
+      position: relative; overflow: hidden;
+      min-height: 100vh; min-height: 100dvh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: clamp(18px, 3.2vh, 32px);
+      padding: 40px 20px 48px; text-align: center;
+    }
+    .tapa::before {   /* franja de arriba */
+      content: ""; position: absolute; left: 0; right: 0; top: 0; height: 10px;
+      background: var(--acento, #26C9A1);
+    }
+    .tapa__red {      /* dibujo de fondo: nodos y enlaces */
+      position: absolute; width: min(70vw, 520px); height: auto;
+      color: var(--acento-claro, #C9F2E8); fill: currentColor; stroke: currentColor;
+      stroke-width: 2.5; stroke-linecap: round; pointer-events: none;
+    }
+    .tapa__red--a { left: -90px; top: -60px; }
+    .tapa__red--b { right: -110px; bottom: -80px; transform: rotate(180deg); }
+    .tapa > :not(.tapa__red) { position: relative; }
+
+    .tapa__iconos { display: flex; justify-content: center; gap: clamp(10px, 3vw, 22px); }
+    .tapa__iconos li {
+      display: flex; align-items: center; justify-content: center;
+      width: clamp(62px, 17vw, 104px); aspect-ratio: 1;
+      background: var(--acento-suave, #E3F7F2);
+      border: 2px solid var(--acento-claro, #C9F2E8); border-radius: 22%;
+    }
+    .tapa__iconos .ico { width: 62%; height: 62%; stroke-width: 2.4; }
+
+    .tapa__titulo {
+      font-family: var(--fuente-titular, "Barlow Condensed", sans-serif); font-weight: 800;
+      font-size: clamp(104px, 31vw, 250px); line-height: .82; letter-spacing: -.012em;
+      color: var(--tinta, #111827); text-transform: uppercase;
+    }
+    .tapa__titulo span { color: var(--acento-numero, #069873); }
+
+    .tapa__chip {
+      display: inline-block;
+      background: var(--acento-numero, #069873); color: var(--blanco, #fff);
+      font-family: var(--fuente-titulo, "Barlow Semi Condensed", sans-serif); font-weight: 700;
+      font-size: clamp(20px, 5.7vw, 40px); line-height: 1.05;
+      padding: .34em .75em .38em; border-radius: 14px;
+    }
+    .tapa__datos { display: flex; flex-direction: column; gap: 6px; }
+    .tapa__escuela {
+      font-weight: 700; color: var(--tinta, #111827);
+      font-size: clamp(17px, 4.5vw, 27px); line-height: 1.2; text-wrap: balance;
+    }
+    .tapa__profe { color: var(--gris, #5B6472); font-weight: 700; font-size: clamp(16px, 4vw, 22px); }
+
+    .tapa__entrar {
+      display: inline-flex; align-items: center; gap: 10px; margin-top: 6px;
+      background: var(--tinta, #111827); color: var(--blanco, #fff);
+      font-weight: 700; font-size: clamp(17px, 4.4vw, 21px); text-decoration: none;
+      padding: 14px 26px; border-radius: 12px;
+    }
+    .tapa__entrar:hover { background: #263244; }
+    .tapa__entrar svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* Celular acostado */
+    @media (max-width: 859px) and (max-height: 560px) and (orientation: landscape) {
+      .tapa { gap: 12px; padding: 26px 20px; }
+      .tapa__titulo { font-size: clamp(72px, 26vh, 150px); }
+      .tapa__iconos li { width: 54px; }
+    }
+    /* PC e impresión: hoja A4 vertical, como las láminas */
+    @media (min-width: 860px), print {
+      .tapa-pagina { background: var(--fondo-pantalla, #DDE3E9); }
+      .tapa {
+        width: 210mm; height: 297mm; min-height: 0;
+        margin: 24px auto 48px; padding: 20mm 16mm;
+        gap: 11mm;
+        box-shadow: 0 2px 14px rgba(17, 24, 39, .14);
+      }
+      .tapa::before { height: 5mm; }
+      .tapa__red { width: 150mm; }
+      .tapa__iconos { gap: 7mm; }
+      .tapa__iconos li { width: 30mm; }
+      .tapa__titulo { font-size: 66mm; }
+      .tapa__chip { font-size: 12mm; }
+      .tapa__escuela { font-size: 7.4mm; }
+      .tapa__profe { font-size: 6.2mm; }
+      .tapa__entrar { font-size: 5.6mm; margin-top: 4mm; }
+    }
+    @media print {
+      .tapa-pagina { background: var(--blanco, #fff); }
+      .tapa { margin: 0; box-shadow: none; }
+      .tapa__entrar { display: none; }
+    }
+  </style>
 </head>
-<body>
+<body class="tapa-pagina">
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <defs>
-    <!-- Red en estrella: tres equipos conectados a un nodo central -->
-    <symbol id="i-red-solido" viewBox="0 0 48 48">
-      <path d="M24 24V15M24 24L9 36M24 24l15 12" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round"/>
-      <g style="fill:currentColor;stroke:none">
-        <circle cx="24" cy="24" r="5"/>
-        <rect x="17" y="1" width="14" height="10" rx="2"/>
-        <path d="M22.5 10.5h3V13h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
-        <rect x="2" y="31" width="14" height="10" rx="2"/>
-        <path d="M7.5 40.5h3V43h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
-        <rect x="32" y="31" width="14" height="10" rx="2"/>
-        <path d="M37.5 40.5h3V43h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
-      </g>
-    </symbol>
-  </defs>
-</svg>
+<main class="tapa">
+  <!-- Fondo decorativo -->
+  <svg class="tapa__red tapa__red--a" viewBox="0 0 520 360" aria-hidden="true" focusable="false">
+    <path d="M60 70 200 40M200 40l150 70M200 40l-40 130M160 170l190-60M160 170 50 230M160 170l120 110M350 110l110 90M280 280l180-80M60 70 50 230" fill="none"/>
+    <circle cx="60" cy="70" r="10"/><circle cx="200" cy="40" r="14"/><circle cx="350" cy="110" r="11"/>
+    <circle cx="160" cy="170" r="16"/><circle cx="50" cy="230" r="9"/><circle cx="280" cy="280" r="12"/><circle cx="460" cy="200" r="9"/>
+  </svg>
+  <svg class="tapa__red tapa__red--b" viewBox="0 0 520 360" aria-hidden="true" focusable="false">
+    <path d="M60 70 200 40M200 40l150 70M200 40l-40 130M160 170l190-60M160 170 50 230M160 170l120 110M350 110l110 90M280 280l180-80M60 70 50 230" fill="none"/>
+    <circle cx="60" cy="70" r="10"/><circle cx="200" cy="40" r="14"/><circle cx="350" cy="110" r="11"/>
+    <circle cx="160" cy="170" r="16"/><circle cx="50" cy="230" r="9"/><circle cx="280" cy="280" r="12"/><circle cx="460" cy="200" r="9"/>
+  </svg>
 
-<a class="saltar" href="#indice">Saltar al índice</a>
+  <!-- Íconos: red, topología, Wi-Fi y router -->
+  <ul class="tapa__iconos" aria-hidden="true">
+    <li><svg class="ico" viewBox="0 0 48 48" focusable="false">
+      <circle cx="24" cy="24" r="19" style="fill:var(--ac)"/>
+      <path d="M5 24h38M24 5c-7 5.5-7 32.500 0 38M24 5c7 5.500 7 32.500 0 38M8.500 13.500h31M8.500 34.500h31"/>
+    </svg></li>
+    <li><svg class="ico" viewBox="0 0 48 48" focusable="false">
+      <path d="M24 24 9 9M24 24l15-15M24 24 9 39M24 24l15 15"/>
+      <circle cx="24" cy="24" r="7" style="fill:var(--ac)"/>
+      <circle cx="8" cy="8" r="4.500"/><circle cx="40" cy="8" r="4.500"/><circle cx="8" cy="40" r="4.500"/><circle cx="40" cy="40" r="4.500"/>
+    </svg></li>
+    <li><svg class="ico" viewBox="0 0 48 48" focusable="false">
+      <path d="M4 18c11.500-10.500 28.500-10.500 40 0M10.500 25c8-7 19-7 27 0M17 32c4.200-3.600 9.800-3.600 14 0"/>
+      <circle cx="24" cy="39" r="3.600" style="fill:var(--ac)"/>
+    </svg></li>
+    <li><svg class="ico" viewBox="0 0 48 48" focusable="false">
+      <path d="M12 26 8 7M36 26l4-19"/>
+      <rect x="4" y="26" width="40" height="14" rx="4" style="fill:var(--ac)"/>
+      <path d="M11 33h.500M17 33h.500M23 33h.500M31 33h7M12 40v3M36 40v3"/>
+    </svg></li>
+  </ul>
 
-<main class="portada">
-  <div class="cab" aria-hidden="true">
-    <svg class="cab__logo"><use href="#i-red-solido"/></svg>
-    <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
-    <span class="cab__raya"></span>
+  <h1 class="tapa__titulo">Redes <span>I</span></h1>
+
+  <p class="tapa__chip">5° Año • Cuadernillo Digital</p>
+
+  <div class="tapa__datos">
+    <p class="tapa__escuela">Colegio Técnico Provincial “Olga B. de Arko” • Ushuaia</p>
+    <p class="tapa__profe">Prof. Nicolás A. Cussi</p>
   </div>
 
-  <header class="portada__hero">
-    <h1>Redes <span>I</span></h1>
-    <p class="tit__sub">Cuadernillo de actividades · 5.º año</p>
-  </header>
-
-  <p class="portada__datos">
-    <strong class="portada__escuela">Técnico en Programación · C.T.P.&nbsp;“Olga&nbsp;B.&nbsp;de&nbsp;Arko” · Ushuaia</strong><br>
-    <strong>Prof. Nicolás A. Cussi</strong>
-  </p>
-
-  <aside class="idea" aria-label="Cómo usar el cuadernillo">
-    <span class="idea__ico" aria-hidden="true">
-      <svg class="ico" viewBox="0 0 48 48" focusable="false">
-        <path d="M24 2.5v4M10 8.5l2.8 2.8M38 8.5l-2.8 2.8M4 22h4M40 22h4"/>
-        <path d="M24 12a10 10 0 0 0-6.2 17.8c1.4 1.2 2.2 2.6 2.2 4.2v1h8v-1c0-1.6.8-3 2.2-4.2A10 10 0 0 0 24 12z" style="fill:var(--ac)"/>
-        <path d="M20 39h8M21.5 43h5"/>
-      </svg>
-    </span>
-    <p><strong>Cómo usarlo:</strong> cada TP tiene sus láminas, un simulador para probar, una página “Para profundizar” y, al final, las actividades.</p>
-  </aside>
-
-  <section class="bloque" id="indice" aria-labelledby="u1">
-    <h2 class="subtitulo" id="u1">Unidad 1 · Fundamentos, infraestructura y direccionamiento</h2>
-    <ul class="lista-tp">
-      <li>
-        <div class="tp tp--pronto">
-          <span class="tp__num" aria-hidden="true">1</span>
-          <span class="tp__titulo">TP N°1 — Señales, medios de transmisión y topologías</span>
-          <span class="tp__temas">Señal analógica y digital · Medios (UTP, fibra óptica, Wi-Fi, Bluetooth) · Topologías (estrella, malla, bus)</span>
-          <span class="tp__meta">Láminas 1–3 · Material en Classroom</span>
-        </div>
-      </li>
-      <li>
-        <div class="tp tp--pronto">
-          <span class="tp__num" aria-hidden="true">2</span>
-          <span class="tp__titulo">TP N°2 — Clasificación de redes, componentes y diseño de una red escolar</span>
-          <span class="tp__temas">PAN, LAN, MAN, WAN; pública y privada; Half-Duplex y Full-Duplex · Componentes (switch, router, access point, patch panel, rack) · Diseño de la red de la escuela</span>
-          <span class="tp__meta">Láminas 4–6 · Material en Classroom</span>
-        </div>
-      </li>
-      <li>
-        <div class="tp tp--pronto">
-          <span class="tp__num" aria-hidden="true">3</span>
-          <span class="tp__titulo">TP N°3 — Cableado 568A/568B y modelos OSI y TCP/IP</span>
-          <span class="tp__temas">Normas 568A y 568B, cable directo y cruzado · Modelo OSI · TCP/IP y encapsulación</span>
-          <span class="tp__meta">Láminas 7–9 · Material en Classroom</span>
-        </div>
-      </li>
-      <li>
-        <div class="tp tp--pronto">
-          <span class="tp__num" aria-hidden="true">4</span>
-          <span class="tp__titulo">TP N°4 — Direccionamiento IPv4, subnetting e IPv6</span>
-          <span class="tp__temas">IPv4 (estático y dinámico, público y privado, clases) · Subnetting · IPv6</span>
-          <span class="tp__meta"><span class="etq etq--sim">Simulador</span> Láminas 10–12 · Material en Classroom</span>
-        </div>
-      </li>
-      <li>
-        <div class="tp tp--pronto">
-          <span class="tp__num" aria-hidden="true">5</span>
-          <span class="tp__titulo">TP N°5 — Enrutamiento y NAT, PAT</span>
-          <span class="tp__temas">Enrutamiento (función del router, estático y dinámico) · NAT (agotamiento de IPv4 y objetivos) · Tipos de NAT (estática, dinámica y PAT)</span>
-          <span class="tp__meta"><span class="etq etq--sim">Simulador</span> Láminas 13–15 · Material en Classroom</span>
-        </div>
-      </li>
-      <li>
-        <div class="tp tp--pronto">
-          <span class="tp__num" aria-hidden="true">6</span>
-          <span class="tp__titulo">TP N°6 — Recursos compartidos en red</span>
-          <span class="tp__temas">Carpetas compartidas y permisos · Rutas UNC · Impresora compartida</span>
-          <span class="tp__meta"><span class="etq etq--sim">Simulador</span> Láminas 16–18 · Material en Classroom</span>
-        </div>
-      </li>
-    </ul>
-  </section>
-
-  <section class="bloque" aria-labelledby="u2">
-    <h2 class="subtitulo" id="u2">Unidad 2 · Protocolos, seguridad y aplicaciones</h2>
-    <ul class="lista-tp">
-      <li>
-        <a class="tp" href="unidades/tp07.html">
-          <span class="tp__num" aria-hidden="true">7</span>
-          <span class="tp__titulo">TP N°7 — Transporte y protocolos de aplicación</span>
-          <span class="tp__temas">TCP y UDP, con el handshake de tres pasos · Puertos · DNS y DHCP · HTTP y HTTPS · FTP, SSH y correo</span>
-          <span class="tp__meta"><span class="etq etq--sim">Simulador</span> Láminas 19–23 <span class="tp__visto" data-visto="7" hidden>· ✓ Visto</span></span>
-        </a>
-      </li>
-      <li>
-        <div class="tp tp--pronto">
-          <span class="tp__num" aria-hidden="true">8</span>
-          <span class="tp__titulo">TP N°8 — Diagnóstico de red</span>
-          <span class="tp__temas"><code class="cod-cmd">ipconfig</code> y <code class="cod-cmd">ping</code> · <code class="cod-cmd">tracert</code>, <code class="cod-cmd">nslookup</code>, <code class="cod-cmd">netstat</code> y diagnóstico por capas · Dentro del router</span>
-          <span class="tp__meta"><span class="etq etq--sim">Simulador</span> <span class="etq etq--compu">En la compu</span> Láminas 24–26 · Próximamente</span>
-        </div>
-      </li>
-      <li>
-        <div class="tp tp--pronto">
-          <span class="tp__num" aria-hidden="true">9</span>
-          <span class="tp__titulo">TP N°9 — APIs REST</span>
-          <span class="tp__temas">Cliente-servidor, recursos y endpoints · Verbos HTTP y códigos de respuesta · JSON y <code>fetch</code></span>
-          <span class="tp__meta"><span class="etq etq--sim">Simulador</span> <span class="etq etq--compu">En la compu</span> Láminas 27–29 · Próximamente</span>
-        </div>
-      </li>
-      <li>
-        <div class="tp tp--pronto">
-          <span class="tp__num" aria-hidden="true">10</span>
-          <span class="tp__titulo">TP N°10 — Proyecto integrador Yarvi</span>
-          <span class="tp__temas">Arquitectura del sistema · MQTT · Del botón al motor: endpoints y <code>fetch</code></span>
-          <span class="tp__meta"><span class="etq etq--compu">En la compu</span> Láminas 30–32 · Próximamente</span>
-        </div>
-      </li>
-      <li>
-        <div class="tp tp--pronto">
-          <span class="tp__num" aria-hidden="true">11</span>
-          <span class="tp__titulo">TP N°11 — Seguridad en redes</span>
-          <span class="tp__temas">Amenazas (sniffing, spoofing, Man-in-the-Middle, DoS) · Firewall, DMZ y VPN · HTTPS, certificados y Wi-Fi (WPA2, WPA3, redes públicas)</span>
-          <span class="tp__meta">Láminas 33–35 · Próximamente</span>
-        </div>
-      </li>
-    </ul>
-  </section>
-
-  <footer class="pie">
-    <span class="pie__linea"></span>
-    <span>Redes I — Prof. Nicolás A. Cussi</span>
-    <span class="pie__linea"></span>
-  </footer>
+  <a class="tapa__entrar" href="indice.html">
+    Entrar al cuadernillo
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+  </a>
 </main>
 
-<script src="assets/js/actividades.js"></script>
 </body>
 </html>
