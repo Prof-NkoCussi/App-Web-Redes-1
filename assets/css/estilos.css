@@ -31,6 +31,8 @@
   --naranja: #EA580C;  --naranja-texto: #C2410C;   --naranja-claro: #FFEDD5;
   --ok: #15803D;       --ok-oscuro: #166534;       --ok-claro: #DCFCE7;
   --error: #B91C1C;    --error-claro: #FEE2E2;
+  --sim-texto: #6D28D9;      --sim-claro: #EDE9FE;                              /* violeta: simuladores */
+  --comando-texto: #B42318;  --comando-claro: #FDEEEC; --comando-linea: #F8D3CE;  /* rojo suave: comandos */
 
   /* Ventanas: los tres puntos */
   --punto-rojo: #FF5F57; --punto-amarillo: #FEBC2E; --punto-verde: #28C840;
@@ -203,7 +205,6 @@ button.boton { border: 0; font-family: inherit; line-height: inherit; cursor: po
 }
 @media (max-width: 379px) {
   .cab__marca b, .cab__lema { font-size: 12px; }
-  .cab__marca span { letter-spacing: .16em; }   /* la bajada entra en un renglón a 360 px */
   .cab__raya { height: 28px; }
 }
 
@@ -551,6 +552,7 @@ code {
   background: var(--acento-suave); color: var(--acento-texto); box-shadow: inset 0 0 0 1px var(--acento-claro);
 }
 code.cod-archivo { background: var(--archivo-claro); color: var(--archivo-texto); box-shadow: inset 0 0 0 1px var(--archivo-linea); }
+code.cod-cmd { background: var(--comando-claro); color: var(--comando-texto); box-shadow: inset 0 0 0 1px var(--comando-linea); }
 code.cod-formula { background: var(--planilla-suave); color: var(--planilla-texto); box-shadow: inset 0 0 0 1px var(--planilla-claro); }
 code.cod-sql { background: var(--sql-suave); color: var(--sql-texto); box-shadow: inset 0 0 0 1px var(--sql-claro); }
 
@@ -892,8 +894,10 @@ a.tp:hover { border-color: var(--acento); }
 .tp__titulo { font-weight: 700; font-size: 17px; color: var(--tinta); }
 .tp__temas { font-size: 14.5px; line-height: 1.35; }
 .tp__meta { font-size: 12.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--gris); }
-/* TP sin página todavía: tarjeta con contorno, sin opacidad (así el texto mantiene el contraste) */
-.tp--pronto { background: var(--blanco); border-color: var(--panel-oscuro); }
+/* TP no activo: tarjeta "apagada" con colores, sin opacidad (así el texto mantiene 4,5:1) */
+.tp--pronto { background: transparent; border-color: var(--panel); box-shadow: inset 6px 0 0 var(--acento-claro); }
+.tp--pronto .tp__num { color: var(--gris-sub); }
+.tp--pronto .tp__titulo, .tp--pronto .tp__temas { color: var(--gris); }
 /* Integrador: franja con los tres colores de módulo, en bandas con corte neto */
 .tp--integrador {
   box-shadow: none;
@@ -908,7 +912,7 @@ a.tp:hover { border-color: var(--acento); }
 .etq--planilla { background: var(--planilla-claro); color: var(--planilla-texto); }
 .etq--xampp    { background: var(--naranja-claro);  color: var(--naranja-texto); }
 .etq--sql      { background: var(--sql-claro);      color: var(--sql-texto); }
-.etq--sim      { background: var(--acento-claro);   color: var(--acento-texto); }
+.etq--sim      { background: var(--sim-claro);      color: var(--sim-texto); }
 .etq--compu    { background: var(--ok-claro);       color: var(--ok-oscuro); }
 .tp__visto { color: #0F766E; }
 .tp__visto[hidden] { display: none; }
