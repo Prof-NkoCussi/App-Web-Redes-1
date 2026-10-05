@@ -260,8 +260,8 @@
         <p class="panel__nota">Se escribe<br>IP:puerto</p>
       </div>
       <ul class="comparar">
-        <li class="grupo"><div><h3>Cliente: tu PC</h3><p><code>192.168.1.25:51234</code><br>El navegador usa un puerto dinámico.</p></div><svg class="ico ico--xl" aria-hidden="true" focusable="false"><use href="#i-pc"/></svg></li>
-        <li class="grupo grupo--naranja"><div><h3>Servidor web</h3><p><code>203.0.113.10:443</code><br>Atiende HTTPS en el puerto 443.</p></div><svg class="ico ico--xl" aria-hidden="true" focusable="false"><use href="#i-servidor"/></svg></li>
+        <li class="grupo"><div><h3>Cliente: tu PC</h3><p><code class="cod-ip">192.168.1.25:51234</code><br>El navegador usa un puerto dinámico.</p></div><svg class="ico ico--xl" aria-hidden="true" focusable="false"><use href="#i-pc"/></svg></li>
+        <li class="grupo grupo--naranja"><div><h3>Servidor web</h3><p><code class="cod-ip">203.0.113.10:443</code><br>Atiende HTTPS en el puerto 443.</p></div><svg class="ico ico--xl" aria-hidden="true" focusable="false"><use href="#i-servidor"/></svg></li>
       </ul>
       <p class="texto" style="margin-top:10px">Cada servicio usa su puerto y su protocolo de transporte: HTTPS, el 443 con TCP; DNS, el 53 con UDP.</p>
     </section>
@@ -310,10 +310,10 @@
           <h3 class="subtitulo" id="dns21">DNS</h3>
           <p class="puerto"><span class="puerto__rot">Puerto</span><b class="puerto__num">53</b><span class="etq etq--udp">UDP</span></p>
         </div>
-        <p>El <strong>DNS</strong> (sistema de nombres de dominio) traduce un nombre en la IP del servidor: <code>www.redesdelaula.com</code> → <code>203.0.113.10</code>. Funciona como la agenda del celular: buscamos un nombre y obtenemos el número.</p>
+        <p>El <strong>DNS</strong> (sistema de nombres de dominio) traduce un nombre en la IP del servidor: <code>www.redesdelaula.com</code> → <code class="cod-ip">203.0.113.10</code>. Funciona como la agenda del celular: buscamos un nombre y obtenemos el número.</p>
         <ol class="lista-pasos" aria-label="Cómo se resuelve un nombre">
           <li><b>1</b><span>La PC busca el nombre en su <strong>caché</strong>.</span></li>
-          <li class="grupo"><b>2</b><span>Si no está, le pregunta a su servidor DNS (<code>8.8.8.8</code>).</span></li>
+          <li class="grupo"><b>2</b><span>Si no está, le pregunta a su servidor DNS (<code class="cod-ip">8.8.8.8</code>).</span></li>
           <li class="grupo"><b>3</b><span>Si el servidor DNS no la sabe, les pregunta a otros servidores DNS hasta conseguir la IP.</span></li>
           <li class="grupo grupo--naranja"><b>4</b><span>Le responde la IP a la PC, y la PC la guarda en su caché.</span></li>
         </ol>
@@ -328,11 +328,11 @@
         <p>En el TP4 vimos que la IP puede ser estática o dinámica. La dinámica la asigna un servidor <strong>DHCP</strong> (en casa, suele ser el router) cuando el dispositivo se conecta a la red. Lo hace en cuatro pasos, el proceso <strong>DORA</strong>:</p>
         <ol class="lista-pasos" aria-label="Proceso DORA">
           <li class="grupo"><b>D</b><span><strong>Discover</strong> (descubrir): la PC pregunta a toda la red si hay un servidor DHCP.</span></li>
-          <li class="grupo grupo--naranja"><b>O</b><span><strong>Offer</strong> (ofrecer): el servidor le ofrece una IP, por ejemplo <code>192.168.1.25</code>.</span></li>
+          <li class="grupo grupo--naranja"><b>O</b><span><strong>Offer</strong> (ofrecer): el servidor le ofrece una IP, por ejemplo <code class="cod-ip">192.168.1.25</code>.</span></li>
           <li class="grupo"><b>R</b><span><strong>Request</strong> (solicitar): la PC pide usar esa IP.</span></li>
           <li class="grupo grupo--naranja"><b>A</b><span><strong>Acknowledge</strong> (confirmar): el servidor confirma, y la IP es de la PC por un tiempo.</span></li>
         </ol>
-        <p>Además de la IP, la PC recibe la máscara (<code>255.255.255.0</code>), la puerta de enlace (<em>gateway</em>, <code>192.168.1.1</code>) y el DNS (<code>8.8.8.8</code>). El servidor usa el puerto 67, y la PC, el 68.</p>
+        <p>Además de la IP, la PC recibe la máscara (<code class="cod-ip">255.255.255.0</code>), la puerta de enlace (<em>gateway</em>, <code class="cod-ip">192.168.1.1</code>) y el DNS (<code class="cod-ip">8.8.8.8</code>). El servidor usa el puerto 67, y la PC, el 68.</p>
       </section>
     </div>
 

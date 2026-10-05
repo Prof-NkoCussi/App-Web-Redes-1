@@ -94,7 +94,7 @@ Textos fijos:
 - **`<title>`, descripción y `theme-color`** (`#26C9A1`) de cada página.
 - **Ícono de la materia:** tres equipos conectados a un nodo central (red en estrella), en versión sólida para la cabecera.
 - **Sin eslóganes ni frases decorativas.**
-- **Sin años calendario en el sitio** (ni 2026 ni 2027): el cuadernillo se reusa todos los años. La fecha de entrega va como `Fecha límite: ___/___/____`.
+- **Sin años calendario en el sitio** (ni 2026 ni 2027): el cuadernillo se reusa todos los años.
 - **Progreso:** la clave de `localStorage` es `redes:tp-visto-`. No usar `bd1:`, `prog:` ni `tpd1:`: todos los cuadernillos comparten el dominio `prof-nkocussi.github.io`.
 
 ## Colores
@@ -133,7 +133,7 @@ Copiar la estructura de `_fuente/modelo-tp01.html` hasta que exista el primer TP
    - Incisos `a)`, `b)`, `c)` con la letra destacada.
    - Cuadros comparativos para completar (`.act-tabla`).
    - **Un punto por lámina + un caso integrador.** En una sola hoja (dos en el TP7). Más cortas que en Base de Datos: no se suman 2 o 3 puntos extra.
-   - Cierre fijo: `REALIZAR EN LA CARPETA.` y `Fecha límite: ___/___/____`.
+   - Sin cierre: no llevan `REALIZAR EN LA CARPETA.` ni `Fecha límite`.
    - Sin corrección automática.
 5. **Actividades para hacer en la computadora** (`article.lamina--compu#actividades-2`), solo en los TP8, TP9 y TP10: pasos numerados y un recuadro "Entrega" con casillas para marcar con lápiz.
 6. **Mini-juego:** si el TP tiene juego en la app Redes I Games, cierra con el botón "Jugar el mini-juego de este TP". Ver "Componentes nuevos".

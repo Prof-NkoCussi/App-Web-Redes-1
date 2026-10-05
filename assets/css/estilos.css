@@ -29,7 +29,7 @@
   --ok: #15803D;       --ok-oscuro: #166534;       --ok-claro: #DCFCE7;
   --error: #B91C1C;    --error-claro: #FEE2E2;
   --sim-texto: #6D28D9;      --sim-claro: #EDE9FE;                              /* violeta: simuladores */
-  --comando-texto: #B42318;  --comando-claro: #FDEEEC; --comando-linea: #F8D3CE;  /* rojo suave: comandos */
+  --comando-texto: #B42318;  --comando-claro: #FDEEEC; --comando-linea: #F8D3CE;  /* rojo suave: comandos e IP */
 
   /* Ventanas: los tres puntos */
   --punto-rojo: #FF5F57; --punto-amarillo: #FEBC2E; --punto-verde: #28C840;
@@ -532,7 +532,7 @@ button.boton { border: 0; font-family: inherit; line-height: inherit; cursor: po
 /* ==========================================================
    Código, archivos y ventanas
    ========================================================== */
-/* Código dentro del texto (comandos con .cod-cmd, archivos con .cod-archivo): fondo claro,
+/* Código dentro del texto (comandos con .cod-cmd, IP con .cod-ip, archivos con .cod-archivo): fondo claro,
    texto y borde de su color (el borde va con box-shadow para no cambiar el ancho) */
 code {
   font-family: var(--fuente-mono); font-size: .9em; white-space: pre-wrap; overflow-wrap: anywhere;   /* una URL larga no desborda en el celular */
@@ -540,7 +540,7 @@ code {
   background: var(--acento-suave); color: var(--acento-texto); box-shadow: inset 0 0 0 1px var(--acento-claro);
 }
 code.cod-archivo { background: var(--archivo-claro); color: var(--archivo-texto); box-shadow: inset 0 0 0 1px var(--archivo-linea); }
-code.cod-cmd { background: var(--comando-claro); color: var(--comando-texto); box-shadow: inset 0 0 0 1px var(--comando-linea); }
+code.cod-cmd, code.cod-ip { background: var(--comando-claro); color: var(--comando-texto); box-shadow: inset 0 0 0 1px var(--comando-linea); }
 
 /* Ventanas: los tres puntos de color delante del nombre */
 .archivo__nombre::before, .ventana-cod__barra::before, .captura__barra::before {
@@ -755,14 +755,6 @@ button.boton:disabled { opacity: .45; cursor: not-allowed; }
 .lamina .tabla-puertos .etq { font-size: 11px; padding: 0 7px; line-height: 1.45; }
 .lamina--pf .subtitulo { font-size: 21px; }
 .lamina--pf .subtitulo::after { margin-top: 4px; height: 4px; }
-
-/* Cierre fijo de las actividades */
-.act-cierre {
-  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px;
-  border: 2px solid var(--tinta); border-radius: var(--radio); padding: 7px 16px;
-}
-.act-cierre__realizar { font-family: var(--fuente-titulo); font-weight: 700; font-size: 20px; letter-spacing: .04em; color: var(--tinta); }
-.act-cierre__fecha { font-size: 17px; font-weight: 600; color: var(--tinta); }
 
 /* HTTP: solicitud y respuesta, cada una con su ventana y sus partes */
 .http { display: grid; gap: 8px; align-content: start; }
