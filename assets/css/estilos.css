@@ -1,6 +1,6 @@
 /* ==========================================================
-   Base de Datos I — Cuadernillo web (identidad: "Bases de Datos y SQL · Desde cero")
-   Prof. Nicolás A. Cussi • Base de Datos I
+   Redes I — Cuadernillo web
+   Prof. Nicolás A. Cussi • Técnico en Programación · 5.º año
    Mobile first · Modo hoja A4 en escritorio e impresión
    ========================================================== */
 
@@ -14,10 +14,9 @@
 @font-face { font-family: "Barlow Condensed"; src: url("../fonts/barlow-condensed-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
 @font-face { font-family: "Barlow Condensed"; src: url("../fonts/barlow-condensed-latin-800-normal.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: swap; }
 
-/* ---------- Paleta (detectada del PDF) ---------- */
+/* ---------- Paleta ---------- */
 :root {
   /* Identidad */
-  --conceptos: #26C6D4;     /* cian del Módulo 1 de Base de Datos (sin uso en Redes I) */
   --acento: #26C9A1;         /* verde azulado: íconos, barras, flechas, recuadros. Encima va texto oscuro */
   --acento-numero: #069873;  /* número de cada título (3,6:1 sobre blanco: solo texto grande) */
   --acento-claro: #C9F2E8;   /* encabezados de tarjetas */
@@ -25,8 +24,6 @@
   --acento-texto: #096750;   /* texto de color sobre blanco o sobre el tono claro (5,6:1 o más) */
 
   /* Colores con significado propio */
-  --planilla: #A78BFA; --planilla-numero: #7C3AED; --planilla-texto: #6D28D9; --planilla-claro: #DDD6FE; --planilla-suave: #EDE9FE;
-  --sql: #60A5FA;      --sql-numero: #2563EB;      --sql-texto: #1D4ED8;      --sql-claro: #BFDBFE;      --sql-suave: #DBEAFE;
   --archivo: #F59E0B;  --archivo-texto: #92400E;   --archivo-claro: #FEF3C7;  --archivo-linea: #FDE68A;
   --naranja: #EA580C;  --naranja-texto: #C2410C;   --naranja-claro: #FFEDD5;
   --ok: #15803D;       --ok-oscuro: #166534;       --ok-claro: #DCFCE7;
@@ -39,12 +36,12 @@
 
   /* Código en pantalla (fondo --consola-fondo; todos 5:1 o más) */
   --consola-fondo: #1E293B; --cod-texto: #E2E8F0; --consola-linea: #334155;
-  --cod-etq: #FB7185;  /* rosa: palabras clave (MIENTRAS, SI, SELECT…) */
-  --cod-atr: #A3E635;  /* lima: nombres de campos y tablas */
-  --cod-str: #FDE047;  /* amarillo: textos entre comillas */
+  --cod-etq: #FB7185;  /* rosa: palabras clave */
+  --cod-atr: #A3E635;  /* lima: campos y propiedades */
+  --cod-str: #FDE047;  /* amarillo: textos */
   --cod-com: #94A3B8;  /* gris azulado, en cursiva: comentarios */
   --cod-num: #C084FC;  /* violeta: números */
-  --cod-fun: #67E8F9;  /* cian: acciones (abrir, leer, mostrar) y funciones */
+  --cod-fun: #67E8F9;  /* cian: funciones */
   /* Terminal: lo que sale bien y los errores */
   --consola-ok: #86EFAC;  --consola-error: #FCA5A5;
 
@@ -61,21 +58,12 @@
 
   --foco: #1E3A8A;          /* contorno de foco del teclado */
 
-  /* TP3: campos alternados dentro de un archivo de texto */
-  --campo-a: var(--acento-claro);
-  --campo-b: #DDE3E9;
-
   --radio: 10px;
   --fuente: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --fuente-titulo: "Barlow Semi Condensed", "Barlow", system-ui, sans-serif;
   --fuente-titular: "Barlow Condensed", "Barlow Semi Condensed", system-ui, sans-serif;
   --fuente-mono: ui-monospace, "Cascadia Mono", Consolas, "Liberation Mono", "Courier New", monospace;
 }
-
-/* Acento por módulo: clase en el <body> de cada TP (o en cada bloque de la portada).
-   modulo-1 no cambia nada: usa el cian de :root */
-.modulo-2 { --acento: var(--planilla); --acento-numero: var(--planilla-numero); --acento-texto: var(--planilla-texto); --acento-claro: var(--planilla-claro); --acento-suave: var(--planilla-suave); --panel-linea: var(--planilla-claro); }
-.modulo-3 { --acento: var(--sql); --acento-numero: var(--sql-numero); --acento-texto: var(--sql-texto); --acento-claro: var(--sql-claro); --acento-suave: var(--sql-suave); --panel-linea: var(--sql-claro); }
 
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
@@ -187,7 +175,7 @@ button.boton { border: 0; font-family: inherit; line-height: inherit; cursor: po
   padding-left: 12px; border-left: 1.5px solid var(--linea);
   line-height: 1.15;
 }
-/* "BASES DE DATOS Y SQL" y "TRABAJO PRÁCTICO N°X" llevan siempre el mismo tamaño */
+/* El nombre de la materia y "TRABAJO PRÁCTICO N°X" llevan siempre el mismo tamaño */
 .cab__marca b, .cab__lema {
   font-size: 14px; font-weight: 700; letter-spacing: .02em; color: var(--tinta);
   text-transform: uppercase; white-space: nowrap;
@@ -272,7 +260,7 @@ button.boton { border: 0; font-family: inherit; line-height: inherit; cursor: po
 .paso h3 { grid-area: tit; font-family: var(--fuente); font-weight: 700; font-size: 19px; color: var(--tinta); }
 .paso p  { grid-area: txt; font-size: 16px; line-height: 1.3; }
 
-/* Tarjetas blancas con encabezado celeste */
+/* Tarjetas blancas con encabezado del acento */
 .tarjeta {
   background: var(--blanco); border-radius: 8px; padding: 6px 6px 12px;
   display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px;
@@ -347,17 +335,17 @@ button.boton { border: 0; font-family: inherit; line-height: inherit; cursor: po
 }
 .sin-raya::after { display: none; }
 
-/* Dos grupos en un mismo esquema: el primero con el acento del módulo (.grupo) y el segundo
-   en naranja (.grupo--naranja); en el TP1 el segundo es la hoja de cálculo (.grupo--planilla) */
+/* Dos grupos en un mismo esquema: el primero con el acento (.grupo) y el segundo en naranja
+   (.grupo--naranja). Cliente y servidor van siempre así. Funciona y falla: .grupo--ok y .grupo--error */
 .grupo { --grupo: var(--acento); --grupo-claro: var(--acento-claro); }
-.grupo--planilla { --grupo: var(--planilla); --grupo-claro: var(--planilla-claro); }
-.grupo--planilla .ico { --ac: var(--planilla); }
 .grupo--naranja { --grupo: var(--naranja); --grupo-claro: var(--naranja-claro); }
 .grupo--naranja .ico { --ac: var(--naranja); }
 .grupo--ok { --grupo: var(--ok); --grupo-claro: var(--ok-claro); }
 .grupo--ok .ico { --ac: var(--ok); }
+.grupo--error { --grupo: var(--error); --grupo-claro: var(--error-claro); }
+.grupo--error .ico { --ac: var(--error); }
 .comparar .grupo { box-shadow: inset 0 5px 0 var(--grupo); }
-.comparar .grupo--ok, .comparar .grupo--naranja { background: var(--grupo-claro); }   /* TP3: ventaja / desventaja */
+.comparar .grupo--ok, .comparar .grupo--naranja, .comparar .grupo--error { background: var(--grupo-claro); }
 .cuando .grupo { box-shadow: inset 5px 0 0 var(--grupo); }
 .tabla-comp thead th.grupo { background: var(--grupo-claro); }
 .tabla-comp thead th:first-child { background: var(--panel-oscuro); }
@@ -520,7 +508,7 @@ button.boton { border: 0; font-family: inherit; line-height: inherit; cursor: po
 .act-tabla thead th { background: var(--acento-claro); font-weight: 700; color: var(--tinta); text-align: center; }
 .act-tabla tbody th { font-weight: 600; color: var(--tinta); }
 
-/* Parte 2 · en la computadora (solo TPs prácticos: 4, 5, 9 e integrador) */
+/* Actividades en la computadora (solo TP8, TP9 y TP10) */
 .lamina--compu .act-banda { background: var(--ok); color: var(--blanco); }
 .lamina--compu .act-banda .ico { color: var(--blanco); --ac: var(--ok-oscuro); }
 .lamina--compu .act-banda__parte { border-left-color: rgba(255, 255, 255, .5); }
@@ -542,10 +530,10 @@ button.boton { border: 0; font-family: inherit; line-height: inherit; cursor: po
 .tit-ico { display: inline-block; width: 1.2em; height: 1.2em; margin-right: 6px; vertical-align: -.25em; }
 
 /* ==========================================================
-   TP3: archivos de texto, separadores y pseudocódigo
+   Código, archivos y ventanas
    ========================================================== */
-/* Código dentro del texto: fondo claro, texto y borde de su color
-   (el borde va con box-shadow para no cambiar el ancho) */
+/* Código dentro del texto (comandos con .cod-cmd, archivos con .cod-archivo): fondo claro,
+   texto y borde de su color (el borde va con box-shadow para no cambiar el ancho) */
 code {
   font-family: var(--fuente-mono); font-size: .9em; white-space: pre;
   border-radius: 4px; padding: 1px 5px;
@@ -553,8 +541,6 @@ code {
 }
 code.cod-archivo { background: var(--archivo-claro); color: var(--archivo-texto); box-shadow: inset 0 0 0 1px var(--archivo-linea); }
 code.cod-cmd { background: var(--comando-claro); color: var(--comando-texto); box-shadow: inset 0 0 0 1px var(--comando-linea); }
-code.cod-formula { background: var(--planilla-suave); color: var(--planilla-texto); box-shadow: inset 0 0 0 1px var(--planilla-claro); }
-code.cod-sql { background: var(--sql-suave); color: var(--sql-texto); box-shadow: inset 0 0 0 1px var(--sql-claro); }
 
 /* Ventanas: los tres puntos de color delante del nombre */
 .archivo__nombre::before, .ventana-cod__barra::before {
@@ -578,42 +564,16 @@ code.cod-sql { background: var(--sql-suave); color: var(--sql-texto); box-shadow
   margin: 0; padding: 8px 14px 10px; overflow-x: auto;
   font-family: var(--fuente-mono); font-size: 15px; line-height: 1.65; color: var(--tinta);
 }
-.archivo__regla, .archivo__n { color: var(--gris); }
-.archivo__n { user-select: none; }
-.archivo__enc { font-weight: 700; }
-.c-a { background: var(--campo-a); }
-.c-b { background: var(--campo-b); }
-/* espacios visibles: un punto por cada carácter */
-.esp {
-  background-image: radial-gradient(circle, var(--gris) 0 1.4px, transparent 1.9px);
-  background-size: 1ch 100%; background-repeat: repeat-x;
-}
-/* el separador es "el otro grupo" del esquema: va en naranja */
-.sep {
-  background: var(--naranja-texto); color: var(--blanco); border-radius: 3px; font-weight: 700;
-  padding: 0 .2em; margin: 0 .2em;   /* aire visual a cada lado: no son espacios del archivo */
-}
+.archivo__n { color: var(--gris); user-select: none; }
 
 /* Archivo + explicación (una columna en el celular, dos en pantalla ancha) */
 .archivo-ej { display: grid; gap: 12px; align-items: start; }
-.tabla-campos { text-align: left; }
-.tabla-campos th, .tabla-campos td { padding-left: 8px; }
-.tabla-campos tbody th { background: var(--blanco); border-top: 1px solid var(--linea); font-family: var(--fuente-mono); font-size: .95em; }
-.tabla-campos tbody td { border-left: 1px solid var(--linea); }
-.muestra { display: inline-block; width: 12px; height: 12px; margin-right: 7px; border: 1px solid var(--linea); border-radius: 2px; vertical-align: -1px; }
 .lista-txt { display: grid; gap: 6px; font-size: 16px; line-height: 1.35; }
 
-/* Separadores: carácter grande + ejemplo */
-.glifo { width: 48px; text-align: center; flex: none; }
-.glifo--bajo { transform: translateY(-.24em); }   /* coma y punto y coma: subirlos al centro */
-.glifo--alto { transform: translateY(.26em); }    /* comillas: bajarlas al centro */
-.tipo__valor--sep { color: var(--naranja-texto); }
-.ico--sep { --ac: var(--naranja); }
 .comun code, .cuando code { display: block; width: fit-content; margin-top: 3px; }
-.comun--suelto li { background: var(--panel); }
 .sin-raya + .texto { margin-top: 8px; }
 
-/* Ventana de código (pseudocódigo; en el TP9, SQL con .ventana-cod--sql) */
+/* Ventana de código o de terminal: barra con el rótulo + el contenido */
 .ventana-cod {
   background: var(--consola-fondo); border-radius: 8px; overflow: hidden;
   box-shadow: 0 6px 16px -8px rgba(15, 23, 42, .6);
@@ -623,7 +583,6 @@ code.cod-sql { background: var(--sql-suave); color: var(--sql-texto); box-shadow
   font-family: var(--fuente-mono); font-size: 12px; font-weight: 600; color: var(--cod-com);
   border-bottom: 1px solid var(--consola-linea);
 }
-.ventana-cod--sql .ventana-cod__barra { box-shadow: inset 0 3px 0 var(--sql); }
 /* colores del código */
 .ventana-cod b, .t-etq { color: var(--cod-etq); }
 .t-atr { color: var(--cod-atr); }
@@ -632,24 +591,6 @@ code.cod-sql { background: var(--sql-suave); color: var(--sql-texto); box-shadow
 .t-num { color: var(--cod-num); }
 .t-fun { color: var(--cod-fun); }
 
-/* Pseudocódigo con número de línea */
-.pseudo {
-  counter-reset: ln; display: grid; padding: 8px 0;
-  font-family: var(--fuente-mono); font-size: 14px; line-height: 1.45; color: var(--cod-texto);
-}
-.pseudo li { counter-increment: ln; display: flex; align-items: baseline; gap: 10px; padding: 1px 10px 1px 0; }
-.pseudo li::before {
-  content: counter(ln); flex: none; width: 2.4em; padding-right: .6em; text-align: right;
-  color: var(--cod-com); border-right: 2px solid var(--consola-linea);
-}
-.pseudo__c { flex: 1; min-width: 0; }
-.pseudo .i1 .pseudo__c { padding-left: 2ch; }
-.pseudo .i2 .pseudo__c { padding-left: 4ch; }
-.pseudo b { font-weight: 700; }
-.pseudo__paso {
-  flex: none; font-family: var(--fuente); font-size: 12px; font-weight: 700; letter-spacing: .04em;
-  background: var(--acento); color: var(--tinta); border-radius: 999px; padding: 1px 8px;
-}
 .act__items .archivo { margin-top: 8px; }
 /* Actividad con un archivo al costado de las consignas (en pantalla ancha) */
 .act__cuerpo { display: grid; gap: 0 14px; align-items: start; }
@@ -817,20 +758,13 @@ code.cod-sql { background: var(--sql-suave); color: var(--sql-texto); box-shadow
   .senalada { padding: 10px 16px; }
   .ambitos--4 .tarjeta { padding-bottom: 8px; }
 
-  /* TP3: archivos de texto y pseudocódigo */
+  /* Archivos y código */
   .archivo__txt { font-size: 16px; }
   .archivo--grande .archivo__txt { font-size: 20px; }
   .archivo--grande .archivo__nombre { font-size: 14px; }
-  .tabla-campos { font-size: 17px; }
-  .tabla-campos td, .tabla-campos tbody th { padding: 7px 8px; }
   .lista-txt { font-size: 17px; }
-  .pseudo { font-size: 15px; line-height: 1.4; padding: 6px 0; }
   .ventana-cod__barra { padding: 4px 12px; }
   .act .archivo__txt { font-size: 14.5px; line-height: 1.5; padding: 6px 12px 8px; }
-  .comun--suelto { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .comun--suelto li { padding: 10px 10px 10px 12px; gap: 8px; font-size: 18px; }
-  .comun--suelto .glifo, .comun--suelto .ico { width: 34px; }
-  .comun--suelto code { font-size: 15px; }
 }
 
 /* ==========================================================
@@ -884,7 +818,7 @@ code.cod-sql { background: var(--sql-suave); color: var(--sql-texto); box-shadow
   background: var(--panel); border-radius: var(--radio); padding: 12px 14px;
   text-decoration: none; color: var(--texto);
   border: 2px solid transparent;
-  box-shadow: inset 6px 0 0 var(--acento);   /* franja del color del módulo */
+  box-shadow: inset 6px 0 0 var(--acento);   /* franja del acento */
 }
 a.tp:hover { border-color: var(--acento); }
 .tp__num {
@@ -899,23 +833,15 @@ a.tp:hover { border-color: var(--acento); }
 .tp--pronto { background: transparent; border-color: var(--panel); box-shadow: inset 6px 0 0 var(--acento-claro); }
 .tp--pronto .tp__num { color: var(--gris-sub); }
 .tp--pronto .tp__titulo, .tp--pronto .tp__temas { color: var(--gris); }
-/* Integrador: franja con los tres colores de módulo, en bandas con corte neto */
-.tp--integrador {
-  box-shadow: none;
-  background: linear-gradient(var(--conceptos) 0 33.34%, var(--planilla) 0 66.67%, var(--sql) 0) left / 6px 100% no-repeat, var(--acento-suave);
-}
-/* Etiquetas de la herramienta que se usa (Archivos, Planilla, XAMPP, SQL) */
+/* Etiquetas antes de "Láminas" (Simulador, En la compu, Archivos) */
 .etq {
   display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .02em; text-transform: none;
   padding: 1px 7px; border-radius: 999px; line-height: 1.5;
 }
 .etq--archivo  { background: var(--archivo-claro);  color: var(--archivo-texto); }
-.etq--planilla { background: var(--planilla-claro); color: var(--planilla-texto); }
-.etq--xampp    { background: var(--naranja-claro);  color: var(--naranja-texto); }
-.etq--sql      { background: var(--sql-claro);      color: var(--sql-texto); }
 .etq--sim      { background: var(--sim-claro);      color: var(--sim-texto); }
 .etq--compu    { background: var(--ok-claro);       color: var(--ok-oscuro); }
-.tp__visto { color: #0F766E; }
+.tp__visto { color: var(--acento-texto); }
 .tp__visto[hidden] { display: none; }
 
 @media (min-width: 860px) {
