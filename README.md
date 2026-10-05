@@ -37,7 +37,7 @@ Una versión web del cuadernillo de Redes I, pensada para leer desde la computad
 | 5 | Enrutamiento y NAT, PAT | Material en Classroom |
 | 6 | Recursos compartidos en red | Material en Classroom |
 | **Unidad 2 · Protocolos, seguridad y aplicaciones** | | |
-| 7 | Transporte y protocolos de aplicación | Próximamente |
+| 7 | Transporte y protocolos de aplicación | ✅ Disponible |
 | 8 | Diagnóstico de red | Próximamente |
 | 9 | APIs REST | Próximamente |
 | 10 | Proyecto integrador Yarvi | Próximamente |

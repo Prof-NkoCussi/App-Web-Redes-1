@@ -257,7 +257,7 @@ button.boton { border: 0; font-family: inherit; line-height: inherit; cursor: po
   background: var(--panel); border-radius: 8px; padding: 12px 14px;
 }
 .paso .ico { grid-area: ico; width: 56px; height: 56px; margin: 0 auto; }
-.paso h3 { grid-area: tit; font-family: var(--fuente); font-weight: 700; font-size: 19px; color: var(--tinta); }
+.paso h3, .paso h4 { grid-area: tit; font-family: var(--fuente); font-weight: 700; font-size: 19px; color: var(--tinta); }
 .paso p  { grid-area: txt; font-size: 16px; line-height: 1.3; }
 
 /* Tarjetas blancas con encabezado del acento */
@@ -311,7 +311,7 @@ button.boton { border: 0; font-family: inherit; line-height: inherit; cursor: po
   display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px;
   background: var(--panel); border-radius: var(--radio); padding: 14px;
 }
-.comparar h3 { font-family: var(--fuente-titulo); font-weight: 700; font-size: 23px; color: var(--tinta); line-height: 1.1; margin-bottom: 4px; }
+.comparar h3, .comparar h4 { font-family: var(--fuente-titulo); font-weight: 700; font-size: 23px; color: var(--tinta); line-height: 1.1; margin-bottom: 4px; }
 .comparar p { font-size: 16.5px; line-height: 1.35; }
 
 /* Tabla comparativa */
@@ -535,7 +535,7 @@ button.boton { border: 0; font-family: inherit; line-height: inherit; cursor: po
 /* Código dentro del texto (comandos con .cod-cmd, archivos con .cod-archivo): fondo claro,
    texto y borde de su color (el borde va con box-shadow para no cambiar el ancho) */
 code {
-  font-family: var(--fuente-mono); font-size: .9em; white-space: pre;
+  font-family: var(--fuente-mono); font-size: .9em; white-space: pre-wrap; overflow-wrap: anywhere;   /* una URL larga no desborda en el celular */
   border-radius: 4px; padding: 1px 5px;
   background: var(--acento-suave); color: var(--acento-texto); box-shadow: inset 0 0 0 1px var(--acento-claro);
 }
@@ -543,7 +543,7 @@ code.cod-archivo { background: var(--archivo-claro); color: var(--archivo-texto)
 code.cod-cmd { background: var(--comando-claro); color: var(--comando-texto); box-shadow: inset 0 0 0 1px var(--comando-linea); }
 
 /* Ventanas: los tres puntos de color delante del nombre */
-.archivo__nombre::before, .ventana-cod__barra::before {
+.archivo__nombre::before, .ventana-cod__barra::before, .captura__barra::before {
   content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%;
   background: var(--punto-rojo); box-shadow: 12px 0 var(--punto-amarillo), 24px 0 var(--punto-verde);
   margin-right: 24px;
@@ -583,6 +583,11 @@ code.cod-cmd { background: var(--comando-claro); color: var(--comando-texto); bo
   font-family: var(--fuente-mono); font-size: 12px; font-weight: 600; color: var(--cod-com);
   border-bottom: 1px solid var(--consola-linea);
 }
+.ventana-cod__txt {
+  margin: 0; padding: 8px 12px 10px;
+  font-family: var(--fuente-mono); font-size: 13.5px; line-height: 1.5; color: var(--cod-texto);
+  white-space: pre-wrap; overflow-wrap: anywhere;   /* en el celular, los renglones largos bajan */
+}
 /* colores del código */
 .ventana-cod b, .t-etq { color: var(--cod-etq); }
 .t-atr { color: var(--cod-atr); }
@@ -598,6 +603,270 @@ code.cod-cmd { background: var(--comando-claro); color: var(--comando-texto); bo
 .act__archivos { display: grid; gap: 8px; justify-items: start; }
 
 /* ==========================================================
+   Redes I: protocolos, esquemas, simulador y captura
+   ========================================================== */
+/* Puerto y transporte de un servicio: "PUERTO 53 · UDP" */
+.puerto {
+  display: inline-flex; align-items: center; gap: 8px; flex: none;
+  background: var(--blanco); border: 1.5px solid var(--linea); border-radius: 999px;
+  padding: 3px 5px 3px 12px; line-height: 1; white-space: nowrap;
+}
+.puerto__rot { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--gris); }
+.puerto__num { font-family: var(--fuente-titular); font-weight: 800; font-size: 22px; color: var(--tinta); }
+.puertos { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+.puertos li { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 17px; color: var(--tinta); }
+/* TCP y UDP: los dos grupos del esquema */
+.etq--tcp { background: var(--acento); color: var(--tinta); }
+.etq--udp { background: var(--naranja-texto); color: var(--blanco); }
+.lamina .etq { font-size: 13px; padding: 2px 9px; letter-spacing: .04em; vertical-align: 1px; }
+
+/* Dos columnas en pantalla ancha */
+.columnas { display: grid; gap: 12px; align-items: start; }
+.columnas .panel { display: grid; gap: 10px; align-content: start; }
+.columnas .panel__cab { margin-bottom: 0; align-items: center; flex-wrap: wrap; }
+.columnas .cuando { grid-template-columns: 1fr; margin-top: 0; }
+.panel .texto, .panel > p { font-size: 16px; line-height: 1.4; }
+
+/* Pasos con letra o número (DORA, resolución DNS) */
+.lista-pasos { display: grid; gap: 6px; }
+.lista-pasos li {
+  display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 10px;
+  background: var(--blanco); border-radius: 8px; padding: 6px 10px 6px 6px;
+  font-size: 15.5px; line-height: 1.3;
+}
+.lista-pasos b {
+  display: flex; align-items: center; justify-content: center; height: 34px; border-radius: 7px;
+  background: var(--grupo, var(--panel-oscuro)); color: var(--tinta);
+  font-family: var(--fuente-titular); font-weight: 800; font-size: 22px;
+}
+
+/* Secuencia con dos grupos (cliente en el acento, servidor en naranja): raya arriba de cada paso */
+.secuencia .paso.grupo { box-shadow: inset 0 5px 0 var(--grupo); }
+
+/* Esquemas en SVG (handshake) */
+.esquema { margin: 0; }
+.esquema svg { width: 100%; height: auto; max-width: 420px; margin: 0 auto; }
+.esquema text { font-family: var(--fuente); fill: var(--tinta); }
+.esquema figcaption { margin-top: 6px; font-size: 14.5px; line-height: 1.35; text-align: center; }
+.esq-rot { font-size: 15px; font-weight: 700; }
+.esq-txt { font-size: 13px; fill: var(--texto); }
+.esq-vida { stroke: var(--linea); stroke-width: 2; stroke-dasharray: 5 5; }
+.esq-pide { stroke: var(--acento); fill: var(--acento); }
+.esq-responde { stroke: var(--naranja); fill: var(--naranja); }
+.esq-caja-pide { fill: var(--acento-claro); }
+.esq-caja-responde { fill: var(--naranja-claro); }
+
+/* Códigos de estado de HTTP */
+.codigos { display: grid; gap: 6px; }
+.codigos li {
+  display: grid; grid-template-columns: 54px 1fr; align-items: center; gap: 0 12px;
+  background: var(--panel); border-radius: 8px; padding: 6px 12px;
+  box-shadow: inset 5px 0 0 var(--grupo, var(--linea));
+  font-size: 15px; line-height: 1.3;
+}
+.codigos b { grid-row: span 2; font-family: var(--fuente-titular); font-weight: 800; font-size: 28px; color: var(--tinta); text-align: center; }
+
+/* ---------- Simulador ---------- */
+.simulador { display: grid; gap: 12px; background: var(--panel); border-radius: 12px; padding: 14px; }
+.sim__cab { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.lamina .etq--sim { font-size: 14px; }
+.sim__aviso { font-size: 14px; color: var(--gris); }
+.sim__form { display: flex; flex-wrap: wrap; align-items: end; gap: 8px; }
+.sim__campo { display: grid; gap: 4px; flex: 1 1 230px; min-width: 0; }
+.sim__campo label { font-weight: 700; font-size: 15px; color: var(--tinta); }
+.sim__campo input {
+  width: 100%; min-width: 0; padding: 8px 10px;
+  font-family: var(--fuente-mono); font-size: 16px; color: var(--tinta);
+  background: var(--blanco); border: 2px solid var(--gris); border-radius: 8px;
+}
+.sim__campo input[aria-invalid="true"] { border-color: var(--error); }
+.sim__ejemplos { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; font-size: 14px; }
+.boton--claro { background: var(--blanco); color: var(--tinta); box-shadow: inset 0 0 0 2px var(--gris); }
+.boton--claro:hover { background: var(--panel-oscuro); }
+.boton--chico { font-size: 13px; padding: 5px 10px; }
+button.boton:disabled { opacity: .45; cursor: not-allowed; }
+.sim__botones { display: flex; flex-wrap: wrap; gap: 8px; }
+.sim__estado { min-height: 1.4em; font-size: 15px; font-weight: 600; color: var(--tinta); }
+.sim__estado--error { color: var(--error); }
+.sim__leyenda { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13.5px; }
+.sim__leyenda li { display: flex; align-items: center; gap: 6px; }
+.sim__leyenda li::before { content: ""; width: 14px; height: 14px; border-radius: 3px; background: var(--leyenda); }
+.sim__cuerpo { display: grid; gap: 12px; align-items: start; }
+.sim__pasos { counter-reset: paso; display: grid; gap: 6px; }
+.sim__paso {
+  counter-increment: paso;
+  display: grid; grid-template-columns: 28px 1fr; gap: 1px 10px; align-items: start;
+  background: var(--blanco); border-radius: 8px; padding: 6px 10px 7px 8px;
+  box-shadow: inset 4px 0 0 var(--paso, var(--linea));
+}
+.sim__paso::before {
+  content: counter(paso); grid-row: span 2; margin-top: 1px;
+  display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--panel); font-weight: 700; font-size: 14px; color: var(--tinta);
+}
+.sim__paso[hidden] { display: none; }
+.sim__quien { font-weight: 700; font-size: 14px; line-height: 1.3; color: var(--tinta); }
+.sim__msg { font-size: 15px; line-height: 1.35; }
+.sim__msg .etq { font-size: 11.5px; padding: 1px 7px; margin-left: 4px; }
+.sim__paso--pide { --paso: var(--acento); }
+.sim__paso--responde { --paso: var(--naranja); }
+.sim__paso--ok { --paso: var(--ok); background: var(--ok-claro); }
+.sim__paso--error { --paso: var(--error); background: var(--error-claro); }
+.sim__paso--nuevo { animation: sim-aparece .25s ease-out; }
+@keyframes sim-aparece { from { opacity: 0; transform: translateY(-4px); } }
+@media (prefers-reduced-motion: reduce) { .sim__paso--nuevo { animation: none; } }
+.sim__caches { display: grid; gap: 8px; }
+.sim__cache { display: grid; gap: 4px; background: var(--blanco); border: 1.5px solid var(--linea); border-radius: 8px; padding: 8px 12px; }
+.sim__cache h3 { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); }
+.sim__cache ul { display: grid; gap: 2px; font-family: var(--fuente-mono); font-size: 13px; color: var(--tinta); overflow-wrap: anywhere; }
+.sim__vacia { font-family: var(--fuente); font-style: italic; color: var(--gris); }
+.sim__cache .boton { justify-self: start; margin-top: 4px; }
+
+/* ---------- Captura anotada (esquema de una ventana de Wireshark) ---------- */
+.captura {
+  margin: 0; background: var(--blanco); border: 1.5px solid var(--linea); border-radius: 8px; overflow: hidden;
+}
+.captura__barra {
+  display: flex; align-items: center; gap: 8px; padding: 4px 12px;
+  background: var(--tinta); color: var(--blanco); font-family: var(--fuente-mono); font-size: 12px; font-weight: 600;
+}
+.captura__filtro { padding: 4px 10px; background: var(--ok-claro); border-bottom: 1px solid var(--linea); font-family: var(--fuente-mono); font-size: 12.5px; color: var(--tinta); }
+.captura__filtro span { font-family: var(--fuente); font-weight: 700; margin-right: 6px; }
+.captura table { width: 100%; border-collapse: collapse; font-family: var(--fuente-mono); font-size: 12px; line-height: 1.35; color: var(--tinta); }
+.captura th { background: var(--panel-oscuro); text-align: left; font-family: var(--fuente); font-weight: 700; padding: 3px 6px; white-space: nowrap; }
+.captura td { padding: 4px 6px; vertical-align: top; }
+.captura .pide td { background: var(--acento-suave); }
+.captura .responde td { background: var(--naranja-claro); }
+.captura .nota-fila td {
+  background: var(--blanco); padding: 3px 6px 7px 26px; font-family: var(--fuente); font-size: 13.5px; line-height: 1.35;
+  text-indent: -20px; border-bottom: 1px solid var(--linea);
+}
+.captura .nota-fila b { font-size: 15px; margin-right: 6px; }
+.captura .nota-fila--pide b { color: var(--acento-texto); }
+.captura .nota-fila--responde b { color: var(--naranja-texto); }
+.captura .nota-fila--oculta td { color: var(--gris); font-style: italic; }
+.captura__pie { padding: 6px 10px; font-size: 13.5px; line-height: 1.35; background: var(--panel); }
+
+/* Tabla resumen de puertos */
+.tabla-puertos { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.25; }
+.tabla-puertos th, .tabla-puertos td { padding: 4px 8px; text-align: left; border-bottom: 1px solid var(--linea); }
+.tabla-puertos thead th { background: var(--acento-claro); color: var(--tinta); font-weight: 700; }
+.tabla-puertos tbody th { font-family: var(--fuente-titular); font-weight: 800; font-size: 18px; color: var(--tinta); white-space: nowrap; }
+.lamina .tabla-puertos .etq { font-size: 11px; padding: 0 7px; line-height: 1.45; }
+.lamina--pf .subtitulo { font-size: 21px; }
+.lamina--pf .subtitulo::after { margin-top: 4px; height: 4px; }
+
+/* Cierre fijo de las actividades */
+.act-cierre {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px;
+  border: 2px solid var(--tinta); border-radius: var(--radio); padding: 7px 16px;
+}
+.act-cierre__realizar { font-family: var(--fuente-titulo); font-weight: 700; font-size: 20px; letter-spacing: .04em; color: var(--tinta); }
+.act-cierre__fecha { font-size: 17px; font-weight: 600; color: var(--tinta); }
+
+/* HTTP: solicitud y respuesta, cada una con su ventana y sus partes */
+.http { display: grid; gap: 8px; align-content: start; }
+.http__tit { font-family: var(--fuente-titulo); font-weight: 700; font-size: 19px; line-height: 1.2; color: var(--tinta); }
+.http__tit span { font-family: var(--fuente); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gris); }
+/* "Para profundizar" con el bloque de la lámina al costado de la tabla */
+.pf-fila { display: grid; gap: 12px; align-items: start; }
+.http .lista-txt { font-size: 15px; gap: 4px; }
+.codigos { margin-top: 12px; }
+.panel > .texto + .columnas { margin-top: 8px; }
+.panel > .http__tit { margin-top: 12px; }
+.panel .codigos { margin-top: 6px; }
+.panel .codigos li { background: var(--blanco); }
+.codigos strong { font-size: 15px; line-height: 1.2; }
+
+/* Variantes compactas para las hojas con mucho contenido */
+.secuencia--compacta .paso .ico { width: 46px; height: 46px; }
+.comparar.comparar--compacto h4 { font-size: 20px; }
+.comparar.comparar--compacto p { font-size: 15.5px; }
+.captura__intro, .sim__intro { font-size: 16px; line-height: 1.4; }
+.captura__intro { margin: 8px 0; }
+.tabla-puertos { margin-top: 10px; }
+
+/* Tabla para completar en una sola fila (Puerto · 80 · 443 …) */
+.act-tabla--fila th, .act-tabla--fila td { text-align: center; }
+.act-tabla--fila tbody th { text-align: left; }
+.act-tabla--fila td { height: 30px; }
+.act-tabla--fila tr > :first-child { width: 22%; }
+.act-tabla.act-tabla--compacta th, .act-tabla.act-tabla--compacta td { height: 26px; padding-top: 3px; padding-bottom: 3px; }
+
+/* Rangos de puertos: números largos, una columna en el celular */
+.tipos--rangos { grid-template-columns: 1fr; }
+.tipo__valor.tipo__valor--chico { font-size: 32px; line-height: 38px; letter-spacing: .01em; }
+
+@media (max-width: 599px) {
+  /* Captura: cada fila como una tarjeta con el nombre de cada columna */
+  .captura thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .captura tr:not(.nota-fila) {
+    display: grid; grid-template-columns: auto auto 1fr;
+    grid-template-areas: "no tiempo proto" "origen destino destino" "info info info";
+  }
+  .captura td[data-col="No."] { grid-area: no; }
+  .captura td[data-col="Time"] { grid-area: tiempo; }
+  .captura td[data-col="Protocol"] { grid-area: proto; }
+  .captura td[data-col="Source"] { grid-area: origen; }
+  .captura td[data-col="Destination"] { grid-area: destino; }
+  .captura tr:not(.nota-fila) td { padding: 3px 6px; }
+  .captura td[data-col]::before {
+    content: attr(data-col); display: block;
+    font-family: var(--fuente); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gris);
+  }
+  .captura td[data-col="Info"] { grid-area: info; }
+  .captura .nota-fila, .captura .nota-fila td { display: block; }
+}
+
+@media (max-width: 599px) {
+  .tabla-puertos th, .tabla-puertos td { padding: 4px 5px; }
+  .tabla-puertos { font-size: 13.5px; }
+}
+/* Celulares chicos: el botón "Índice" queda solo con la flecha, para que el título entre en dos renglones */
+@media (max-width: 399px) {
+  .barra__volver span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .barra__titulo { font-size: 15px; }
+}
+
+@media (min-width: 600px), print {
+  .columnas { grid-template-columns: 1fr 1fr; }
+  .codigos { grid-template-columns: 1fr 1fr; }
+  .tipos--rangos { grid-template-columns: repeat(3, 1fr); }
+  .sim__cuerpo { grid-template-columns: 1fr 210px; }
+}
+
+@media (min-width: 600px), print {
+  .columnas--3-2 { grid-template-columns: 3fr 2fr; }
+}
+
+@media (min-width: 860px), print {
+  /* Códigos de estado: los cinco en una fila */
+  .codigos { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .codigos li { grid-template-columns: 1fr; align-content: start; gap: 1px; padding: 6px 8px 8px 12px; font-size: 13.5px; }
+  .codigos b { grid-row: auto; text-align: left; font-size: 26px; line-height: 1.1; }
+  .codigos strong { font-size: 14px; }
+  .pf-fila { grid-template-columns: 1fr 1.65fr; gap: 3.5mm; }
+  .pf-fila .pf { height: 100%; }
+  .columnas .panel { padding: 12px 14px; gap: 8px; }
+  .columnas .cuando li { font-size: 16px; padding: 10px 14px; gap: 14px; }
+  .columnas .cuando .ico--l { width: 50px; height: 50px; }
+  .secuencia--compacta .paso { padding: 10px 8px 12px; row-gap: 6px; }
+  .secuencia--compacta .paso .ico { width: 50px; height: 50px; }
+  .secuencia--compacta .paso h4 { font-size: 18px; }
+  .secuencia--compacta .paso p { font-size: 15.5px; }
+  .comparar.comparar--compacto li { padding: 10px 16px; }
+  .tabla-puertos th, .tabla-puertos td { padding: 3px 8px; }
+  .tabla-puertos tbody th { font-size: 15px; }
+  .tabla-puertos { font-size: 13.5px; }
+  .captura table { font-size: 11.5px; }
+  .captura td { padding: 3px 6px; }
+  .captura .nota-fila td { padding: 2px 6px 5px 26px; font-size: 13px; }
+  .sim__paso { padding: 5px 10px 5px 8px; }
+  .sim__pasos { gap: 5px; }
+  .simulador { gap: 10px; }
+}
+
+/* ==========================================================
    Pantallas medianas: secuencias horizontales
    ========================================================== */
 @media (min-width: 600px), print {
@@ -611,7 +880,7 @@ code.cod-cmd { background: var(--comando-claro); color: var(--comando-texto); bo
     text-align: center; row-gap: 10px; padding: 14px 10px 16px; height: 100%;
     align-content: start;
   }
-  .paso h3 { font-size: 20px; }
+  .paso h3, .paso h4 { font-size: 20px; }
   .paso .ico { width: 64px; height: 64px; }
   .mosaico { grid-template-columns: repeat(4, 1fr); }
   .ambitos { grid-template-columns: repeat(3, 1fr); }
@@ -692,7 +961,7 @@ code.cod-cmd { background: var(--comando-claro); color: var(--comando-texto); bo
   .intro p { font-size: 19px; padding-left: 18px; }
   .subtitulo { font-size: 24px; }
   .paso { padding: 16px 10px 18px; }
-  .paso h3 { font-size: 21px; }
+  .paso h3, .paso h4 { font-size: 21px; }
   .paso p { font-size: 17.5px; }
   .paso .ico { width: 70px; height: 70px; }
   .tarjeta__cab { font-size: 19px; }
@@ -712,7 +981,7 @@ code.cod-cmd { background: var(--comando-claro); color: var(--comando-texto); bo
   .idea p { font-size: 18.5px; padding: 16px 20px; }
   .idea strong { font-size: 26px; }
   .comparar li { padding: 13px 18px; }
-  .comparar h3 { font-size: 26px; }
+  .comparar h3, .comparar h4 { font-size: 26px; }
   .comparar p { font-size: 17.5px; }
   .comparar .ico--xl { width: 80px; height: 80px; }
   .tabla-comp th, .tabla-comp td { font-size: 17px; padding: 8px 8px; }
@@ -790,7 +1059,7 @@ code.cod-cmd { background: var(--comando-claro); color: var(--comando-texto); bo
   .archivo, .ventana-cod { box-shadow: none; }
   .ventana-cod { border: 1.5px solid var(--linea); }
   .ventana-cod__barra { background: var(--blanco); }
-  .archivo__nombre { background: var(--blanco); color: var(--tinta); border-bottom: 1px solid var(--linea); }
+  .archivo__nombre, .captura__barra { background: var(--blanco); color: var(--tinta); border-bottom: 1px solid var(--linea); }
 }
 
 /* ==========================================================

@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TP N°7 — Transporte y protocolos de aplicación · Redes I</title>
+  <meta name="description" content="TP N°7 de Redes I: TCP y UDP, puertos, DNS y DHCP, HTTP y HTTPS, FTP, SSH y correo electrónico, con un simulador de resolución DNS. Prof. Nicolás A. Cussi.">
+  <meta name="theme-color" content="#26C9A1">
+  <link rel="preload" href="../assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/barlow-semi-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/estilos.css">
+</head>
+<body data-tp="7">
+
+<!-- ====== Íconos (SVG simples) ====== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Red en estrella: tres equipos conectados a un nodo central -->
+    <symbol id="i-red-solido" viewBox="0 0 48 48">
+      <path d="M24 24V15M24 24L9 36M24 24l15 12" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round"/>
+      <g style="fill:currentColor;stroke:none">
+        <circle cx="24" cy="24" r="5"/>
+        <rect x="17" y="1" width="14" height="10" rx="2"/>
+        <path d="M22.5 10.5h3V13h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+        <rect x="2" y="31" width="14" height="10" rx="2"/>
+        <path d="M7.5 40.5h3V43h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+        <rect x="32" y="31" width="14" height="10" rx="2"/>
+        <path d="M37.5 40.5h3V43h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+      </g>
+    </symbol>
+    <symbol id="i-foco" viewBox="0 0 48 48">
+      <path d="M24 2.5v4M10 8.5l2.8 2.8M38 8.5l-2.8 2.8M4 22h4M40 22h4"/>
+      <path d="M24 12a10 10 0 0 0-6.2 17.8c1.4 1.2 2.2 2.6 2.2 4.2v1h8v-1c0-1.6.8-3 2.2-4.2A10 10 0 0 0 24 12z" style="fill:var(--ac)"/>
+      <path d="M20 39h8M21.5 43h5"/>
+    </symbol>
+    <symbol id="i-caja" viewBox="0 0 48 48">
+      <path d="M24 5l17 8v22l-17 8-17-8V13z" style="fill:var(--blanco)"/>
+      <path d="M13.5 10 17.5 8 34.5 16 34.5 22 30.5 24 30.5 18z" style="fill:var(--ac);stroke:none"/>
+      <path d="M24 5l17 8v22l-17 8-17-8V13z"/>
+      <path d="M7 13l17 8 17-8M24 21v22"/>
+    </symbol>
+    <symbol id="i-enchufe" viewBox="0 0 48 48">
+      <path d="M18 5v10M30 5v10"/>
+      <path d="M11 15h26v8a13 13 0 0 1-26 0z" style="fill:var(--ac)"/>
+      <path d="M24 36v8"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 48 48">
+      <circle cx="24" cy="24" r="19" style="fill:var(--ac)"/>
+      <path d="M15 24.5l6 6 12-13"/>
+    </symbol>
+    <symbol id="i-rayo" viewBox="0 0 48 48">
+      <path d="M28 4 10 27h12l-3 17 19-25H26z" style="fill:var(--ac)"/>
+    </symbol>
+    <symbol id="i-semaforo" viewBox="0 0 48 48">
+      <rect x="15" y="3" width="18" height="35" rx="5" style="fill:var(--blanco)"/>
+      <circle cx="24" cy="11.5" r="3.6"/>
+      <circle cx="24" cy="20.5" r="3.6"/>
+      <circle cx="24" cy="29.5" r="3.6" style="fill:var(--ac)"/>
+      <path d="M24 38v7"/>
+    </symbol>
+    <symbol id="i-bajar" viewBox="0 0 48 48">
+      <path d="M10 5h19l9 9v29H10z" style="fill:var(--blanco)"/>
+      <path d="M29 5v9h9" style="fill:var(--ac)"/>
+      <path d="M24 19v15M18 28l6 6 6-6"/>
+    </symbol>
+    <symbol id="i-video" viewBox="0 0 48 48">
+      <rect x="4" y="12" width="28" height="24" rx="4" style="fill:var(--ac)"/>
+      <path d="M32 21l12-7v20l-12-7z"/>
+    </symbol>
+    <symbol id="i-puerta" viewBox="0 0 48 48">
+      <path d="M12 43V5h24v38"/>
+      <path d="M12 43V5l16 4v36z" style="fill:var(--ac)"/>
+      <circle cx="23" cy="26" r="1.8" style="fill:currentColor;stroke:none"/>
+      <path d="M5 43h38"/>
+    </symbol>
+    <symbol id="i-edificio" viewBox="0 0 48 48">
+      <rect x="9" y="5" width="30" height="38" rx="1.5" style="fill:var(--blanco)"/>
+      <g style="fill:var(--ac);stroke:none">
+        <rect x="14" y="10" width="7" height="6" rx="1"/><rect x="27" y="10" width="7" height="6" rx="1"/>
+        <rect x="14" y="20" width="7" height="6" rx="1"/><rect x="27" y="20" width="7" height="6" rx="1"/>
+      </g>
+      <path d="M20 43v-9h8v9M4 43h40"/>
+    </symbol>
+    <symbol id="i-pc" viewBox="0 0 48 48">
+      <rect x="4" y="7" width="40" height="27" rx="3"/>
+      <rect x="8.5" y="11.5" width="31" height="18" rx="1" style="fill:var(--ac);stroke:none"/>
+      <path d="M24 34v6M16 41h16"/>
+    </symbol>
+    <symbol id="i-servidor" viewBox="0 0 48 48">
+      <rect x="8" y="5" width="32" height="11" rx="2" style="fill:var(--blanco)"/>
+      <rect x="8" y="18.5" width="32" height="11" rx="2" style="fill:var(--blanco)"/>
+      <rect x="8" y="32" width="32" height="11" rx="2" style="fill:var(--blanco)"/>
+      <g style="fill:var(--ac);stroke:none"><circle cx="14" cy="10.5" r="2.2"/><circle cx="14" cy="24" r="2.2"/><circle cx="14" cy="37.5" r="2.2"/></g>
+      <path d="M22 10.5h12M22 24h12M22 37.5h12"/>
+    </symbol>
+    <symbol id="i-importante" viewBox="0 0 48 48">
+      <path d="M24 5 3 42h42z" style="fill:var(--ac)"/>
+      <path d="M24 18v12M24 35.5v.5" style="stroke:var(--blanco)"/>
+    </symbol>
+    <symbol id="i-notebook" viewBox="0 0 48 48">
+      <rect x="9" y="9" width="30" height="21" rx="2"/>
+      <rect x="12.5" y="12.5" width="23" height="14" style="fill:var(--ac);stroke:none"/>
+      <path d="M4 35h40l-3 5H7z" style="fill:var(--blanco)"/>
+    </symbol>
+    <symbol id="i-celular" viewBox="0 0 48 48">
+      <rect x="14" y="4" width="20" height="40" rx="3.5" style="fill:var(--blanco)"/>
+      <rect x="17.5" y="9" width="13" height="26" style="fill:var(--ac);stroke:none"/>
+      <path d="M22 39.5h4"/>
+    </symbol>
+    <symbol id="i-lapiz" viewBox="0 0 48 48">
+      <path d="M33 6l9 9-25 25-9-9z" style="fill:var(--ac)"/>
+      <path d="M8 31 5.5 42.5 17 40z" style="fill:var(--blanco)"/>
+      <path d="M27 12l9 9"/>
+    </symbol>
+    <symbol id="i-descarga" viewBox="0 0 24 24">
+      <path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>
+    </symbol>
+    <symbol id="i-atras" viewBox="0 0 24 24">
+      <path d="M20 12H5M11 6l-6 6 6 6"/>
+    </symbol>
+  </defs>
+</svg>
+
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header class="barra">
+  <div class="barra__fila">
+    <a class="boton barra__volver" href="../index.html"><svg aria-hidden="true" focusable="false"><use href="#i-atras"/></svg><span>Índice</span></a>
+    <span class="barra__titulo">TP N°7 — Transporte y protocolos de aplicación</span>
+    <button class="boton" type="button" data-imprimir aria-label="Guardar en PDF">
+      <svg aria-hidden="true" focusable="false"><use href="#i-descarga"/></svg><span><span class="boton__largo">Guardar </span>PDF</span>
+    </button>
+  </div>
+  <nav class="partes" aria-label="Partes del TP N°7">
+    <a href="#pag-19">19 · TCP y UDP</a>
+    <a href="#pag-20">20 · Puertos</a>
+    <a href="#pag-21">21 · DNS y DHCP</a>
+    <a href="#pag-22">22 · HTTP y HTTPS</a>
+    <a href="#pag-23">23 · FTP, SSH y correo</a>
+    <a href="#simulador">Simulador DNS</a>
+    <a href="#profundizar">Para profundizar</a>
+    <a href="#actividades">Actividades</a>
+  </nav>
+</header>
+
+<main id="contenido" class="laminas">
+  <h1 class="sr-only">TP N°7 — Transporte y protocolos de aplicación</h1>
+
+  <!-- =================== LÁMINA 19 =================== -->
+  <article class="lamina" id="pag-19" aria-labelledby="t19">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°7</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t19"><span class="tit__num">19.</span> TCP y UDP</h2>
+      <p class="tit__sub">Dos formas de llevar los datos</p>
+    </div>
+
+    <div class="intro">
+      <svg class="ico ico--xl" aria-hidden="true" focusable="false"><use href="#i-caja"/></svg>
+      <p>La <strong>capa de transporte</strong> (capa 4 del modelo OSI, TP3) lleva los datos de una aplicación a la aplicación correcta del otro dispositivo, con <strong>TCP</strong> o con <strong>UDP</strong>.</p>
+    </div>
+
+    <table class="tabla-comp">
+      <caption class="sr-only">Comparación entre TCP y UDP</caption>
+      <thead>
+        <tr><th scope="col">Aspecto</th><th scope="col" class="grupo">TCP</th><th scope="col" class="grupo grupo--naranja">UDP</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row"><span><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-enchufe"/></svg>Orientación a conexión</span></th><td>Sí: primero se conecta</td><td>No: envía sin conectarse</td></tr>
+        <tr><th scope="row"><span><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Confiabilidad</span></th><td>Alta: confirma, reenvía lo perdido y ordena los datos</td><td>Baja: no confirma ni reenvía</td></tr>
+        <tr><th scope="row"><span><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-rayo"/></svg>Velocidad</span></th><td>Menor: más controles</td><td>Mayor: casi sin controles</td></tr>
+        <tr><th scope="row"><span><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-semaforo"/></svg>Control de flujo</span></th><td>Sí: el receptor avisa cuánto puede recibir</td><td>No</td></tr>
+      </tbody>
+    </table>
+
+    <div class="columnas">
+      <section class="panel" aria-labelledby="hs19">
+        <div class="panel__cab"><h3 class="subtitulo" id="hs19">Handshake de tres pasos</h3></div>
+        <figure class="esquema">
+          <svg viewBox="0 0 360 246" role="img" aria-labelledby="hs19-t hs19-d">
+            <title id="hs19-t">Handshake de tres pasos de TCP</title>
+            <desc id="hs19-d">1, el cliente envía SYN al servidor: quiero conectarme. 2, el servidor responde SYN-ACK: recibido, yo también. 3, el cliente envía ACK: recibido. La conexión queda establecida y ya pueden viajar los datos.</desc>
+            <rect class="esq-caja-pide" x="4" y="6" width="92" height="30" rx="6"/>
+            <text class="esq-rot" x="50" y="26" text-anchor="middle">Cliente</text>
+            <rect class="esq-caja-responde" x="264" y="6" width="92" height="30" rx="6"/>
+            <text class="esq-rot" x="310" y="26" text-anchor="middle">Servidor</text>
+            <path class="esq-vida" d="M50 36v184M310 36v184"/>
+            <path class="esq-pide" d="M50 72 300.04 95.08" style="stroke-width:3"/>
+            <path class="esq-pide" d="M310 96 297.5 100.87 298.6 88.92z" style="stroke:none"/>
+            <text class="esq-rot" x="180" y="74" text-anchor="middle">1. SYN</text>
+            <text class="esq-txt" x="180" y="107" text-anchor="middle">“quiero conectarme”</text>
+            <path class="esq-responde" d="M310 126 59.96 149.08" style="stroke-width:3"/>
+            <path class="esq-responde" d="M50 150 61.4 142.92 62.5 154.87z" style="stroke:none"/>
+            <text class="esq-rot" x="180" y="128" text-anchor="middle">2. SYN-ACK</text>
+            <text class="esq-txt" x="180" y="161" text-anchor="middle">“recibido, yo también”</text>
+            <path class="esq-pide" d="M50 180 300.04 203.08" style="stroke-width:3"/>
+            <path class="esq-pide" d="M310 204 297.5 208.87 298.6 196.92z" style="stroke:none"/>
+            <text class="esq-rot" x="180" y="182" text-anchor="middle">3. ACK</text>
+            <text class="esq-txt" x="180" y="215" text-anchor="middle">“recibido”</text>
+            <text class="esq-rot" x="180" y="240" text-anchor="middle" style="font-size:14px">Conexión establecida: ya viajan los datos</text>
+          </svg>
+        </figure>
+      </section>
+
+      <section class="panel" aria-labelledby="cu19">
+        <div class="panel__cab"><h3 class="subtitulo" id="cu19">Casos de uso típicos</h3></div>
+        <ul class="cuando">
+          <li class="grupo"><svg class="ico ico--l" aria-hidden="true" focusable="false"><use href="#i-bajar"/></svg><span><strong>TCP:</strong> cuando todo tiene que llegar completo. Descarga de un archivo, email, páginas web.</span></li>
+          <li class="grupo grupo--naranja"><svg class="ico ico--l" aria-hidden="true" focusable="false"><use href="#i-video"/></svg><span><strong>UDP:</strong> cuando importa más la rapidez que perder un dato. Videollamada, juego online, streaming en vivo, consulta DNS.</span></li>
+        </ul>
+      </section>
+    </div>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> TCP es confiable pero más lento; UDP es más rápido pero no confirma la entrega.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 19">19</span>
+    </footer>
+  </article>
+
+  <!-- =================== LÁMINA 20 =================== -->
+  <article class="lamina" id="pag-20" aria-labelledby="t20">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°7</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t20"><span class="tit__num">20.</span> Puertos</h2>
+      <p class="tit__sub">Cada aplicación tiene su número</p>
+    </div>
+
+    <div class="intro">
+      <svg class="ico ico--xl" aria-hidden="true" focusable="false"><use href="#i-puerta"/></svg>
+      <p>Un <strong>puerto</strong> es un número del <strong>0 al 65535</strong> que identifica a una aplicación dentro de un dispositivo. La <strong>IP</strong> dice a qué dispositivo van los datos; el <strong>puerto</strong>, a qué aplicación.</p>
+    </div>
+
+    <div class="ejemplo">
+      <h3 class="subtitulo">Ejemplo</h3>
+      <svg class="ico ico--l" aria-hidden="true" focusable="false"><use href="#i-edificio"/></svg>
+      <p>La IP es como la dirección de un edificio, y el puerto, el número de departamento.</p>
+    </div>
+
+    <section class="panel" aria-labelledby="ip20">
+      <div class="panel__cab">
+        <h3 class="subtitulo" id="ip20">IP + puerto</h3>
+        <p class="panel__nota">Se escribe<br>IP:puerto</p>
+      </div>
+      <ul class="comparar">
+        <li class="grupo"><div><h3>Cliente: tu PC</h3><p><code>192.168.1.25:51234</code><br>El navegador usa un puerto dinámico.</p></div><svg class="ico ico--xl" aria-hidden="true" focusable="false"><use href="#i-pc"/></svg></li>
+        <li class="grupo grupo--naranja"><div><h3>Servidor web</h3><p><code>203.0.113.10:443</code><br>Atiende HTTPS en el puerto 443.</p></div><svg class="ico ico--xl" aria-hidden="true" focusable="false"><use href="#i-servidor"/></svg></li>
+      </ul>
+      <p class="texto" style="margin-top:10px">Cada servicio usa su puerto y su protocolo de transporte: HTTPS, el 443 con TCP; DNS, el 53 con UDP.</p>
+    </section>
+
+    <section aria-labelledby="r20">
+      <h3 class="subtitulo" id="r20">Tres rangos de puertos</h3>
+      <ul class="tipos tipos--rangos" style="margin-top:8px">
+        <li class="tarjeta"><h4 class="tarjeta__cab">Bien conocidos</h4><p class="tipo__valor tipo__valor--chico">0–1023</p><p>Servicios estándar: 80 (HTTP), 443 (HTTPS), 53 (DNS).</p></li>
+        <li class="tarjeta"><h4 class="tarjeta__cab">Registrados</h4><p class="tipo__valor tipo__valor--chico">1024–49151</p><p>Aplicaciones conocidas: 3306 (MySQL).</p></li>
+        <li class="tarjeta"><h4 class="tarjeta__cab">Dinámicos</h4><p class="tipo__valor tipo__valor--chico">49152–65535</p><p>Los elige el cliente para cada conexión.</p></li>
+      </ul>
+    </section>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> la IP encuentra el dispositivo, y el puerto, la aplicación.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 20">20</span>
+    </footer>
+  </article>
+
+  <!-- =================== LÁMINA 21 =================== -->
+  <article class="lamina" id="pag-21" aria-labelledby="t21">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°7</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t21"><span class="tit__num">21.</span> DNS y DHCP</h2>
+      <p class="tit__sub">Traducir nombres y repartir IP</p>
+    </div>
+
+    <p class="texto">Desde esta lámina vemos <strong>protocolos de aplicación</strong>: trabajan en la capa de aplicación (capa 7 del modelo OSI, TP3). Cada uno usa un puerto y viaja con TCP o con UDP.</p>
+
+    <div class="columnas">
+      <section class="panel" aria-labelledby="dns21">
+        <div class="panel__cab">
+          <h3 class="subtitulo" id="dns21">DNS</h3>
+          <p class="puerto"><span class="puerto__rot">Puerto</span><b class="puerto__num">53</b><span class="etq etq--udp">UDP</span></p>
+        </div>
+        <p>El <strong>DNS</strong> (sistema de nombres de dominio) traduce un nombre en la IP del servidor: <code>www.redesdelaula.com</code> → <code>203.0.113.10</code>. Funciona como la agenda del celular: buscamos un nombre y obtenemos el número.</p>
+        <ol class="lista-pasos" aria-label="Cómo se resuelve un nombre">
+          <li><b>1</b><span>La PC busca el nombre en su <strong>caché</strong>.</span></li>
+          <li class="grupo"><b>2</b><span>Si no está, le pregunta a su servidor DNS (<code>8.8.8.8</code>).</span></li>
+          <li class="grupo"><b>3</b><span>Si el servidor DNS no la sabe, les pregunta a otros servidores DNS hasta conseguir la IP.</span></li>
+          <li class="grupo grupo--naranja"><b>4</b><span>Le responde la IP a la PC, y la PC la guarda en su caché.</span></li>
+        </ol>
+        <p>La <strong>caché</strong> guarda las respuestas un tiempo: la próxima vez, la IP sale enseguida, sin preguntar. Probalo en el simulador DNS, después de esta lámina.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="dhcp21">
+        <div class="panel__cab">
+          <h3 class="subtitulo" id="dhcp21">DHCP</h3>
+          <p class="puerto"><span class="puerto__rot">Puertos</span><b class="puerto__num">67 y 68</b><span class="etq etq--udp">UDP</span></p>
+        </div>
+        <p>En el TP4 vimos que la IP puede ser estática o dinámica. La dinámica la asigna un servidor <strong>DHCP</strong> (en casa, suele ser el router) cuando el dispositivo se conecta a la red. Lo hace en cuatro pasos, el proceso <strong>DORA</strong>:</p>
+        <ol class="lista-pasos" aria-label="Proceso DORA">
+          <li class="grupo"><b>D</b><span><strong>Discover</strong> (descubrir): la PC pregunta a toda la red si hay un servidor DHCP.</span></li>
+          <li class="grupo grupo--naranja"><b>O</b><span><strong>Offer</strong> (ofrecer): el servidor le ofrece una IP, por ejemplo <code>192.168.1.25</code>.</span></li>
+          <li class="grupo"><b>R</b><span><strong>Request</strong> (solicitar): la PC pide usar esa IP.</span></li>
+          <li class="grupo grupo--naranja"><b>A</b><span><strong>Acknowledge</strong> (confirmar): el servidor confirma, y la IP es de la PC por un tiempo.</span></li>
+        </ol>
+        <p>Además de la IP, la PC recibe la máscara (<code>255.255.255.0</code>), la puerta de enlace (<em>gateway</em>, <code>192.168.1.1</code>) y el DNS (<code>8.8.8.8</code>). El servidor usa el puerto 67, y la PC, el 68.</p>
+      </section>
+    </div>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> DNS traduce nombres en IP; DHCP le da a cada dispositivo su IP al conectarse. Los dos usan UDP.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 21">21</span>
+    </footer>
+  </article>
+
+  <!-- =================== LÁMINA 22 =================== -->
+  <article class="lamina" id="pag-22" aria-labelledby="t22">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°7</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t22"><span class="tit__num">22.</span> HTTP y HTTPS</h2>
+      <p class="tit__sub">Pedir y recibir páginas web</p>
+    </div>
+
+    <section class="panel" aria-labelledby="http22">
+      <div class="panel__cab">
+        <h3 class="subtitulo" id="http22">HTTP</h3>
+        <p class="puerto"><span class="puerto__rot">Puerto</span><b class="puerto__num">80</b><span class="etq etq--tcp">TCP</span></p>
+      </div>
+      <p class="texto"><strong>HTTP</strong> es el protocolo de la web: el navegador (el cliente) le envía una <strong>solicitud</strong> al servidor web, y el servidor le contesta con una <strong>respuesta</strong>. Antes, el navegador consigue la IP con DNS (lámina 21) y se conecta con el handshake de TCP (lámina 19).</p>
+      <div class="columnas">
+        <div class="http">
+          <h4 class="http__tit">La solicitud <span>· del navegador al servidor</span></h4>
+          <div class="ventana-cod">
+            <div class="ventana-cod__barra" aria-hidden="true">HTTP</div>
+<pre class="ventana-cod__txt"><b>GET</b> <span class="t-str">/index.html</span> HTTP/1.1
+<span class="t-atr">Host:</span> www.redesdelaula.com
+<span class="t-atr">User-Agent:</span> Mozilla/5.0 (Windows…)
+<span class="t-atr">Accept-Language:</span> es-AR</pre>
+          </div>
+          <ul class="lista-txt pf__lista">
+            <li><strong>Método:</strong> <code>GET</code> pide una página.</li>
+            <li><strong>URL:</strong> se arma con el Host y la ruta: <code>http://www.redesdelaula.com/index.html</code></li>
+            <li><strong>Headers:</strong> datos extra, uno por renglón: el sitio, el navegador y el idioma.</li>
+          </ul>
+        </div>
+        <div class="http">
+          <h4 class="http__tit">La respuesta <span>· del servidor al navegador</span></h4>
+          <div class="ventana-cod">
+            <div class="ventana-cod__barra" aria-hidden="true">HTTP</div>
+<pre class="ventana-cod__txt">HTTP/1.1 <span class="t-num">200</span> OK
+<span class="t-atr">Content-Type:</span> text/html
+
+<span class="t-com">&lt;!DOCTYPE html&gt;…</span></pre>
+          </div>
+          <ul class="lista-txt pf__lista">
+            <li><strong>Código de estado:</strong> cómo salió el pedido; <code>200 OK</code> es “todo bien”.</li>
+            <li><strong>Headers:</strong> datos extra, como el tipo de contenido.</li>
+            <li><strong>Contenido:</strong> la página, escrita en HTML.</li>
+          </ul>
+        </div>
+      </div>
+      <h4 class="http__tit" id="cod22">Códigos de estado</h4>
+      <ul class="codigos" aria-labelledby="cod22">
+        <li class="grupo grupo--ok"><b>200</b><strong>OK</strong><span>Salió bien.</span></li>
+        <li><b>301</b><strong>Moved Permanently</strong><span>Se mudó a otra URL.</span></li>
+        <li class="grupo grupo--error"><b>403</b><strong>Forbidden</strong><span>Prohibido: no se puede ver.</span></li>
+        <li class="grupo grupo--error"><b>404</b><strong>Not Found</strong><span>No existe esa página.</span></li>
+        <li class="grupo grupo--error"><b>500</b><strong>Internal Server Error</strong><span>Falló el servidor.</span></li>
+      </ul>
+    </section>
+
+    <div class="columnas columnas--3-2">
+      <section class="panel" aria-labelledby="https22">
+        <div class="panel__cab">
+          <h3 class="subtitulo" id="https22">HTTPS</h3>
+          <p class="puerto"><span class="puerto__rot">Puerto</span><b class="puerto__num">443</b><span class="etq etq--tcp">TCP</span></p>
+        </div>
+        <p><strong>HTTPS</strong> es HTTP <strong>cifrado</strong>: nadie en el medio puede leer ni cambiar lo que viaja.</p>
+      </section>
+      <div class="nota nota--importante">
+        <h3><svg class="ico tit-ico" aria-hidden="true" focusable="false"><use href="#i-importante"/></svg>Importante</h3>
+        <p>Nunca escribas una contraseña sin el candado de HTTPS.</p>
+      </div>
+    </div>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> en HTTP, el cliente envía una solicitud y el servidor devuelve una respuesta con un código de estado.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 22">22</span>
+    </footer>
+  </article>
+
+  <!-- =================== LÁMINA 23 =================== -->
+  <article class="lamina" id="pag-23" aria-labelledby="t23">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°7</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t23"><span class="tit__num">23.</span> FTP, SSH y correo</h2>
+      <p class="tit__sub">Archivos, acceso remoto y mensajes</p>
+    </div>
+
+    <div class="columnas">
+      <section class="panel" aria-labelledby="ftp23">
+        <div class="panel__cab">
+          <h3 class="subtitulo" id="ftp23">FTP</h3>
+          <p class="puerto"><span class="puerto__rot">Puertos</span><b class="puerto__num">20 y 21</b><span class="etq etq--tcp">TCP</span></p>
+        </div>
+        <p><strong>FTP</strong> (protocolo de transferencia de archivos) sirve para subir y bajar archivos de un servidor con un programa de FTP. Usa el puerto <strong>21</strong> para las órdenes (control) y el <strong>20</strong> para los datos. No cifra: los archivos y la contraseña viajan sin protección.</p>
+        <p>Ojo: descargar un archivo desde una página web no usa FTP, sino HTTP o HTTPS.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="ssh23">
+        <div class="panel__cab">
+          <h3 class="subtitulo" id="ssh23">SSH</h3>
+          <p class="puerto"><span class="puerto__rot">Puerto</span><b class="puerto__num">22</b><span class="etq etq--tcp">TCP</span></p>
+        </div>
+        <p><strong>SSH</strong> (en inglés, <em>Secure Shell</em>) permite manejar la terminal de otra computadora a distancia: es un <strong>acceso remoto</strong>. Todo viaja cifrado, también la contraseña.</p>
+        <p>Se usa, por ejemplo, para administrar un servidor sin estar frente a él.</p>
+      </section>
+    </div>
+
+    <section class="panel" aria-labelledby="mail23">
+      <div class="panel__cab">
+        <h3 class="subtitulo" id="mail23">Correo electrónico (email)</h3>
+        <p class="panel__nota">Los tres<br>usan TCP</p>
+      </div>
+      <ol class="secuencia secuencia--compacta">
+        <li class="paso grupo"><h4>Remitente</h4><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-notebook"/></svg><p>Envía el correo con <strong>SMTP</strong> (puerto 25).</p></li>
+        <li class="paso grupo grupo--naranja"><h4>Su servidor de correo</h4><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-servidor"/></svg><p>Lo reenvía con SMTP (puerto 25).</p></li>
+        <li class="paso grupo grupo--naranja"><h4>Servidor del destinatario</h4><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-servidor"/></svg><p>Lo guarda en el buzón.</p></li>
+        <li class="paso grupo"><h4>Destinatario</h4><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-celular"/></svg><p>Lo recibe con <strong>POP3</strong> (110) o <strong>IMAP</strong> (143).</p></li>
+      </ol>
+      <ul class="comparar comparar--compacto" style="margin-top:12px">
+        <li class="grupo"><div><h4>POP3 · puerto 110</h4><p>Descarga los correos a un dispositivo y, por lo general, los borra del servidor. Lo que bajó la notebook no aparece en el celular.</p></div></li>
+        <li class="grupo grupo--naranja"><div><h4>IMAP · puerto 143</h4><p>Deja los correos en el servidor y sincroniza: lo que leés o borrás en el celular se ve igual en la notebook.</p></div></li>
+      </ul>
+    </section>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> FTP transfiere archivos; SSH da acceso remoto cifrado; el correo usa SMTP para enviar y POP3 o IMAP para recibir. Todos usan TCP.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 23">23</span>
+    </footer>
+  </article>
+
+  <!-- =================== SIMULADOR DNS (hoja propia, sin número de lámina) =================== -->
+  <article class="lamina lamina--sim" id="simulador" aria-labelledby="tsim">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°7</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="tsim">Simulador DNS</h2>
+      <p class="tit__sub">Cómo se consigue la IP de un nombre</p>
+    </div>
+
+    <section class="simulador" data-sim="dns" aria-labelledby="tsim">
+      <div class="sim__cab">
+        <span class="etq etq--sim">Simulador</span>
+        <p class="sim__aviso">Simulación: los valores son de ejemplo.</p>
+      </div>
+      <p class="sim__intro">Escribí un nombre y mirá, paso por paso, cómo la PC consigue su IP. Fijate qué pasa si lo pedís dos veces seguidas, o si lo escribís mal.</p>
+
+      <div class="sim__controles no-imprimir" data-sim-js hidden>
+        <form class="sim__form" novalidate>
+          <div class="sim__campo">
+            <label for="sim-nombre">Nombre a resolver</label>
+            <input id="sim-nombre" type="text" value="www.redesdelaula.com" inputmode="url" autocomplete="off" autocapitalize="none" spellcheck="false">
+          </div>
+          <button class="boton" type="submit">Resolver</button>
+        </form>
+        <p class="sim__ejemplos" style="margin-top:8px">Probá con:
+          <button class="boton boton--claro boton--chico" type="button" data-nombre="www.redesdelaula.com">www.redesdelaula.com</button>
+          <button class="boton boton--claro boton--chico" type="button" data-nombre="www.redesdelaula.con">www.redesdelaula.con (mal escrito)</button>
+        </p>
+        <div class="sim__botones" style="margin-top:8px">
+          <button class="boton" type="button" data-sim-siguiente>Siguiente paso</button>
+          <button class="boton boton--claro" type="button" data-sim-todo>Ver todos los pasos</button>
+        </div>
+      </div>
+
+      <p class="sim__estado" role="status" aria-live="polite">Ejemplo resuelto: www.redesdelaula.com, con las dos cachés vacías.</p>
+
+      <ul class="sim__leyenda" aria-label="Qué significa cada color">
+        <li style="--leyenda:var(--acento)">Pide</li>
+        <li style="--leyenda:var(--naranja)">Responde</li>
+        <li style="--leyenda:var(--linea)">Busca en su caché</li>
+        <li style="--leyenda:var(--ok)">Listo</li>
+        <li style="--leyenda:var(--error)">No existe</li>
+      </ul>
+
+      <div class="sim__cuerpo">
+        <ol class="sim__pasos" aria-label="Pasos de la resolución">
+          <li class="sim__paso sim__paso--local"><p class="sim__quien">PC</p><p class="sim__msg">Busca www.redesdelaula.com en su caché: no está.</p></li>
+          <li class="sim__paso sim__paso--pide"><p class="sim__quien">PC <span aria-hidden="true">→</span><span class="sr-only"> a </span> Servidor DNS (8.8.8.8)</p><p class="sim__msg">¿Cuál es la IP de www.redesdelaula.com? <span class="etq etq--udp">UDP 53</span></p></li>
+          <li class="sim__paso sim__paso--local"><p class="sim__quien">Servidor DNS</p><p class="sim__msg">Busca en su caché: no está. Tiene que averiguarla.</p></li>
+          <li class="sim__paso sim__paso--pide"><p class="sim__quien">Servidor DNS <span aria-hidden="true">→</span><span class="sr-only"> a </span> Servidor raíz</p><p class="sim__msg">¿Cuál es la IP de www.redesdelaula.com? <span class="etq etq--udp">UDP 53</span></p></li>
+          <li class="sim__paso sim__paso--responde"><p class="sim__quien">Servidor raíz <span aria-hidden="true">→</span><span class="sr-only"> a </span> Servidor DNS</p><p class="sim__msg">No la sé. Preguntale al servidor de .com. <span class="etq etq--udp">UDP 53</span></p></li>
+          <li class="sim__paso sim__paso--pide"><p class="sim__quien">Servidor DNS <span aria-hidden="true">→</span><span class="sr-only"> a </span> Servidor de .com</p><p class="sim__msg">¿Cuál es la IP de www.redesdelaula.com? <span class="etq etq--udp">UDP 53</span></p></li>
+          <li class="sim__paso sim__paso--responde"><p class="sim__quien">Servidor de .com <span aria-hidden="true">→</span><span class="sr-only"> a </span> Servidor DNS</p><p class="sim__msg">No la sé. Preguntale al servidor de redesdelaula.com. <span class="etq etq--udp">UDP 53</span></p></li>
+          <li class="sim__paso sim__paso--pide"><p class="sim__quien">Servidor DNS <span aria-hidden="true">→</span><span class="sr-only"> a </span> Servidor de redesdelaula.com</p><p class="sim__msg">¿Cuál es la IP de www.redesdelaula.com? <span class="etq etq--udp">UDP 53</span></p></li>
+          <li class="sim__paso sim__paso--responde"><p class="sim__quien">Servidor de redesdelaula.com <span aria-hidden="true">→</span><span class="sr-only"> a </span> Servidor DNS</p><p class="sim__msg">Es 203.0.113.10. <span class="etq etq--udp">UDP 53</span></p></li>
+          <li class="sim__paso sim__paso--responde"><p class="sim__quien">Servidor DNS <span aria-hidden="true">→</span><span class="sr-only"> a </span> PC</p><p class="sim__msg">Es 203.0.113.10. Antes, la guarda en su caché. <span class="etq etq--udp">UDP 53</span></p></li>
+          <li class="sim__paso sim__paso--ok"><p class="sim__quien">PC</p><p class="sim__msg">Guarda la IP en su caché. Ya puede conectarse a 203.0.113.10.</p></li>
+        </ol>
+
+        <div class="sim__caches">
+          <section class="sim__cache" aria-labelledby="sim-c-pc">
+            <h3 id="sim-c-pc">Caché de la PC</h3>
+            <ul data-cache="pc"><li>www.redesdelaula.com → 203.0.113.10</li></ul>
+            <button class="boton boton--claro boton--chico no-imprimir" type="button" data-vaciar="pc" data-sim-js hidden>Vaciar</button>
+          </section>
+          <section class="sim__cache" aria-labelledby="sim-c-dns">
+            <h3 id="sim-c-dns">Caché del servidor DNS</h3>
+            <ul data-cache="dns"><li>www.redesdelaula.com → 203.0.113.10</li></ul>
+            <button class="boton boton--claro boton--chico no-imprimir" type="button" data-vaciar="dns" data-sim-js hidden>Vaciar</button>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 7</span>
+    </footer>
+  </article>
+
+  <!-- =================== PARA PROFUNDIZAR · Hoja 1 =================== -->
+  <article class="lamina lamina--pf" id="profundizar" aria-labelledby="tpf">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°7</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="tpf"><span class="tit__num">+</span> Para profundizar</h2>
+      <p class="tit__sub">Un poco más sobre cada lámina</p>
+    </div>
+
+    <div class="pf-grid">
+    <section class="pf" aria-labelledby="pf19">
+      <p class="pf__etiqueta">Lámina 19</p>
+      <h3 class="pf__titulo" id="pf19">¿Cómo sabe TCP que falta algo?</h3>
+      <div class="pf__cols">
+        <div class="pf__texto">
+          <p>TCP numera los datos que envía. El receptor contesta con un <strong>ACK</strong> (acuse de recibo) que dice hasta dónde le llegó todo. Si el emisor no recibe el ACK a tiempo, vuelve a enviar esa parte.</p>
+          <p>Con los números, el receptor también ordena los datos, aunque lleguen mezclados.</p>
+        </div>
+        <div class="pf__caja">
+          <h4>¿Y el streaming?</h4>
+          <p>Las plataformas de series y películas usan TCP: cargan unos segundos por adelantado (el <strong>buffer</strong>) y pueden esperar a que llegue todo. En una transmisión en vivo importa la demora: por eso suele convenir UDP.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="pf" aria-labelledby="pf20">
+      <p class="pf__etiqueta">Lámina 20</p>
+      <h3 class="pf__titulo" id="pf20">Muchas conexiones a la vez</h3>
+      <div class="pf__cols">
+        <div class="pf__texto">
+          <p>Si abrimos tres pestañas, el navegador usa un puerto dinámico distinto para cada conexión. Así, cuando llegan las respuestas, la PC sabe a qué pestaña le corresponde cada una.</p>
+          <p>Un mismo servidor también puede atender varios servicios a la vez, cada uno en su puerto: la web en el 443 y SSH en el 22.</p>
+        </div>
+        <div class="pf__caja">
+          <h4>Tres pestañas, tres conexiones</h4>
+          <ul class="pf__lista">
+            <li><code>192.168.1.25:51234 → 203.0.113.10:443</code></li>
+            <li><code>192.168.1.25:51235 → 203.0.113.10:443</code></li>
+            <li><code>192.168.1.25:51236 → 203.0.113.20:80</code></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="pf" aria-labelledby="pf21">
+      <p class="pf__etiqueta">Lámina 21</p>
+      <h3 class="pf__titulo" id="pf21">Los nombres se leen de derecha a izquierda</h3>
+      <div class="pf__cols">
+        <div class="pf__texto">
+          <p>Los nombres de dominio se organizan como un árbol. Arriba están los <strong>servidores raíz</strong>; debajo, los de cada terminación (.com, .ar, .org), y debajo, los de cada dominio. Por eso el servidor DNS pregunta en ese orden.</p>
+          <p>La IP que entrega DHCP es prestada: dura un tiempo, llamado <strong>concesión</strong>, y después se renueva.</p>
+        </div>
+        <div class="pf__caja">
+          <h4>Las partes de un nombre</h4>
+          <ul class="pf__lista">
+            <li><strong>.com:</strong> la terminación (dominio de nivel superior).</li>
+            <li><strong>redesdelaula:</strong> el dominio, registrado por su dueño.</li>
+            <li><strong>www:</strong> un nombre dentro del dominio; por costumbre, el del servidor web.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="pf" aria-labelledby="pf22">
+      <p class="pf__etiqueta">Lámina 22</p>
+      <h3 class="pf__titulo" id="pf22">Los códigos vienen en familias</h3>
+      <div class="pf__cols">
+        <div class="pf__texto">
+          <p>El primer número del código dice qué tipo de respuesta es. Así, aunque no conozcamos un código, podemos saber si salió bien o mal.</p>
+          <p>Si alguien captura el tráfico, como en la captura de la hoja siguiente, con HTTP puede leer todo. Con HTTPS solo ve datos cifrados.</p>
+        </div>
+        <div class="pf__caja">
+          <h4>Cinco familias</h4>
+          <ul class="pf__lista">
+            <li><strong>1xx:</strong> información (casi nunca se ven).</li>
+            <li><strong>2xx:</strong> salió bien (200).</li>
+            <li><strong>3xx:</strong> redirección: hay que ir a otra URL (301).</li>
+            <li><strong>4xx:</strong> error del cliente: el pedido está mal o no está permitido (403, 404).</li>
+            <li><strong>5xx:</strong> error del servidor (500).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 7</span>
+    </footer>
+  </article>
+
+  <!-- =================== PARA PROFUNDIZAR · Hoja 2 =================== -->
+  <article class="lamina lamina--pf" id="profundizar-2" aria-labelledby="tpf2">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°7</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="tpf2"><span class="tit__num">+</span> Para profundizar</h2>
+      <p class="tit__sub">Los puertos de este TP y una captura de tráfico</p>
+    </div>
+
+    <div class="pf-fila">
+    <section class="pf" aria-labelledby="pf23">
+      <p class="pf__etiqueta">Lámina 23</p>
+      <h3 class="pf__titulo" id="pf23">Versiones cifradas</h3>
+      <div class="pf__cols">
+        <div class="pf__texto">
+          <p>FTP no cifra nada. Hoy se prefiere <strong>SFTP</strong>, que transfiere archivos a través de SSH, por el puerto 22.</p>
+        </div>
+        <div class="pf__caja">
+          <h4>El correo, hoy</h4>
+          <p>Los programas de correo usan versiones cifradas: SMTP en el puerto 587 para enviar, e IMAP en el 993 o POP3 en el 995 para recibir.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="tp-puertos">
+      <h3 class="subtitulo" id="tp-puertos">Tabla resumen de puertos</h3>
+      <table class="tabla-puertos">
+        <caption class="sr-only">Puerto, protocolo, transporte y uso de cada servicio</caption>
+        <thead><tr><th scope="col">Puerto</th><th scope="col">Protocolo</th><th scope="col">Transporte</th><th scope="col">Para qué se usa</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">20 y 21</th><td>FTP</td><td><span class="etq etq--tcp">TCP</span></td><td>Transferir archivos (20: datos; 21: control)</td></tr>
+          <tr><th scope="row">22</th><td>SSH</td><td><span class="etq etq--tcp">TCP</span></td><td>Acceso remoto cifrado</td></tr>
+          <tr><th scope="row">25</th><td>SMTP</td><td><span class="etq etq--tcp">TCP</span></td><td>Enviar correo</td></tr>
+          <tr><th scope="row">53</th><td>DNS</td><td><span class="etq etq--udp">UDP</span></td><td>Traducir nombres en IP</td></tr>
+          <tr><th scope="row">67 y 68</th><td>DHCP</td><td><span class="etq etq--udp">UDP</span></td><td>Asignar IP automáticamente (67: servidor; 68: cliente)</td></tr>
+          <tr><th scope="row">80</th><td>HTTP</td><td><span class="etq etq--tcp">TCP</span></td><td>Páginas web</td></tr>
+          <tr><th scope="row">110</th><td>POP3</td><td><span class="etq etq--tcp">TCP</span></td><td>Recibir correo y descargarlo</td></tr>
+          <tr><th scope="row">143</th><td>IMAP</td><td><span class="etq etq--tcp">TCP</span></td><td>Recibir correo y dejarlo en el servidor</td></tr>
+          <tr><th scope="row">443</th><td>HTTPS</td><td><span class="etq etq--tcp">TCP</span></td><td>Páginas web cifradas</td></tr>
+          <tr><th scope="row">3306</th><td>MySQL</td><td><span class="etq etq--tcp">TCP</span></td><td>Base de datos MySQL (puerto registrado)</td></tr>
+        </tbody>
+      </table>
+    </section>
+    </div>
+
+    <section aria-labelledby="tp-captura">
+      <h3 class="subtitulo" id="tp-captura">Una captura anotada</h3>
+      <p class="captura__intro">Wireshark captura los paquetes que pasan por la placa de red. Así se ve la carga de www.redesdelaula.com:</p>
+      <figure class="captura" aria-labelledby="cap-t">
+        <figcaption class="sr-only" id="cap-t">Esquema de una captura de Wireshark con una consulta DNS, su respuesta, un GET de HTTP y su respuesta 200 OK</figcaption>
+        <div class="captura__barra" aria-hidden="true">Wireshark</div>
+        <p class="captura__filtro"><span>Filtro:</span>dns or http</p>
+        <table>
+          <caption class="sr-only">Paquetes capturados</caption>
+          <thead><tr><th scope="col">No.</th><th scope="col">Time</th><th scope="col">Source</th><th scope="col">Destination</th><th scope="col">Protocol</th><th scope="col">Info</th></tr></thead>
+          <tbody>
+            <tr class="pide"><td data-col="No.">1</td><td data-col="Time">0.000000</td><td data-col="Source">192.168.1.25</td><td data-col="Destination">8.8.8.8</td><td data-col="Protocol">DNS</td><td data-col="Info">Standard query 0x4f1c A www.redesdelaula.com</td></tr>
+            <tr class="nota-fila nota-fila--pide"><td colspan="6"><b aria-hidden="true">↑</b><strong>Consulta DNS:</strong> la PC le pregunta al servidor DNS la IP de www.redesdelaula.com (UDP, puerto 53).</td></tr>
+            <tr class="responde"><td data-col="No.">2</td><td data-col="Time">0.024310</td><td data-col="Source">8.8.8.8</td><td data-col="Destination">192.168.1.25</td><td data-col="Protocol">DNS</td><td data-col="Info">Standard query response 0x4f1c A www.redesdelaula.com A 203.0.113.10</td></tr>
+            <tr class="nota-fila nota-fila--responde"><td colspan="6"><b aria-hidden="true">↑</b><strong>Respuesta DNS:</strong> la IP es 203.0.113.10. El número 0x4f1c une la consulta con su respuesta.</td></tr>
+            <tr class="pide"><td data-col="No.">6</td><td data-col="Time">0.081544</td><td data-col="Source">192.168.1.25</td><td data-col="Destination">203.0.113.10</td><td data-col="Protocol">HTTP</td><td data-col="Info">GET / HTTP/1.1</td></tr>
+            <tr class="nota-fila nota-fila--pide"><td colspan="6"><b aria-hidden="true">↑</b><strong>GET:</strong> el navegador le pide la página principal (/) al servidor web (TCP, puerto 80). Las filas 3 a 5 (el handshake de TCP) y la 7 (una confirmación de TCP) no se ven: el filtro las oculta.</td></tr>
+            <tr class="responde"><td data-col="No.">8</td><td data-col="Time">0.137902</td><td data-col="Source">203.0.113.10</td><td data-col="Destination">192.168.1.25</td><td data-col="Protocol">HTTP</td><td data-col="Info">HTTP/1.1 200 OK  (text/html)</td></tr>
+            <tr class="nota-fila nota-fila--responde"><td colspan="6"><b aria-hidden="true">↑</b><strong>200 OK:</strong> el servidor responde que salió bien y envía la página (text/html). Con HTTPS, las filas 6 y 8 dirían «TLS» y «Application Data»: todo viaja cifrado.</td></tr>
+          </tbody>
+        </table>
+      </figure>
+    </section>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 7</span>
+    </footer>
+  </article>
+
+  <!-- =================== ACTIVIDADES · Parte 1 =================== -->
+  <article class="lamina lamina--act" id="actividades" aria-labelledby="act-1">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°7</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <header class="act-banda">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-lapiz"/></svg>
+      <div>
+        <h2 id="act-1">Actividades para hacer en la carpeta</h2>
+        <p>TP N°7 — Transporte y protocolos de aplicación</p>
+      </div>
+      <span class="act-banda__parte">Parte<br>1 de 2</span>
+    </header>
+
+    <p class="consigna"><strong>Consigna:</strong> Respondé cada punto de forma completa, usando tus propias palabras. Podés apoyarte en las láminas, en el simulador y en “Para profundizar” del TP N°7.</p>
+
+    <ol class="acts">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">1-</span> TCP y UDP</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Copiá el cuadro en la carpeta y completalo para comparar TCP y UDP.
+            <table class="act-tabla act-tabla--compacta">
+              <caption class="sr-only">Cuadro para comparar TCP y UDP</caption>
+              <thead><tr><th scope="col">Característica</th><th scope="col">TCP</th><th scope="col">UDP</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Orientación a conexión</th><td></td><td></td></tr>
+                <tr><th scope="row">Confiabilidad</th><td></td><td></td></tr>
+                <tr><th scope="row">Velocidad</th><td></td><td></td></tr>
+                <tr><th scope="row">Control de flujo</th><td></td><td></td></tr>
+                <tr><th scope="row">Casos de uso típicos</th><td></td><td></td></tr>
+              </tbody>
+            </table></div></li>
+          <li><b class="act__letra">b)</b><div>Indicá qué protocolo conviene en cada escenario, TCP o UDP, y justificá: videollamada / descarga de un archivo / streaming / juego online / envío de un email / consulta DNS.</div></li>
+          <li><b class="act__letra">c)</b><div>Dibujá el handshake de tres pasos entre un cliente y un servidor. Escribí el nombre de cada mensaje.</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <ol class="acts" start="2">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">2-</span> Puertos</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Copiá la tabla y completala con el protocolo o servicio de cada puerto.
+            <table class="act-tabla act-tabla--fila">
+              <caption class="sr-only">Tabla para completar con el protocolo o servicio de cada puerto</caption>
+              <thead><tr><th scope="row">Puerto</th><th scope="col">80</th><th scope="col">443</th><th scope="col">21</th><th scope="col">22</th><th scope="col">25</th><th scope="col">53</th><th scope="col">3306</th></tr></thead>
+              <tbody><tr><th scope="row">Protocolo o servicio</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+            </table></div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">3-</span> DNS y DHCP</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Explicá qué hace DNS, con el ejemplo de <code>www.redesdelaula.com</code>.</div></li>
+          <li><b class="act__letra">b)</b><div>¿Para qué sirve la caché? Explicá qué pasa la segunda vez que se pide el mismo nombre.</div></li>
+          <li><b class="act__letra">c)</b><div>Ordená los pasos del proceso DORA y explicá qué hace cada uno: Request / Discover / Acknowledge / Offer.</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 7</span>
+    </footer>
+  </article>
+
+  <!-- =================== ACTIVIDADES · Parte 2 =================== -->
+  <article class="lamina lamina--act" id="actividades-2" aria-labelledby="act-2">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°7</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <header class="act-banda">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-lapiz"/></svg>
+      <div>
+        <h2 id="act-2">Actividades para hacer en la carpeta</h2>
+        <p>TP N°7 — Transporte y protocolos de aplicación</p>
+      </div>
+      <span class="act-banda__parte">Parte<br>2 de 2</span>
+    </header>
+
+    <ol class="acts acts--2col" start="4">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">4-</span> HTTP y HTTPS</h3>
+        <div class="ventana-cod" style="margin-top:9px" role="group" aria-label="Solicitud que envió un navegador">
+          <div class="ventana-cod__barra" aria-hidden="true">HTTP</div>
+<pre class="ventana-cod__txt"><b>GET</b> <span class="t-str">/horarios/quinto.html</span> HTTP/1.1
+<span class="t-atr">Host:</span> www.redesdelaula.com
+<span class="t-atr">User-Agent:</span> Mozilla/5.0 (Windows…)
+<span class="t-atr">Accept-Language:</span> es-AR</pre>
+        </div>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Un navegador envió esta solicitud. Indicá el método, la URL y los headers.</div></li>
+          <li><b class="act__letra">b)</b><div>Explicá qué significa cada código de estado: 200, 301, 404 y 500.</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">5-</span> FTP, SSH y correo</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Indicá qué protocolo se usa en cada caso: subir archivos a un servidor / manejar a distancia la terminal de un servidor / enviar un correo / leer el mismo correo en el celular y en la notebook.</div></li>
+          <li><b class="act__letra">b)</b><div>¿Qué puertos usa FTP? ¿Para qué sirve cada uno?</div></li>
+          <li><b class="act__letra">c)</b><div>Explicá la diferencia entre POP3 e IMAP.</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <ol class="acts" start="6">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">6-</span> Caso integrador</h3>
+        <p class="act__caso">Un alumno enciende su notebook, se conecta al Wi-Fi, abre el navegador, escribe una URL, navega, descarga un archivo y envía un email.</p>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Identificá qué protocolo de aplicación interviene en cada paso y en qué orden.</div></li>
+          <li><b class="act__letra">b)</b><div>Copiá la tabla y completala con la función, el puerto, si usa TCP o UDP y un ejemplo de uso de cada protocolo.
+            <table class="act-tabla act-tabla--compacta">
+              <caption class="sr-only">Tabla para completar con la función, el puerto, el transporte y un ejemplo de cada protocolo</caption>
+              <thead><tr><th scope="col">Protocolo</th><th scope="col">Función</th><th scope="col">Puerto</th><th scope="col">TCP o UDP</th><th scope="col">Ejemplo de uso</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">DNS</th><td></td><td></td><td></td><td></td></tr>
+                <tr><th scope="row">DHCP</th><td></td><td></td><td></td><td></td></tr>
+                <tr><th scope="row">HTTP</th><td></td><td></td><td></td><td></td></tr>
+                <tr><th scope="row">HTTPS</th><td></td><td></td><td></td><td></td></tr>
+                <tr><th scope="row">FTP</th><td></td><td></td><td></td><td></td></tr>
+                <tr><th scope="row">SSH</th><td></td><td></td><td></td><td></td></tr>
+                <tr><th scope="row">SMTP</th><td></td><td></td><td></td><td></td></tr>
+              </tbody>
+            </table></div></li>
+          <li><b class="act__letra">c)</b><div>Mirá la captura anotada de “Para profundizar” e identificá los protocolos presentes.</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <div class="act-cierre">
+      <p class="act-cierre__realizar">REALIZAR EN LA CARPETA.</p>
+      <p class="act-cierre__fecha">Fecha límite: ___/___/____</p>
+    </div>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 7</span>
+    </footer>
+  </article>
+</main>
+
+<script src="../assets/js/actividades.js"></script>
+<script src="../assets/js/simuladores.js"></script>
+</body>
+</html>
