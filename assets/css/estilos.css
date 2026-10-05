@@ -1,0 +1,913 @@
+/* ==========================================================
+   Base de Datos I — Cuadernillo web (identidad: "Bases de Datos y SQL · Desde cero")
+   Prof. Nicolás A. Cussi • Base de Datos I
+   Mobile first · Modo hoja A4 en escritorio e impresión
+   ========================================================== */
+
+/* ---------- Tipografías locales (SIL OFL, ver assets/fonts/OFL.txt) ---------- */
+@font-face { font-family: "Barlow"; src: url("../fonts/barlow-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow"; src: url("../fonts/barlow-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow"; src: url("../fonts/barlow-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow"; src: url("../fonts/barlow-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow Semi Condensed"; src: url("../fonts/barlow-semi-condensed-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow Semi Condensed"; src: url("../fonts/barlow-semi-condensed-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow Condensed"; src: url("../fonts/barlow-condensed-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow Condensed"; src: url("../fonts/barlow-condensed-latin-800-normal.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: swap; }
+
+/* ---------- Paleta (detectada del PDF) ---------- */
+:root {
+  /* Identidad del cuadernillo. El acento es el cian del Módulo 1;
+     .modulo-2 y .modulo-3 lo cambian por el color de su módulo */
+  --conceptos: #26C6D4;     /* cian del Módulo 1 (también en la franja del Integrador) */
+  --acento: var(--conceptos); /* acento: íconos, barras, flechas, recuadros */
+  --acento-numero: #05A2B4; /* número de cada título (ajustado: 3:1 sobre blanco) */
+  --acento-claro: #CDEFF4;  /* encabezados de tarjetas */
+  --acento-suave: #E2F5F8;  /* fondo de "Idea clave" */
+  /* Texto de color sobre blanco o sobre el tono claro (el cian de acento no sirve para texto chico) */
+  --acento-texto: #0B6B7A;  /* 6,2:1 */
+
+  /* Colores con significado propio */
+  --planilla: #A78BFA; --planilla-numero: #7C3AED; --planilla-texto: #6D28D9; --planilla-claro: #DDD6FE; --planilla-suave: #EDE9FE;
+  --sql: #60A5FA;      --sql-numero: #2563EB;      --sql-texto: #1D4ED8;      --sql-claro: #BFDBFE;      --sql-suave: #DBEAFE;
+  --archivo: #F59E0B;  --archivo-texto: #92400E;   --archivo-claro: #FEF3C7;  --archivo-linea: #FDE68A;
+  --naranja: #EA580C;  --naranja-texto: #C2410C;   --naranja-claro: #FFEDD5;
+  --ok: #15803D;       --ok-oscuro: #166534;       --ok-claro: #DCFCE7;
+
+  /* Ventanas: los tres puntos */
+  --punto-rojo: #FF5F57; --punto-amarillo: #FEBC2E; --punto-verde: #28C840;
+
+  /* Código en pantalla (fondo --consola-fondo; todos 5:1 o más) */
+  --consola-fondo: #1E293B; --cod-texto: #E2E8F0; --consola-linea: #334155;
+  --cod-etq: #FB7185;  /* rosa: palabras clave (MIENTRAS, SI, SELECT…) */
+  --cod-atr: #A3E635;  /* lima: nombres de campos y tablas */
+  --cod-str: #FDE047;  /* amarillo: textos entre comillas */
+  --cod-com: #94A3B8;  /* gris azulado, en cursiva: comentarios */
+  --cod-num: #C084FC;  /* violeta: números */
+  --cod-fun: #67E8F9;  /* cian: acciones (abrir, leer, mostrar) y funciones */
+
+  --panel: #EEF2F5;         /* recuadros grises */
+  --panel-oscuro: #DDE3E9;  /* gris un tono más oscuro (encabezado neutro de una tabla) */
+  --panel-linea: #C9E9EE;   /* divisor dentro de recuadros */
+  --blanco: #FFFFFF;
+  --tinta: #111827;         /* títulos e íconos */
+  --texto: #1F2933;         /* texto corrido */
+  --gris-sub: #7B8594;      /* subtítulos grandes */
+  --gris: #5B6472;          /* textos chicos en mayúsculas */
+  --linea: #CBD3DB;         /* líneas del pie */
+  --fondo-pantalla: #DDE3E9;/* fondo detrás de las hojas */
+
+  --foco: #1E3A8A;          /* contorno de foco del teclado */
+
+  /* TP3: campos alternados dentro de un archivo de texto */
+  --campo-a: var(--acento-claro);
+  --campo-b: #DDE3E9;
+
+  --radio: 10px;
+  --fuente: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fuente-titulo: "Barlow Semi Condensed", "Barlow", system-ui, sans-serif;
+  --fuente-titular: "Barlow Condensed", "Barlow Semi Condensed", system-ui, sans-serif;
+  --fuente-mono: ui-monospace, "Cascadia Mono", Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Acento por módulo: clase en el <body> de cada TP (o en cada bloque de la portada).
+   modulo-1 no cambia nada: usa el cian de :root */
+.modulo-2 { --acento: var(--planilla); --acento-numero: var(--planilla-numero); --acento-texto: var(--planilla-texto); --acento-claro: var(--planilla-claro); --acento-suave: var(--planilla-suave); --panel-linea: var(--planilla-claro); }
+.modulo-3 { --acento: var(--sql); --acento-numero: var(--sql-numero); --acento-texto: var(--sql-texto); --acento-claro: var(--sql-claro); --acento-suave: var(--sql-suave); --panel-linea: var(--sql-claro); }
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 96px; }
+body {
+  margin: 0;
+  font-family: var(--fuente);
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--texto);
+  background: var(--fondo-pantalla);
+}
+h1, h2, h3, h4, p, ol, ul { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+svg { display: block; }
+strong { font-weight: 700; color: var(--tinta); }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; border-radius: 4px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.saltar {
+  position: absolute; left: 8px; top: -60px; z-index: 50;
+  background: var(--tinta); color: var(--blanco); padding: 10px 14px; border-radius: 6px;
+  text-decoration: none; font-weight: 600;
+}
+.saltar:focus { top: 8px; }
+
+/* ---------- Íconos (sprite SVG) ---------- */
+.ico {
+  width: 48px; height: 48px; flex: none;
+  color: var(--tinta);
+  --ac: var(--acento);
+  fill: none; stroke: currentColor; stroke-width: 2.6;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.ico--s  { width: 36px; height: 36px; }
+.ico--l  { width: 56px; height: 56px; }
+.ico--xl { width: 68px; height: 68px; }
+
+/* ==========================================================
+   Barra de navegación (solo pantalla)
+   ========================================================== */
+.barra {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--blanco);
+  border-bottom: 1px solid var(--linea);
+  box-shadow: 0 2px 8px rgba(17, 24, 39, .06);
+}
+.barra__fila {
+  display: flex; align-items: center; gap: 10px;
+  max-width: 210mm; margin: 0 auto; padding: 8px 16px;
+}
+.barra__volver, .boton { flex: none; }
+.barra__titulo {
+  flex: 1; min-width: 0; text-align: center;
+  font-family: var(--fuente-titulo); font-weight: 700; font-size: 16px; line-height: 1.15; color: var(--tinta);
+}
+.boton__largo { display: none; }
+@media (min-width: 560px) {
+  .barra__titulo { font-size: 18px; }
+  .boton__largo { display: inline; }
+}
+.boton {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--tinta); color: var(--blanco);
+  text-decoration: none; font-weight: 600; font-size: 14px;
+  padding: 8px 12px; border-radius: 8px;
+}
+button.boton { border: 0; font-family: inherit; line-height: inherit; cursor: pointer; }
+.boton:hover { background: #263244; }
+.boton svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+.partes {
+  position: relative;
+  display: flex; gap: 6px; overflow-x: auto;
+  max-width: 210mm; margin: 0 auto; padding: 0 16px 8px;
+  scrollbar-width: none;
+}
+.partes::-webkit-scrollbar { display: none; }
+.partes a {
+  flex: none; text-decoration: none; font-size: 14px; font-weight: 600;
+  padding: 6px 12px; border-radius: 999px;
+  background: var(--panel); color: var(--tinta);
+}
+.partes a[aria-current="true"] { background: var(--acento-claro); box-shadow: inset 0 -3px 0 var(--acento); }
+
+/* ==========================================================
+   Lámina (una página del cuadernillo)
+   ========================================================== */
+.laminas { padding: 12px 0 32px; }
+.lamina > * { flex-shrink: 0; }
+
+.lamina {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 18px;
+  max-width: 210mm; margin: 0 auto 12px;
+  padding: 20px 16px 14px;
+  background: var(--blanco);
+}
+
+/* --- Cabecera --- */
+.cab { display: flex; align-items: center; gap: 12px; }
+.cab__logo { width: 34px; height: 34px; color: var(--tinta); flex: none; }
+.cab__marca {
+  display: flex; flex-direction: column;
+  padding-left: 12px; border-left: 1.5px solid var(--linea);
+  line-height: 1.15;
+}
+/* "BASES DE DATOS Y SQL" y "TRABAJO PRÁCTICO N°X" llevan siempre el mismo tamaño */
+.cab__marca b, .cab__lema {
+  font-size: 14px; font-weight: 700; letter-spacing: .02em; color: var(--tinta);
+  text-transform: uppercase; white-space: nowrap;
+}
+.cab__marca span { font-size: 11px; letter-spacing: .22em; color: var(--gris); }
+.cab__lema { margin-left: auto; text-align: right; line-height: 1.15; }
+/* barra vertical del alto del bloque de texto (2 renglones de .cab__marca) */
+.cab__raya { width: 5px; height: 29px; background: var(--acento); flex: none; }
+.cab__marca + .cab__raya { margin-left: auto; }
+@media (max-width: 479px) {
+  .cab { gap: 10px; }
+  .cab__marca b, .cab__lema { font-size: 13px; }
+  .cab__lema-n { display: block; }
+  .cab__raya { height: 30px; }
+}
+@media (max-width: 379px) {
+  .cab__marca b, .cab__lema { font-size: 12px; }
+  .cab__raya { height: 28px; }
+}
+
+/* --- Título --- */
+.tit__h {
+  font-family: var(--fuente-titular); font-weight: 700;
+  font-size: clamp(34px, 9.6vw, 56px); line-height: 1; letter-spacing: -.008em;
+  color: var(--tinta);
+}
+.tit__num { color: var(--acento-numero); font-weight: 800; margin-right: .12em; }
+.tit__sub {
+  margin-top: 4px;
+  font-family: var(--fuente-titulo); font-weight: 600;
+  font-size: clamp(20px, 5.6vw, 33px); line-height: 1.1; color: var(--gris-sub);
+}
+.tit__ico { display: inline-block; vertical-align: -.08em; width: .78em; height: .78em; margin-right: .1em; stroke-width: 3; }
+
+/* --- Bloques comunes --- */
+.texto { font-size: 17px; line-height: 1.45; }
+
+.panel {
+  background: var(--panel); border-radius: 12px;
+  padding: 16px 14px;
+}
+.subtitulo {
+  font-family: var(--fuente-titulo); font-weight: 700; font-size: 22px; color: var(--tinta);
+  line-height: 1.15;
+}
+.subtitulo::after {
+  content: ""; display: block; width: 40px; height: 5px; margin-top: 6px; background: var(--acento);
+}
+.panel__cab { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.panel__nota {
+  font-size: 9.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--gris); text-align: right; line-height: 1.5;
+}
+
+/* Recuadro de definición / introducción */
+.intro {
+  display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 14px;
+  background: var(--panel); border-radius: var(--radio); padding: 14px;
+}
+.intro p {
+  padding-left: 14px; border-left: 2px solid var(--panel-linea);
+  font-size: 17px; line-height: 1.4;
+}
+
+/* Secuencias con flechas (vertical en celular, horizontal en pantalla ancha) */
+.secuencia { display: grid; gap: 26px; }
+.secuencia > li { position: relative; }
+.secuencia > li:not(:last-child)::after {
+  content: ""; position: absolute; left: 50%; bottom: -21px;
+  width: 18px; height: 16px; background: var(--acento);
+  clip-path: polygon(0 32%, 52% 32%, 52% 0, 100% 50%, 52% 100%, 52% 68%, 0 68%);
+  transform: translateX(-50%) rotate(90deg);
+}
+
+/* Pasos (Dato → Contexto → …) */
+.paso {
+  display: grid; grid-template-columns: 64px 1fr; grid-template-areas: "ico tit" "ico txt";
+  align-items: center; column-gap: 14px; row-gap: 2px;
+  background: var(--panel); border-radius: 8px; padding: 12px 14px;
+}
+.paso .ico { grid-area: ico; width: 56px; height: 56px; margin: 0 auto; }
+.paso h3 { grid-area: tit; font-family: var(--fuente); font-weight: 700; font-size: 19px; color: var(--tinta); }
+.paso p  { grid-area: txt; font-size: 16px; line-height: 1.3; }
+
+/* Tarjetas blancas con encabezado celeste */
+.tarjeta {
+  background: var(--blanco); border-radius: 8px; padding: 6px 6px 12px;
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px;
+}
+.tarjeta__cab {
+  align-self: stretch;
+  background: var(--acento-claro); border-radius: 6px;
+  font-family: var(--fuente); font-weight: 700; font-size: 18px; color: var(--tinta);
+  padding: 6px 8px;
+}
+.tarjeta p { font-size: 16px; line-height: 1.3; padding: 0 6px; }
+.tarjeta .grande { font-size: 30px; font-weight: 700; color: var(--tinta); line-height: 1.1; }
+
+/* Ejemplos en la vida real */
+.ejemplos .tarjeta { min-height: 100%; }
+
+/* Mosaico de cosas (¿Qué puede guardar?) */
+.mosaico { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.mosaico li {
+  background: var(--blanco); border-radius: 8px; padding: 12px 8px 14px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  font-weight: 700; font-size: 17px; color: var(--tinta);
+}
+
+/* Grilla de ámbitos (Escuela, Comercio, …) */
+.ambitos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.ambitos .tarjeta { border: 5px solid var(--panel); height: 100%; }
+
+/* Lista horizontal con ícono (¿Qué tienen en común?) */
+.comun { display: grid; gap: 10px; }
+.comun li {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--blanco); border-radius: 8px; padding: 10px 14px;
+  font-size: 17px; line-height: 1.2;
+}
+
+/* Recuadro "Ejemplo" */
+.ejemplo {
+  display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px;
+  background: var(--panel); border-radius: var(--radio); padding: 12px 14px;
+}
+.ejemplo .subtitulo { font-size: 20px; }
+.ejemplo p { grid-column: 1 / -1; font-size: 16.5px; }
+
+/* Dos opciones lado a lado (Hoja de cálculo / Base de datos) */
+.comparar { display: grid; gap: 10px; }
+.comparar li {
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px;
+  background: var(--panel); border-radius: var(--radio); padding: 14px;
+}
+.comparar h3 { font-family: var(--fuente-titulo); font-weight: 700; font-size: 23px; color: var(--tinta); line-height: 1.1; margin-bottom: 4px; }
+.comparar p { font-size: 16.5px; line-height: 1.35; }
+
+/* Tabla comparativa */
+.tabla-comp { width: calc(100% + 12px); margin: -6px; border-collapse: separate; border-spacing: 6px; table-layout: fixed; }
+.tabla-comp th, .tabla-comp td {
+  background: var(--panel); border-radius: 6px; padding: 9px 6px;
+  font-size: 15px; line-height: 1.2; text-align: center; font-weight: 400;
+}
+.tabla-comp thead th { background: var(--acento-claro); font-weight: 700; color: var(--tinta); font-size: 16px; }
+.tabla-comp thead th:first-child, .tabla-comp tbody th { width: 36%; }
+.tabla-comp tbody th { text-align: left; font-weight: 700; color: var(--tinta); }
+.tabla-comp tbody th span { display: flex; align-items: center; gap: 8px; }
+.tabla-comp .ico { width: 24px; height: 24px; stroke-width: 3.2; }
+
+/* ¿Cuándo conviene cada una? */
+.cuando { display: grid; gap: 10px; margin-top: 12px; }
+.cuando li {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--panel); border-radius: var(--radio); padding: 12px 14px;
+  font-size: 16.5px; line-height: 1.35;
+}
+.sin-raya::after { display: none; }
+
+/* Dos grupos en un mismo esquema: el primero con el acento del módulo (.grupo) y el segundo
+   en naranja (.grupo--naranja); en el TP1 el segundo es la hoja de cálculo (.grupo--planilla) */
+.grupo { --grupo: var(--acento); --grupo-claro: var(--acento-claro); }
+.grupo--planilla { --grupo: var(--planilla); --grupo-claro: var(--planilla-claro); }
+.grupo--planilla .ico { --ac: var(--planilla); }
+.grupo--naranja { --grupo: var(--naranja); --grupo-claro: var(--naranja-claro); }
+.grupo--naranja .ico { --ac: var(--naranja); }
+.grupo--ok { --grupo: var(--ok); --grupo-claro: var(--ok-claro); }
+.grupo--ok .ico { --ac: var(--ok); }
+.comparar .grupo { box-shadow: inset 0 5px 0 var(--grupo); }
+.comparar .grupo--ok, .comparar .grupo--naranja { background: var(--grupo-claro); }   /* TP3: ventaja / desventaja */
+.cuando .grupo { box-shadow: inset 5px 0 0 var(--grupo); }
+.tabla-comp thead th.grupo { background: var(--grupo-claro); }
+.tabla-comp thead th:first-child { background: var(--panel-oscuro); }
+
+/* Tabla de ejemplo con señalamientos (Tabla · Fila · Columna) */
+.senalada { display: grid; gap: 12px; }
+.tabla-ej {
+  width: 100%; border-collapse: collapse; table-layout: fixed;
+  background: var(--blanco); font-size: 16px; line-height: 1.2; text-align: center;
+}
+.tabla-ej caption {
+  background: var(--acento); color: var(--tinta); border-radius: 8px 8px 0 0;
+  font-weight: 700; font-size: 19px; letter-spacing: .05em; padding: 5px;
+}
+.tabla-ej th { background: var(--acento-claro); color: var(--tinta); font-weight: 700; padding: 7px 4px; }
+.tabla-ej td { padding: 6px 4px; border-top: 1px solid var(--linea); }
+.tabla-ej th + th, .tabla-ej td + td { border-left: 1px solid var(--linea); }
+.tabla-ej .marca-col { border: 3px solid var(--acento); background: var(--acento-suave); }
+/* columna en el acento y fila en naranja (dos grupos en un mismo esquema) */
+.tabla-ej .marca-fila { border: 3px solid var(--naranja); }
+.tabla-ej .marca-fila td { background: var(--naranja-claro); }
+.senal { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 4px 10px; }
+.senal b {
+  position: relative; justify-self: start;
+  background: var(--acento); color: var(--tinta); border-radius: 6px;
+  font-weight: 700; font-size: 16px; padding: 4px 12px;
+}
+.senal--fila b { background: var(--naranja-texto); color: var(--blanco); }
+.senal p { font-size: 15px; line-height: 1.3; }
+
+/* Grilla de 4 tarjetas (Tabla · Columna · Fila · Registro) */
+.ambitos--4 .tarjeta { border: 0; }
+
+/* Entidades con sus atributos */
+.entidades { display: grid; gap: 10px; }
+.entidades .tarjeta, .tipos .tarjeta { background: var(--panel); }
+.entidades .tarjeta { gap: 6px; padding-bottom: 10px; }
+.tarjeta .tarjeta__rotulo { font-size: 16px; }
+.chips { align-self: stretch; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 0 4px; }
+.chips li { background: var(--acento-suave); border-radius: 6px; padding: 5px 4px; font-size: 16px; text-align: center; }
+/* TP2, lámina 6: la entidad en el acento y los atributos en naranja */
+.chips.grupo li, .tarjeta.grupo .tarjeta__cab { background: var(--grupo-claro); }
+
+/* ¿Cómo reconocerlos? (dos definiciones con ejemplo) */
+.reconocer { display: grid; gap: 10px; }
+.reconocer .tarjeta { gap: 10px; }
+.reconocer__def { display: flex; align-items: center; gap: 12px; text-align: left; padding: 0 8px; }
+.tarjeta .reconocer__ej { align-self: stretch; background: var(--panel); border-radius: 6px; padding: 6px 8px; }
+
+/* Tipos de datos */
+.tipos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.tipo__valor {
+  font-family: var(--fuente-titular); font-weight: 800; font-size: 44px; line-height: 48px;
+  letter-spacing: .03em; color: var(--tinta);
+}
+.tipo__valor--acento { color: var(--acento-numero); }
+.tipo__valor span { color: var(--acento); }
+
+/* Tabla con datos dentro de una actividad */
+.act-tabla caption { text-align: left; font-weight: 700; letter-spacing: .05em; color: var(--tinta); padding-bottom: 4px; }
+.act-tabla--datos td { height: auto; }
+.act > .act-tabla { width: 100%; margin: 8px 0 0; font-size: 14px; }
+
+/* Página "Para profundizar" */
+.pf-grid { display: grid; gap: 12px; }
+.pf {
+  display: grid; gap: 8px;
+  background: var(--panel); border-radius: 12px; border-left: 6px solid var(--acento);
+  padding: 14px 14px 14px 16px;
+}
+.pf__etiqueta { font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--gris); }
+.pf__titulo { font-family: var(--fuente-titulo); font-weight: 700; font-size: 21px; line-height: 1.15; color: var(--tinta); }
+.pf p, .pf li { font-size: 16px; line-height: 1.4; }
+.pf__cols { display: grid; gap: 10px; align-items: start; }
+.pf__texto { display: grid; gap: 8px; }
+.pf__caja { background: var(--blanco); border-radius: 8px; padding: 10px 12px; display: grid; gap: 6px; }
+.pf__caja h4 {
+  font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gris);
+  padding-bottom: 5px; border-bottom: 3px solid var(--acento); justify-self: start;
+}
+.pf__lista { display: grid; gap: 5px; }
+.pf__lista li { position: relative; padding-left: 16px; }
+.pf__lista li::before { content: ""; position: absolute; left: 0; top: .5em; width: 7px; height: 7px; background: var(--acento); border-radius: 2px; }
+
+/* Idea clave */
+.idea {
+  display: grid; grid-template-columns: 64px 1fr; align-items: stretch;
+  background: var(--acento-suave); border-radius: var(--radio); overflow: hidden;
+}
+.idea__ico { display: flex; align-items: center; justify-content: center; background: var(--acento); }
+.idea__ico .ico { color: var(--blanco); --ac: rgba(255, 255, 255, .45); width: 40px; height: 40px; }
+.idea p { padding: 12px 14px; font-size: 16.5px; line-height: 1.35; align-self: center; }
+.idea strong { font-family: var(--fuente-titulo); font-size: 21px; margin-right: 4px; }
+
+/* Pie */
+.pie {
+  margin-top: auto; padding-top: 6px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 11.5px; color: var(--gris);
+}
+.pie__linea { flex: 1; height: 1px; background: var(--linea); }
+.pie__num { font-weight: 700; font-size: 15px; color: var(--tinta); min-width: 1.2em; text-align: right; }
+
+/* ==========================================================
+   Actividades para hacer en la carpeta
+   (estructura del profe: TP N°X — nombre / Consigna / 1- a) b) c),
+    con la tipografía y la paleta del cuadernillo)
+   ========================================================== */
+.act-banda {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--acento); color: var(--tinta);
+  border-radius: var(--radio); padding: 12px 16px;
+}
+.act-banda .ico { --ac: var(--blanco); width: 40px; height: 40px; }
+.act-banda h2 { font-family: var(--fuente-titular); font-weight: 700; font-size: 26px; line-height: 1; letter-spacing: -.005em; }
+.act-banda p { font-size: 15px; font-weight: 500; line-height: 1.25; margin-top: 3px; }
+.act-banda__parte {
+  margin-left: auto; flex: none; text-align: right;
+  font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; line-height: 1.5;
+  padding-left: 12px; border-left: 1.5px solid rgba(17, 24, 39, .35);
+}
+.consigna {
+  background: var(--acento-suave); border-radius: var(--radio);
+  padding: 12px 16px; font-size: 16.5px; line-height: 1.4;
+}
+.consigna strong { font-family: var(--fuente-titulo); font-size: 19px; margin-right: 2px; }
+
+.acts { display: grid; gap: 12px; }
+
+.act { background: var(--panel); border-radius: 12px; padding: 12px 12px 12px; }
+.act__titulo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--fuente-titulo); font-weight: 700; font-size: 21px; line-height: 1.15; color: var(--tinta);
+}
+.act__num {
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  min-width: 34px; height: 30px; padding: 0 6px; border-radius: 7px;
+  background: var(--acento); color: var(--tinta);
+  font-family: var(--fuente-titular); font-weight: 800; font-size: 21px;
+}
+.act__caso { margin-top: 9px; font-size: 16px; line-height: 1.4; padding-left: 12px; border-left: 3px solid var(--acento); }
+.act__items { margin-top: 9px; display: grid; gap: 6px; }
+.act__items > li {
+  display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: start;
+  background: var(--blanco); border-radius: 8px; padding: 8px 12px 8px 8px;
+  font-size: 16px; line-height: 1.38;
+}
+.act__letra {
+  background: var(--acento-claro); border-radius: 6px; text-align: center;
+  font-weight: 700; color: var(--tinta); font-size: 15px; line-height: 1.5;
+}
+.act__frases { margin-top: 5px; display: grid; gap: 3px; }
+.act__frases li { position: relative; padding-left: 16px; }
+.act__frases li::before { content: ""; position: absolute; left: 0; top: .5em; width: 7px; height: 7px; background: var(--acento); border-radius: 2px; }
+.act-tabla {
+  width: calc(100% + 40px); margin: 7px 0 0 -40px;   /* en el celular ocupa todo el ancho del ítem */
+  border-collapse: collapse; table-layout: auto; font-size: 12.5px;
+}
+.act-tabla th, .act-tabla td { border: 1.5px solid var(--linea); padding: 5px 4px; text-align: left; height: 30px; }
+.act-tabla thead th { background: var(--acento-claro); font-weight: 700; color: var(--tinta); text-align: center; }
+.act-tabla tbody th { font-weight: 600; color: var(--tinta); }
+
+/* Parte 2 · en la computadora (solo TPs prácticos: 4, 5, 9 e integrador) */
+.lamina--compu .act-banda { background: var(--ok); color: var(--blanco); }
+.lamina--compu .act-banda .ico { color: var(--blanco); --ac: var(--ok-oscuro); }
+.lamina--compu .act-banda__parte { border-left-color: rgba(255, 255, 255, .5); }
+.lamina--compu .act__num { background: var(--ok); color: var(--blanco); }
+.lamina--compu .act__letra, .lamina--compu .consigna { background: var(--ok-claro); }
+
+/* Recuadros "Importante" y "Recomendación" (solo en láminas nuevas y "Para profundizar") */
+.nota { display: grid; gap: 4px; border-radius: var(--radio); padding: 12px 14px 12px 18px; }
+.nota h3 { font-family: var(--fuente-titulo); font-weight: 700; font-size: 19px; line-height: 1.2; }
+.nota p { font-size: 16px; line-height: 1.4; }
+.nota--importante { background: var(--naranja-claro); box-shadow: inset 4px 0 0 var(--naranja); }
+.nota--importante h3 { color: var(--naranja-texto); }
+.nota--importante .tit-ico { --ac: var(--naranja-texto); }
+.nota--consejo, .pf__caja--consejo { background: var(--ok-claro); box-shadow: inset 4px 0 0 var(--ok); }
+.pf__caja--consejo { padding-left: 16px; }
+.nota--consejo h3, .pf__caja--consejo h4 { color: var(--ok); }
+.pf__caja--consejo h4 { border-bottom-color: var(--ok); }
+.nota--consejo .tit-ico, .pf__caja--consejo .tit-ico { --ac: var(--ok); }
+.tit-ico { display: inline-block; width: 1.2em; height: 1.2em; margin-right: 6px; vertical-align: -.25em; }
+
+/* ==========================================================
+   TP3: archivos de texto, separadores y pseudocódigo
+   ========================================================== */
+/* Código dentro del texto: fondo claro, texto y borde de su color
+   (el borde va con box-shadow para no cambiar el ancho) */
+code {
+  font-family: var(--fuente-mono); font-size: .9em; white-space: pre;
+  border-radius: 4px; padding: 1px 5px;
+  background: var(--acento-suave); color: var(--acento-texto); box-shadow: inset 0 0 0 1px var(--acento-claro);
+}
+code.cod-archivo { background: var(--archivo-claro); color: var(--archivo-texto); box-shadow: inset 0 0 0 1px var(--archivo-linea); }
+code.cod-formula { background: var(--planilla-suave); color: var(--planilla-texto); box-shadow: inset 0 0 0 1px var(--planilla-claro); }
+code.cod-sql { background: var(--sql-suave); color: var(--sql-texto); box-shadow: inset 0 0 0 1px var(--sql-claro); }
+
+/* Ventanas: los tres puntos de color delante del nombre */
+.archivo__nombre::before, .ventana-cod__barra::before {
+  content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--punto-rojo); box-shadow: 12px 0 var(--punto-amarillo), 24px 0 var(--punto-verde);
+  margin-right: 24px;
+}
+
+/* Ventana de un archivo (nombre arriba, contenido en monoespaciado) */
+.archivo {
+  width: fit-content; max-width: 100%; margin: 0;
+  background: var(--blanco); border: 1.5px solid var(--linea); border-radius: 8px; overflow: hidden;
+  box-shadow: 0 6px 16px -8px rgba(15, 23, 42, .6);
+}
+.archivo__nombre {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--tinta); color: var(--blanco); box-shadow: inset 0 3px 0 var(--archivo);
+  font-family: var(--fuente-mono); font-size: 13px; font-weight: 600; padding: 4px 12px;
+}
+.archivo__txt {
+  margin: 0; padding: 8px 14px 10px; overflow-x: auto;
+  font-family: var(--fuente-mono); font-size: 15px; line-height: 1.65; color: var(--tinta);
+}
+.archivo__regla, .archivo__n { color: var(--gris); }
+.archivo__n { user-select: none; }
+.archivo__enc { font-weight: 700; }
+.c-a { background: var(--campo-a); }
+.c-b { background: var(--campo-b); }
+/* espacios visibles: un punto por cada carácter */
+.esp {
+  background-image: radial-gradient(circle, var(--gris) 0 1.4px, transparent 1.9px);
+  background-size: 1ch 100%; background-repeat: repeat-x;
+}
+/* el separador es "el otro grupo" del esquema: va en naranja */
+.sep {
+  background: var(--naranja-texto); color: var(--blanco); border-radius: 3px; font-weight: 700;
+  padding: 0 .2em; margin: 0 .2em;   /* aire visual a cada lado: no son espacios del archivo */
+}
+
+/* Archivo + explicación (una columna en el celular, dos en pantalla ancha) */
+.archivo-ej { display: grid; gap: 12px; align-items: start; }
+.tabla-campos { text-align: left; }
+.tabla-campos th, .tabla-campos td { padding-left: 8px; }
+.tabla-campos tbody th { background: var(--blanco); border-top: 1px solid var(--linea); font-family: var(--fuente-mono); font-size: .95em; }
+.tabla-campos tbody td { border-left: 1px solid var(--linea); }
+.muestra { display: inline-block; width: 12px; height: 12px; margin-right: 7px; border: 1px solid var(--linea); border-radius: 2px; vertical-align: -1px; }
+.lista-txt { display: grid; gap: 6px; font-size: 16px; line-height: 1.35; }
+
+/* Separadores: carácter grande + ejemplo */
+.glifo { width: 48px; text-align: center; flex: none; }
+.glifo--bajo { transform: translateY(-.24em); }   /* coma y punto y coma: subirlos al centro */
+.glifo--alto { transform: translateY(.26em); }    /* comillas: bajarlas al centro */
+.tipo__valor--sep { color: var(--naranja-texto); }
+.ico--sep { --ac: var(--naranja); }
+.comun code, .cuando code { display: block; width: fit-content; margin-top: 3px; }
+.comun--suelto li { background: var(--panel); }
+.sin-raya + .texto { margin-top: 8px; }
+
+/* Ventana de código (pseudocódigo; en el TP9, SQL con .ventana-cod--sql) */
+.ventana-cod {
+  background: var(--consola-fondo); border-radius: 8px; overflow: hidden;
+  box-shadow: 0 6px 16px -8px rgba(15, 23, 42, .6);
+}
+.ventana-cod__barra {
+  display: flex; align-items: center; gap: 8px; padding: 6px 12px;
+  font-family: var(--fuente-mono); font-size: 12px; font-weight: 600; color: var(--cod-com);
+  border-bottom: 1px solid var(--consola-linea);
+}
+.ventana-cod--sql .ventana-cod__barra { box-shadow: inset 0 3px 0 var(--sql); }
+/* colores del código */
+.ventana-cod b, .t-etq { color: var(--cod-etq); }
+.t-atr { color: var(--cod-atr); }
+.t-str { color: var(--cod-str); }
+.t-com { color: var(--cod-com); font-style: italic; }
+.t-num { color: var(--cod-num); }
+.t-fun { color: var(--cod-fun); }
+
+/* Pseudocódigo con número de línea */
+.pseudo {
+  counter-reset: ln; display: grid; padding: 8px 0;
+  font-family: var(--fuente-mono); font-size: 14px; line-height: 1.45; color: var(--cod-texto);
+}
+.pseudo li { counter-increment: ln; display: flex; align-items: baseline; gap: 10px; padding: 1px 10px 1px 0; }
+.pseudo li::before {
+  content: counter(ln); flex: none; width: 2.4em; padding-right: .6em; text-align: right;
+  color: var(--cod-com); border-right: 2px solid var(--consola-linea);
+}
+.pseudo__c { flex: 1; min-width: 0; }
+.pseudo .i1 .pseudo__c { padding-left: 2ch; }
+.pseudo .i2 .pseudo__c { padding-left: 4ch; }
+.pseudo b { font-weight: 700; }
+.pseudo__paso {
+  flex: none; font-family: var(--fuente); font-size: 12px; font-weight: 700; letter-spacing: .04em;
+  background: var(--acento); color: var(--tinta); border-radius: 999px; padding: 1px 8px;
+}
+.act__items .archivo { margin-top: 8px; }
+/* Actividad con un archivo al costado de las consignas (en pantalla ancha) */
+.act__cuerpo { display: grid; gap: 0 14px; align-items: start; }
+.act__cuerpo > .archivo, .act__archivos { margin-top: 9px; }
+.act__archivos { display: grid; gap: 8px; justify-items: start; }
+
+/* ==========================================================
+   Pantallas medianas: secuencias horizontales
+   ========================================================== */
+@media (min-width: 600px), print {
+  .secuencia { grid-auto-flow: column; grid-auto-columns: 1fr; gap: 30px; }
+  .secuencia > li:not(:last-child)::after {
+    left: auto; right: -25px; top: 50%; bottom: auto;
+    transform: translateY(-50%);
+  }
+  .paso {
+    grid-template-columns: 1fr; grid-template-areas: "tit" "ico" "txt";
+    text-align: center; row-gap: 10px; padding: 14px 10px 16px; height: 100%;
+    align-content: start;
+  }
+  .paso h3 { font-size: 20px; }
+  .paso .ico { width: 64px; height: 64px; }
+  .mosaico { grid-template-columns: repeat(4, 1fr); }
+  .ambitos { grid-template-columns: repeat(3, 1fr); }
+  .ambitos--4 { grid-template-columns: repeat(4, 1fr); }
+  .entidades, .tipos { grid-template-columns: repeat(3, 1fr); }
+  .reconocer { grid-template-columns: 1fr 1fr; }
+  .senalada {
+    grid-template-columns: 1fr 3.2fr 1.25fr; grid-template-areas: "fila tabla nota" ". col .";
+    column-gap: 20px; row-gap: 14px; align-items: center;
+  }
+  .senalada .tabla-ej { grid-area: tabla; }
+  .senal--fila { grid-area: fila; margin-top: 12%; }
+  .senal--tabla { grid-area: nota; align-self: start; }
+  .senal--col { grid-area: col; margin-left: 20%; }
+  .senal--fila, .senal--tabla { grid-template-columns: 1fr; }
+  .senal--tabla b { justify-self: center; }
+  .senal--tabla p { text-align: center; }
+  .senal b::after { content: ""; position: absolute; background: var(--acento); width: 14px; height: 14px; }
+  .senal--fila b::after { background: var(--naranja-texto); right: -13px; top: 50%; transform: translateY(-50%); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+  .senal--tabla b::after { left: -13px; top: 50%; transform: translateY(-50%); clip-path: polygon(100% 0, 0 50%, 100% 100%); }
+  .senal--col b::after { left: 50%; top: -15px; transform: translateX(-50%); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+  .comun { grid-template-columns: repeat(3, 1fr); }
+  .comparar { grid-template-columns: 1fr 1fr; }
+  .cuando { grid-template-columns: 1fr 1fr; }
+  .act-tabla { width: 100%; margin-left: 0; table-layout: fixed; font-size: 14.5px; }
+  .act-tabla th, .act-tabla td { padding: 6px 8px; }
+  .pf__cols { grid-template-columns: 1.25fr 1fr; gap: 14px; }
+  .ejemplo { grid-template-columns: auto auto 1fr; }
+  .ejemplo p { grid-column: auto; padding-left: 12px; border-left: 2px solid var(--panel-linea); }
+  .archivo-ej { grid-template-columns: auto 1fr; gap: 16px; }
+  .act__cuerpo { grid-template-columns: auto 1fr; }
+}
+
+/* ==========================================================
+   Escritorio e impresión: cada lámina es una hoja A4
+   ========================================================== */
+@media (min-width: 860px), print {
+  .laminas { padding: 24px 0 48px; }
+  .lamina {
+    width: 210mm; min-height: 297mm; max-width: none;
+    margin: 0 auto 24px;
+    box-shadow: 0 2px 14px rgba(17, 24, 39, .14);
+  }
+  .lamina { padding: 11mm 13mm 8mm; gap: 5mm; justify-content: space-between; }
+  .lamina > .pie { margin-top: 0; }
+  .lamina--act { justify-content: flex-start; gap: 4mm; }
+  .lamina--act > .pie { margin-top: auto; }
+  .act-banda { padding: 10px 20px; gap: 16px; }
+  .act-banda h2 { font-size: 36px; }
+  .act-banda p { font-size: 16px; }
+  .act-banda .ico { width: 46px; height: 46px; }
+  .acts { gap: 3mm; }
+  .acts--2col { grid-template-columns: 1fr 1fr; }
+  .acts--2col .act__titulo { font-size: 18px; }
+  .lamina--act .consigna { padding: 10px 16px; font-size: 16px; }
+  .act__items { gap: 4px; margin-top: 8px; }
+  .act__items > li { font-size: 15.5px; padding: 5px 12px 5px 8px; }
+  .act__letra { line-height: 1.4; }
+  .acts--amplio { gap: 5mm; }
+  .acts--amplio .act { padding: 15px 16px 16px; }
+  .acts--amplio .act__items { gap: 7px; margin-top: 11px; }
+  .acts--amplio .act__items > li { font-size: 16.5px; padding: 9px 14px 9px 9px; }
+  .acts--amplio .act-tabla { font-size: 15.5px; margin-top: 9px; }
+  .acts--amplio .act-tabla th, .acts--amplio .act-tabla td { height: 36px; }
+  .act__caso { font-size: 15.5px; margin-top: 8px; }
+  .act { padding: 11px 13px 12px; }
+  .tit__h { font-size: 50px; }
+  .tit__h--largo { font-size: 43px; letter-spacing: -.018em; }
+  .tit__sub { font-size: 32px; }
+
+  /* Tamaños para llenar la hoja A4 */
+  .cab__logo { width: 40px; height: 40px; }
+  .cab__marca b, .cab__lema { font-size: 15px; }
+  .cab__raya { height: 31px; }
+  .cab__marca span { font-size: 12px; }
+  .texto { font-size: 18.5px; }
+  .intro { padding: 16px 18px; gap: 18px; }
+  .intro p { font-size: 19px; padding-left: 18px; }
+  .subtitulo { font-size: 24px; }
+  .paso { padding: 16px 10px 18px; }
+  .paso h3 { font-size: 21px; }
+  .paso p { font-size: 17.5px; }
+  .paso .ico { width: 70px; height: 70px; }
+  .tarjeta__cab { font-size: 19px; }
+  .tarjeta p { font-size: 17px; }
+  .tarjeta .grande { font-size: 36px; }
+  .tarjeta .ico--l { width: 64px; height: 64px; }
+  .mosaico li { font-size: 18.5px; padding: 16px 8px 18px; }
+  .mosaico .ico--xl { width: 72px; height: 72px; }
+  .ambitos .ico--xl { width: 70px; height: 70px; }
+  .comun li { font-size: 18.5px; padding: 12px 16px; }
+  .comun .ico { width: 54px; height: 54px; }
+  .ejemplo { padding: 14px 18px; }
+  .ejemplo p { font-size: 18.5px; }
+  .ejemplo .ico--l { width: 64px; height: 64px; }
+  .idea { grid-template-columns: 24mm 1fr; }
+  .idea__ico .ico { width: 50px; height: 50px; }
+  .idea p { font-size: 18.5px; padding: 16px 20px; }
+  .idea strong { font-size: 26px; }
+  .comparar li { padding: 13px 18px; }
+  .comparar h3 { font-size: 26px; }
+  .comparar p { font-size: 17.5px; }
+  .comparar .ico--xl { width: 80px; height: 80px; }
+  .tabla-comp th, .tabla-comp td { font-size: 17px; padding: 8px 8px; }
+  .tabla-comp thead th { font-size: 18px; padding: 9px 8px; }
+  .tabla-comp tbody th span { gap: 14px; padding-left: 14px; }
+  .tabla-comp .ico { width: 30px; height: 30px; stroke-width: 3; }
+  .cuando { margin-top: 10px; }
+  .cuando li { font-size: 17.5px; padding: 11px 18px; gap: 18px; }
+  .cuando .ico--l { width: 58px; height: 58px; }
+
+  /* "Para profundizar": grilla 2 × 2 que ocupa el resto de la hoja */
+  .pf-grid { grid-template-columns: 1fr 1fr; gap: 3.5mm; flex-grow: 1; }
+  .lamina--pf { gap: 4mm; }
+  .lamina--pf .tit__sub { font-size: 27px; }
+  .pf { padding: 11px 13px 11px 15px; gap: 4px; align-content: start; }
+  .pf__cols { grid-template-columns: 1fr; gap: 9px; }
+  .pf__etiqueta { font-size: 9.5px; }
+  .pf__titulo { font-size: 21px; margin-bottom: 3px; }
+  .pf p, .pf li { font-size: 14px; line-height: 1.36; }
+  .pf__texto { gap: 7px; }
+  .pf__caja { padding: 8px 11px 9px; gap: 4px; }
+  .pf__caja h4 { font-size: 9.5px; padding-bottom: 4px; border-bottom-width: 2px; }
+  .pf__lista { gap: 4px; }
+  .pie { font-size: 12px; }
+
+  /* TP2: tabla señalada, entidades y tipos de datos */
+  .senal--fila { margin-top: 30%; }
+  .tabla-ej td { padding: 4px; }
+  .tabla-ej th { padding: 5px 4px; }
+  .tabla-ej caption { padding: 3px; }
+  .ambitos--4 .tarjeta { gap: 6px; }
+  .ambitos--4 .tarjeta p { font-size: 16px; }
+  .ambitos--4 .tarjeta .ico--l { width: 50px; height: 50px; }
+  .entidades .ico--xl { width: 56px; height: 56px; }
+  .chips li { padding: 4px; }
+  .reconocer .tarjeta { gap: 8px; }
+  .reconocer .ico--l { width: 50px; height: 50px; }
+  .tipos .ico--xl { width: 56px; height: 56px; }
+  .tipo__valor { font-size: 42px; line-height: 44px; }
+  .act > .act-tabla { font-size: 14.5px; }
+  .act-tabla--datos { table-layout: auto; }
+  .act-tabla--datos th, .act-tabla--datos td { padding: 4px 6px; }
+  .senalada { padding: 10px 16px; }
+  .ambitos--4 .tarjeta { padding-bottom: 8px; }
+
+  /* TP3: archivos de texto y pseudocódigo */
+  .archivo__txt { font-size: 16px; }
+  .archivo--grande .archivo__txt { font-size: 20px; }
+  .archivo--grande .archivo__nombre { font-size: 14px; }
+  .tabla-campos { font-size: 17px; }
+  .tabla-campos td, .tabla-campos tbody th { padding: 7px 8px; }
+  .lista-txt { font-size: 17px; }
+  .pseudo { font-size: 15px; line-height: 1.4; padding: 6px 0; }
+  .ventana-cod__barra { padding: 4px 12px; }
+  .act .archivo__txt { font-size: 14.5px; line-height: 1.5; padding: 6px 12px 8px; }
+  .comun--suelto { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .comun--suelto li { padding: 10px 10px 10px 12px; gap: 8px; font-size: 18px; }
+  .comun--suelto .glifo, .comun--suelto .ico { width: 34px; }
+  .comun--suelto code { font-size: 15px; }
+}
+
+/* ==========================================================
+   Impresión / PDF
+   ========================================================== */
+@page { size: A4; margin: 0; }
+@media print {
+  html, body { background: var(--blanco); }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .barra, .saltar, .no-imprimir { display: none !important; }
+  .laminas { padding: 0; }
+  .lamina {
+    height: 297mm; min-height: 0; margin: 0; box-shadow: none;
+    break-after: page; page-break-after: always;
+  }
+  .lamina:last-child { break-after: auto; page-break-after: auto; }
+
+  /* Código en papel: fondo claro, barra en blanco y sin sombras */
+  :root {
+    --consola-fondo: #F1F5F9; --consola-linea: var(--linea); --cod-texto: var(--tinta);
+    --cod-etq: #BE123C; --cod-atr: #3F6212; --cod-str: #854D0E; --cod-com: #475569; --cod-num: #7E22CE; --cod-fun: #0E7490;
+  }
+  .archivo, .ventana-cod { box-shadow: none; }
+  .ventana-cod { border: 1.5px solid var(--linea); }
+  .ventana-cod__barra { background: var(--blanco); }
+  .archivo__nombre { background: var(--blanco); color: var(--tinta); border-bottom: 1px solid var(--linea); }
+}
+
+/* ==========================================================
+   Portada e índice (index.html)
+   ========================================================== */
+.portada {
+  max-width: 210mm; margin: 0 auto; background: var(--blanco);
+  padding: 20px 16px 28px; display: flex; flex-direction: column; gap: 22px;
+}
+.portada__hero { position: relative; padding: 8px 0 4px; }
+.portada__hero h1 {
+  font-family: var(--fuente-titular); font-weight: 800;
+  font-size: clamp(38px, 11vw, 64px); line-height: .98; color: var(--tinta); letter-spacing: -.015em;
+}
+.portada__hero h1 span { color: var(--acento-numero); }
+.portada__hero .tit__sub { margin-top: 8px; }
+.portada__datos { font-size: 15px; color: var(--gris); line-height: 1.5; }
+.portada__datos strong { color: var(--tinta); }
+
+.bloque h2 { margin-bottom: 12px; }
+.lista-tp { display: grid; gap: 10px; }
+.tp {
+  display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; align-items: start;
+  background: var(--panel); border-radius: var(--radio); padding: 12px 14px;
+  text-decoration: none; color: var(--texto);
+  border: 2px solid transparent;
+  box-shadow: inset 6px 0 0 var(--acento);   /* franja del color del módulo */
+}
+a.tp:hover { border-color: var(--acento); }
+.tp__num {
+  grid-row: span 3;
+  font-family: var(--fuente-titular); font-weight: 800; font-size: 28px; line-height: 1;
+  color: var(--acento-numero); min-width: 2.2ch;
+}
+.tp__titulo { font-weight: 700; font-size: 17px; color: var(--tinta); }
+.tp__temas { font-size: 14.5px; line-height: 1.35; }
+.tp__meta { font-size: 12.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--gris); }
+.tp--pronto { opacity: .62; }
+/* Integrador: franja con los tres colores de módulo, en bandas con corte neto */
+.tp--integrador {
+  box-shadow: none;
+  background: linear-gradient(var(--conceptos) 0 33.34%, var(--planilla) 0 66.67%, var(--sql) 0) left / 6px 100% no-repeat, var(--acento-suave);
+}
+/* Etiquetas de la herramienta que se usa (Archivos, Planilla, XAMPP, SQL) */
+.etq {
+  display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .02em; text-transform: none;
+  padding: 1px 7px; border-radius: 999px; line-height: 1.5;
+}
+.etq--archivo  { background: var(--archivo-claro);  color: var(--archivo-texto); }
+.etq--planilla { background: var(--planilla-claro); color: var(--planilla-texto); }
+.etq--xampp    { background: var(--naranja-claro);  color: var(--naranja-texto); }
+.etq--sql      { background: var(--sql-claro);      color: var(--sql-texto); }
+.tp__visto { color: #0F766E; }
+.tp__visto[hidden] { display: none; }
+
+@media (min-width: 860px) {
+  .portada { margin: 24px auto 48px; padding: 14mm 14mm 16mm; box-shadow: 0 2px 14px rgba(17, 24, 39, .14); }
+}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Base de Datos I — Cuadernillo de actividades · Prof. Nicolás A. Cussi</title>
+  <meta name="description" content="Cuadernillo de actividades de Base de Datos I (5.º año), organizado en 9 TPs y un integrador. Bachillerato en Programación, Ushuaia.">
+  <meta name="theme-color" content="#26C6D4">
+  <link rel="preload" href="assets/fonts/barlow-condensed-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/estilos.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-db-solido" viewBox="0 0 48 48">
+      <g style="fill:currentColor;stroke:none">
+        <ellipse cx="24" cy="9.5" rx="16" ry="5.5"/>
+        <path d="M8 14c2.8 2.9 9.1 4.5 16 4.5S37.2 16.9 40 14v6.5c0 3-7.2 5.5-16 5.5S8 23.5 8 20.5z"/>
+        <path d="M8 25c2.8 2.9 9.1 4.5 16 4.5S37.2 27.9 40 25v6.5c0 3-7.2 5.5-16 5.5S8 34.5 8 31.5z"/>
+        <path d="M8 36c2.8 2.9 9.1 4.5 16 4.5S37.2 38.9 40 36v2.5c0 3-7.2 5.5-16 5.5S8 41.5 8 38.5z"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<a class="saltar" href="#indice">Saltar al índice</a>
+
+<main class="portada">
+  <div class="cab" aria-hidden="true">
+    <svg class="cab__logo"><use href="#i-db-solido"/></svg>
+    <div class="cab__marca"><b>BASES DE DATOS Y SQL</b><span>DESDE CERO</span></div>
+    <span class="cab__raya"></span>
+  </div>
+
+  <header class="portada__hero">
+    <h1>Base de Datos <span>I</span></h1>
+    <p class="tit__sub">Cuadernillo de actividades · 5.º año</p>
+  </header>
+
+  <p class="portada__datos">
+    <strong>Base de Datos I</strong> • Prof. Nicolás A. Cussi<br>
+    Bachillerato Profesional Especializado en Programación · Ushuaia
+  </p>
+
+  <aside class="idea" aria-label="Cómo usar el cuadernillo">
+    <span class="idea__ico" aria-hidden="true">
+      <svg class="ico" viewBox="0 0 48 48" focusable="false">
+        <path d="M24 2.5v4M10 8.5l2.8 2.8M38 8.5l-2.8 2.8M4 22h4M40 22h4"/>
+        <path d="M24 12a10 10 0 0 0-6.2 17.8c1.4 1.2 2.2 2.6 2.2 4.2v1h8v-1c0-1.6.8-3 2.2-4.2A10 10 0 0 0 24 12z" style="fill:var(--ac)"/>
+        <path d="M20 39h8M21.5 43h5"/>
+      </svg>
+    </span>
+    <p><strong>Cómo usarlo:</strong> cada TP tiene sus láminas, una página “Para profundizar” y, al final, las actividades para hacer en la carpeta.</p>
+  </aside>
+
+  <section class="bloque modulo-1" id="indice" aria-labelledby="b1">
+    <h2 class="subtitulo" id="b1">Módulo 1 · Conceptos de bases de datos</h2>
+    <ul class="lista-tp">
+      <li>
+        <a class="tp" href="unidades/tp01.html">
+          <span class="tp__num" aria-hidden="true">1</span>
+          <span class="tp__titulo">TP N°1 — Del dato a la base de datos</span>
+          <span class="tp__temas">¿Qué son los datos? · ¿Qué es una base de datos? · Bases de datos en la vida cotidiana · Base de datos vs. hoja de cálculo</span>
+          <span class="tp__meta">Láminas 1–4 <span class="tp__visto" data-visto="1" hidden>· ✓ Visto</span></span>
+        </a>
+      </li>
+      <li>
+        <a class="tp" href="unidades/tp02.html">
+          <span class="tp__num" aria-hidden="true">2</span>
+          <span class="tp__titulo">TP N°2 — Componentes de una tabla</span>
+          <span class="tp__temas">Tablas, filas, columnas y registros · Entidades y atributos · Tipos de datos</span>
+          <span class="tp__meta">Láminas 5–7 <span class="tp__visto" data-visto="2" hidden>· ✓ Visto</span></span>
+        </a>
+      </li>
+      <li>
+        <a class="tp" href="unidades/tp03.html">
+          <span class="tp__num" aria-hidden="true">3</span>
+          <span class="tp__titulo">TP N°3 — Archivos de texto</span>
+          <span class="tp__temas">Campos de tamaño fijo · Campos con separadores · Acceso a los datos</span>
+          <span class="tp__meta"><span class="etq etq--archivo">Archivos</span> Láminas 8–10 <span class="tp__visto" data-visto="3" hidden>· ✓ Visto</span></span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="bloque modulo-2" aria-labelledby="b2">
+    <h2 class="subtitulo" id="b2">Módulo 2 · Operaciones con planilla de cálculo</h2>
+    <ul class="lista-tp">
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">4</span>
+          <span class="tp__titulo">TP N°4 — La planilla como base de datos</span>
+          <span class="tp__temas">Armar la base · Ordenar · Filtrar</span>
+          <span class="tp__meta"><span class="etq etq--planilla">Planilla</span> Láminas 11–13 · Próximamente</span>
+        </div>
+      </li>
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">5</span>
+          <span class="tp__titulo">TP N°5 — Buscar y resumir datos</span>
+          <span class="tp__temas">BUSCARV y BUSCARX · Subtotales · Tablas dinámicas</span>
+          <span class="tp__meta"><span class="etq etq--planilla">Planilla</span> Láminas 14–16 · Próximamente</span>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="bloque modulo-3" aria-labelledby="b3">
+    <h2 class="subtitulo" id="b3">Módulo 3 · Bases de datos relacionales</h2>
+    <ul class="lista-tp">
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">6</span>
+          <span class="tp__titulo">TP N°6 — Software de gestión</span>
+          <span class="tp__temas">¿Qué es un SGBD? · Principales gestores · Bases relacionales y NoSQL</span>
+          <span class="tp__meta">Láminas 17–19 · Próximamente</span>
+        </div>
+      </li>
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">7</span>
+          <span class="tp__titulo">TP N°7 — Modelo relacional y claves</span>
+          <span class="tp__temas">El modelo relacional · Clave primaria · Clave foránea</span>
+          <span class="tp__meta">Láminas 20–22 · Próximamente</span>
+        </div>
+      </li>
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">8</span>
+          <span class="tp__titulo">TP N°8 — Relaciones, formularios e informes</span>
+          <span class="tp__temas">Relaciones 1:1, 1:N y N:M · Formularios e informes</span>
+          <span class="tp__meta">Láminas 23–24 · Próximamente</span>
+        </div>
+      </li>
+      <li>
+        <div class="tp tp--pronto">
+          <span class="tp__num" aria-hidden="true">9</span>
+          <span class="tp__titulo">TP N°9 — Primeros pasos con XAMPP y SQL</span>
+          <span class="tp__temas">XAMPP y phpMyAdmin · CREATE DATABASE y CREATE TABLE · INSERT INTO · SELECT</span>
+          <span class="tp__meta"><span class="etq etq--xampp">XAMPP</span> <span class="etq etq--sql">SQL</span> Láminas 25–28 · Próximamente</span>
+        </div>
+      </li>
+      <li>
+        <div class="tp tp--pronto tp--integrador">
+          <span class="tp__num" aria-hidden="true">✦</span>
+          <span class="tp__titulo">Integrador</span>
+          <span class="tp__temas">Caso práctico: diseñamos y creamos una base de datos desde cero</span>
+          <span class="tp__meta"><span class="etq etq--xampp">XAMPP</span> <span class="etq etq--sql">SQL</span> Lámina 29 · Próximamente</span>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <footer class="pie">
+    <span class="pie__linea"></span>
+    <span>Base de Datos I — Prof. Nicolás A. Cussi</span>
+    <span class="pie__linea"></span>
+  </footer>
+</main>
+
+<script src="assets/js/actividades.js"></script>
+</body>
+</html>
