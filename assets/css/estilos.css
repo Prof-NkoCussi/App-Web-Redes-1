@@ -777,7 +777,7 @@ button.boton:disabled { opacity: .45; cursor: not-allowed; }
 .sim__intro { font-size: 16px; line-height: 1.4; }
 .captura { margin-top: 8px; }
 /* Recuadro de definición, más chico que una introducción de lámina */
-.intro.intro--def { margin-top: 6px; padding: 8px 14px; gap: 14px; }
+.intro.intro--def { margin-top: 6px; padding: 8px 14px; gap: 14px; background: var(--acento-suave); }   /* mismo fondo que "Idea clave" */
 .intro.intro--def p { font-size: 15px; line-height: 1.4; padding-left: 14px; }
 .intro--def .ico { width: 44px; height: 44px; }
 .tabla-puertos { margin-top: 10px; }
