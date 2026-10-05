@@ -16,15 +16,13 @@
 
 /* ---------- Paleta (detectada del PDF) ---------- */
 :root {
-  /* Identidad del cuadernillo. El acento es el cian del Módulo 1;
-     .modulo-2 y .modulo-3 lo cambian por el color de su módulo */
-  --conceptos: #26C6D4;     /* cian del Módulo 1 (también en la franja del Integrador) */
-  --acento: var(--conceptos); /* acento: íconos, barras, flechas, recuadros */
-  --acento-numero: #05A2B4; /* número de cada título (ajustado: 3:1 sobre blanco) */
-  --acento-claro: #CDEFF4;  /* encabezados de tarjetas */
-  --acento-suave: #E2F5F8;  /* fondo de "Idea clave" */
-  /* Texto de color sobre blanco o sobre el tono claro (el cian de acento no sirve para texto chico) */
-  --acento-texto: #0B6B7A;  /* 6,2:1 */
+  /* Identidad */
+  --conceptos: #26C6D4;     /* cian del Módulo 1 de Base de Datos (sin uso en Redes I) */
+  --acento: #26C9A1;         /* verde azulado: íconos, barras, flechas, recuadros. Encima va texto oscuro */
+  --acento-numero: #069873;  /* número de cada título (3,6:1 sobre blanco: solo texto grande) */
+  --acento-claro: #C9F2E8;   /* encabezados de tarjetas */
+  --acento-suave: #E3F7F2;   /* fondo de "Idea clave" */
+  --acento-texto: #096750;   /* texto de color sobre blanco o sobre el tono claro (5,6:1 o más) */
 
   /* Colores con significado propio */
   --planilla: #A78BFA; --planilla-numero: #7C3AED; --planilla-texto: #6D28D9; --planilla-claro: #DDD6FE; --planilla-suave: #EDE9FE;
@@ -32,6 +30,7 @@
   --archivo: #F59E0B;  --archivo-texto: #92400E;   --archivo-claro: #FEF3C7;  --archivo-linea: #FDE68A;
   --naranja: #EA580C;  --naranja-texto: #C2410C;   --naranja-claro: #FFEDD5;
   --ok: #15803D;       --ok-oscuro: #166534;       --ok-claro: #DCFCE7;
+  --error: #B91C1C;    --error-claro: #FEE2E2;
 
   /* Ventanas: los tres puntos */
   --punto-rojo: #FF5F57; --punto-amarillo: #FEBC2E; --punto-verde: #28C840;
@@ -44,10 +43,12 @@
   --cod-com: #94A3B8;  /* gris azulado, en cursiva: comentarios */
   --cod-num: #C084FC;  /* violeta: números */
   --cod-fun: #67E8F9;  /* cian: acciones (abrir, leer, mostrar) y funciones */
+  /* Terminal: lo que sale bien y los errores */
+  --consola-ok: #86EFAC;  --consola-error: #FCA5A5;
 
   --panel: #EEF2F5;         /* recuadros grises */
   --panel-oscuro: #DDE3E9;  /* gris un tono más oscuro (encabezado neutro de una tabla) */
-  --panel-linea: #C9E9EE;   /* divisor dentro de recuadros */
+  --panel-linea: #C6EBE2;   /* divisor dentro de recuadros */
   --blanco: #FFFFFF;
   --tinta: #111827;         /* títulos e íconos */
   --texto: #1F2933;         /* texto corrido */
@@ -202,6 +203,7 @@ button.boton { border: 0; font-family: inherit; line-height: inherit; cursor: po
 }
 @media (max-width: 379px) {
   .cab__marca b, .cab__lema { font-size: 12px; }
+  .cab__marca span { letter-spacing: .16em; }   /* la bajada entra en un renglón a 360 px */
   .cab__raya { height: 28px; }
 }
 
@@ -890,7 +892,8 @@ a.tp:hover { border-color: var(--acento); }
 .tp__titulo { font-weight: 700; font-size: 17px; color: var(--tinta); }
 .tp__temas { font-size: 14.5px; line-height: 1.35; }
 .tp__meta { font-size: 12.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--gris); }
-.tp--pronto { opacity: .62; }
+/* TP sin página todavía: tarjeta con contorno, sin opacidad (así el texto mantiene el contraste) */
+.tp--pronto { background: var(--blanco); border-color: var(--panel-oscuro); }
 /* Integrador: franja con los tres colores de módulo, en bandas con corte neto */
 .tp--integrador {
   box-shadow: none;
@@ -905,6 +908,8 @@ a.tp:hover { border-color: var(--acento); }
 .etq--planilla { background: var(--planilla-claro); color: var(--planilla-texto); }
 .etq--xampp    { background: var(--naranja-claro);  color: var(--naranja-texto); }
 .etq--sql      { background: var(--sql-claro);      color: var(--sql-texto); }
+.etq--sim      { background: var(--acento-claro);   color: var(--acento-texto); }
+.etq--compu    { background: var(--ok-claro);       color: var(--ok-oscuro); }
 .tp__visto { color: #0F766E; }
 .tp__visto[hidden] { display: none; }
 
