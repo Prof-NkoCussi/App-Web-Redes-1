@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TP N°8 — Diagnóstico de red · Redes I</title>
+  <meta name="description" content="TP N°8 de Redes I: ipconfig y ping, tracert, nslookup y netstat, el diagnóstico por capas y la configuración del router, con un simulador de ping y tracert. Prof. Nicolás A. Cussi.">
+  <meta name="theme-color" content="#26C9A1">
+  <link rel="preload" href="../assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/barlow-semi-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/estilos.css">
+</head>
+<body data-tp="8">
+
+<!-- ====== Íconos (SVG simples) ====== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Red en estrella: tres equipos conectados a un nodo central -->
+    <symbol id="i-red-solido" viewBox="0 0 48 48">
+      <path d="M24 24V15M24 24L9 36M24 24l15 12" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round"/>
+      <g style="fill:currentColor;stroke:none">
+        <circle cx="24" cy="24" r="5"/>
+        <rect x="17" y="1" width="14" height="10" rx="2"/>
+        <path d="M22.5 10.5h3V13h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+        <rect x="2" y="31" width="14" height="10" rx="2"/>
+        <path d="M7.5 40.5h3V43h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+        <rect x="32" y="31" width="14" height="10" rx="2"/>
+        <path d="M37.5 40.5h3V43h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+      </g>
+    </symbol>
+    <symbol id="i-foco" viewBox="0 0 48 48">
+      <path d="M24 2.5v4M10 8.5l2.8 2.8M38 8.5l-2.8 2.8M4 22h4M40 22h4"/>
+      <path d="M24 12a10 10 0 0 0-6.2 17.8c1.4 1.2 2.2 2.6 2.2 4.2v1h8v-1c0-1.6.8-3 2.2-4.2A10 10 0 0 0 24 12z" style="fill:var(--ac)"/>
+      <path d="M20 39h8M21.5 43h5"/>
+    </symbol>
+    <!-- Ventana del Símbolo del sistema -->
+    <symbol id="i-terminal" viewBox="0 0 48 48">
+      <rect x="4" y="7" width="40" height="34" rx="4" style="fill:var(--blanco)"/>
+      <path d="M8 7h32a4 4 0 0 1 4 4v5H4v-5a4 4 0 0 1 4-4z" style="fill:var(--ac)"/>
+      <path d="M12 23l6 5-6 5M22 34h12"/>
+    </symbol>
+    <symbol id="i-pc" viewBox="0 0 48 48">
+      <rect x="4" y="7" width="40" height="27" rx="3"/>
+      <rect x="8.5" y="11.5" width="31" height="18" rx="1" style="fill:var(--ac);stroke:none"/>
+      <path d="M24 34v6M16 41h16"/>
+    </symbol>
+    <symbol id="i-lapiz" viewBox="0 0 48 48">
+      <path d="M33 6l9 9-25 25-9-9z" style="fill:var(--ac)"/>
+      <path d="M8 31 5.5 42.5 17 40z" style="fill:var(--blanco)"/>
+      <path d="M27 12l9 9"/>
+    </symbol>
+    <symbol id="i-descarga" viewBox="0 0 24 24">
+      <path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>
+    </symbol>
+    <symbol id="i-atras" viewBox="0 0 24 24">
+      <path d="M20 12H5M11 6l-6 6 6 6"/>
+    </symbol>
+  </defs>
+</svg>
+
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header class="barra">
+  <div class="barra__fila">
+    <a class="boton barra__volver" href="../indice.html"><svg aria-hidden="true" focusable="false"><use href="#i-atras"/></svg><span>Índice</span></a>
+    <span class="barra__titulo">TP N°8 — Diagnóstico de red</span>
+    <button class="boton" type="button" data-imprimir aria-label="Guardar en PDF">
+      <svg aria-hidden="true" focusable="false"><use href="#i-descarga"/></svg><span><span class="boton__largo">Guardar </span>PDF</span>
+    </button>
+  </div>
+  <nav class="partes" aria-label="Partes del TP N°8">
+    <a href="#pag-24">24 · ipconfig y ping</a>
+    <a href="#pag-25">25 · tracert, nslookup y netstat</a>
+    <a href="#pag-26">26 · Dentro del router</a>
+    <a href="#simulador">Simulador de ping</a>
+    <a href="#profundizar">Para profundizar</a>
+    <a href="#actividades">Actividades</a>
+    <a href="#actividades-2">En la compu</a>
+  </nav>
+</header>
+
+<main id="contenido" class="laminas">
+  <h1 class="sr-only">TP N°8 — Diagnóstico de red</h1>
+
+  <!-- =================== LÁMINA 24 =================== -->
+  <article class="lamina lamina--densa" id="pag-24" aria-labelledby="t24">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°8</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t24"><span class="tit__num">24.</span> ipconfig y ping</h2>
+      <p class="tit__sub">Ver la configuración y probar la conexión</p>
+    </div>
+
+    <p class="texto texto--cmd"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-terminal"/></svg><span>Los comandos se escriben en el <strong>Símbolo del sistema</strong>: <kbd>Win</kbd> + <kbd>R</kbd>, <code class="cod-cmd">cmd</code> y <kbd>Enter</kbd>.</span></p>
+
+    <section class="cmd" aria-labelledby="ipc24">
+      <div class="ventana-cod ventana-cod--terminal" role="group" aria-label="Salida del comando ipconfig">
+        <div class="ventana-cod__barra" aria-hidden="true">Símbolo del sistema</div>
+<pre class="ventana-cod__txt" tabindex="0"><span class="t-prompt">C:\Users\Alumno&gt;</span><span class="t-cmd">ipconfig</span>
+
+Configuración IP de Windows
+
+
+Adaptador de Ethernet Ethernet:
+
+   Sufijo DNS específico para la conexión. . :
+   Vínculo: dirección IPv6 local. . . : fe80::a1c:2b7e:91d3:6f5%7
+   Dirección IPv4. . . . . . . . . . . . . . : <span class="t-str">192.168.1.25</span>
+   Máscara de subred . . . . . . . . . . . . : <span class="t-str">255.255.255.0</span>
+   Puerta de enlace predeterminada . . . . . : <span class="t-str">192.168.1.1</span></pre>
+      </div>
+      <div class="cmd__texto">
+        <h3 class="subtitulo" id="ipc24">ipconfig: la configuración</h3>
+        <ul class="lista-txt pf__lista">
+          <li><strong>Dirección IPv4:</strong> la IP de la PC.</li>
+          <li><strong>Máscara de subred:</strong> qué parte de la IP es la red (TP4).</li>
+          <li><strong>Puerta de enlace predeterminada</strong> (<em>gateway</em>): la IP del router, la salida hacia otras redes e Internet.</li>
+        </ul>
+        <p><code class="cod-cmd">ipconfig /all</code> suma la <strong>Dirección física</strong> (la MAC) y los servidores DHCP y DNS.</p>
+      </div>
+    </section>
+
+    <section class="cmd" aria-labelledby="ping24">
+      <div class="ventana-cod ventana-cod--terminal" role="group" aria-label="Salida del comando ping a la puerta de enlace">
+        <div class="ventana-cod__barra" aria-hidden="true">Símbolo del sistema</div>
+<pre class="ventana-cod__txt" tabindex="0"><span class="t-prompt">C:\Users\Alumno&gt;</span><span class="t-cmd">ping 192.168.1.1</span>
+
+Haciendo ping a 192.168.1.1 con 32 bytes de datos:
+<span class="t-ok">Respuesta desde 192.168.1.1: bytes=32 tiempo=2ms TTL=64</span>
+<span class="t-ok">Respuesta desde 192.168.1.1: bytes=32 tiempo=1ms TTL=64</span>
+<span class="t-ok">Respuesta desde 192.168.1.1: bytes=32 tiempo=3ms TTL=64</span>
+<span class="t-ok">Respuesta desde 192.168.1.1: bytes=32 tiempo=1ms TTL=64</span>
+
+Estadísticas de ping para 192.168.1.1:
+    Paquetes: enviados = 4, recibidos = 4, perdidos = 0
+    (0% perdidos),
+Tiempos aproximados de ida y vuelta en milisegundos:
+    Mínimo = 1ms, Máximo = 3ms, Media = 1ms</pre>
+      </div>
+      <div class="cmd__texto">
+        <h3 class="subtitulo" id="ping24">ping: ¿responde?</h3>
+        <p>Envía 4 paquetes a otro equipo y espera su respuesta. En cada una leemos:</p>
+        <ul class="lista-txt pf__lista">
+          <li><strong>tiempo:</strong> lo que tardó la ida y vuelta, en milisegundos (ms).</li>
+          <li><strong>TTL</strong> (tiempo de vida): cuántos routers más puede atravesar el paquete; cada router le resta 1.</li>
+          <li><strong>perdidos:</strong> los paquetes sin respuesta («Tiempo de espera agotado para esta solicitud»). Lo ideal es 0%.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="orden24">
+      <div class="panel__cab">
+        <h3 class="subtitulo" id="orden24">El orden de prueba</h3>
+        <p class="panel__nota">De lo más cercano<br>a lo más lejano</p>
+      </div>
+      <ol class="secuencia secuencia--prueba">
+        <li class="prueba"><h4><b>1</b>La propia PC</h4><code class="cod-cmd">ping 127.0.0.1</code><p><code class="cod-ip">127.0.0.1</code> es la propia PC. <strong>Si falla:</strong> el problema está en ella.</p></li>
+        <li class="prueba"><h4><b>2</b>La puerta de enlace</h4><code class="cod-cmd">ping 192.168.1.1</code><p><strong>Si falla:</strong> el cable, el Wi-Fi o la IP.</p></li>
+        <li class="prueba"><h4><b>3</b>Una IP de Internet</h4><code class="cod-cmd">ping 8.8.8.8</code><p><strong>Si falla:</strong> el router o el proveedor.</p></li>
+        <li class="prueba"><h4><b>4</b>Un nombre</h4><code class="cod-cmd">ping www.redesdelaula.com</code><p><strong>Si solo falla este:</strong> el DNS.</p></li>
+      </ol>
+    </section>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> ipconfig muestra la configuración, y ping, si un equipo responde. El primer paso que falla muestra dónde está el problema.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 24">24</span>
+    </footer>
+  </article>
+
+  <!-- =================== LÁMINA 25 =================== -->
+  <article class="lamina lamina--densa" id="pag-25" aria-labelledby="t25">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°8</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t25"><span class="tit__num">25.</span> tracert, nslookup y netstat</h2>
+      <p class="tit__sub">Seguir el camino y revisar capa por capa</p>
+    </div>
+
+    <div class="cmd-par">
+    <section class="cmd cmd--abajo" aria-labelledby="tr25">
+      <div class="ventana-cod ventana-cod--terminal" role="group" aria-label="Salida del comando tracert">
+        <div class="ventana-cod__barra" aria-hidden="true">Símbolo del sistema</div>
+<pre class="ventana-cod__txt" tabindex="0"><span class="t-prompt">C:\Users\Alumno&gt;</span><span class="t-cmd">tracert www.redesdelaula.com</span>
+
+Traza a la dirección www.redesdelaula.com [203.0.113.10]
+sobre un máximo de 30 saltos:
+
+  1    &lt;1 ms    &lt;1 ms    &lt;1 ms  192.168.1.1
+  2     8 ms     7 ms     9 ms  203.0.113.1
+  3    15 ms    14 ms    16 ms  203.0.113.65
+  4    32 ms    31 ms    33 ms  203.0.113.129
+  5    35 ms    34 ms    36 ms  203.0.113.10
+
+<span class="t-ok">Traza completa.</span></pre>
+      </div>
+      <div class="cmd__texto">
+        <h3 class="subtitulo" id="tr25">tracert: el camino</h3>
+        <p>Muestra los routers del camino: cada renglón es un <strong>salto</strong>.</p>
+        <ul class="lista-txt pf__lista">
+          <li>El salto 1 es la puerta de enlace; el último, el destino.</li>
+          <li>Los tres tiempos son tres pruebas a ese router.</li>
+          <li>Un <code>*</code> es una prueba sin respuesta: si desde un salto todo da <code>*</code>, el camino se corta ahí.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="cmd cmd--abajo" aria-labelledby="ns25">
+      <div class="ventana-cod ventana-cod--terminal" role="group" aria-label="Salida del comando nslookup">
+        <div class="ventana-cod__barra" aria-hidden="true">Símbolo del sistema</div>
+<pre class="ventana-cod__txt" tabindex="0"><span class="t-prompt">C:\Users\Alumno&gt;</span><span class="t-cmd">nslookup www.redesdelaula.com</span>
+Servidor:  dns.google
+Address:  8.8.8.8
+
+Respuesta no autoritativa:
+Nombre:  www.redesdelaula.com
+Address:  <span class="t-str">203.0.113.10</span></pre>
+      </div>
+      <div class="cmd__texto">
+        <h3 class="subtitulo" id="ns25">nslookup: el DNS</h3>
+        <p>Le pregunta al servidor DNS (TP7) la IP de un nombre. Arriba aparece el servidor DNS; abajo, el nombre y su IP.</p>
+        <ul class="lista-txt pf__lista">
+          <li>«Respuesta no autoritativa»: respondió nuestro servidor DNS, no el del dominio.</li>
+          <li>Si el nombre no existe: «Non-existent domain».</li>
+        </ul>
+      </div>
+    </section>
+
+    </div>
+
+    <section class="cmd" aria-labelledby="nt25">
+      <div class="ventana-cod ventana-cod--terminal" role="group" aria-label="Salida del comando netstat">
+        <div class="ventana-cod__barra" aria-hidden="true">Símbolo del sistema</div>
+<pre class="ventana-cod__txt" tabindex="0"><span class="t-prompt">C:\Users\Alumno&gt;</span><span class="t-cmd">netstat -n</span>
+
+Conexiones activas
+
+  Proto  Dirección local        Dirección remota       Estado
+  TCP    192.168.1.25:51234     203.0.113.10:<span class="t-str">443</span>       ESTABLISHED
+  TCP    192.168.1.25:51240     203.0.113.10:<span class="t-str">80</span>        TIME_WAIT
+  TCP    192.168.1.25:51251     203.0.113.27:<span class="t-str">443</span>       ESTABLISHED</pre>
+      </div>
+      <div class="cmd__texto">
+        <h3 class="subtitulo" id="nt25">netstat: las conexiones</h3>
+        <p>Las conexiones de la PC: protocolo, IP y puerto de cada lado, y estado.</p>
+        <ul class="lista-txt pf__lista">
+          <li><strong>ESTABLISHED:</strong> establecida. <strong>TIME_WAIT:</strong> recién cerrada.</li>
+          <li>El puerto remoto indica el servicio: 443 es HTTPS; 80, HTTP (TP7).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="capas" aria-labelledby="capas25">
+      <h3 class="subtitulo" id="capas25">Diagnóstico ordenado por capas <span class="subtitulo__nota">· capas del modelo OSI (TP3)</span></h3>
+      <table class="tabla-capas">
+        <caption class="sr-only">Qué revisar en cada capa, con qué comando y qué hacer si falla</caption>
+        <thead><tr><th scope="col">Capa</th><th scope="col">Qué revisamos · con qué</th><th scope="col">Si falla</th></tr></thead>
+        <tbody>
+          <tr><th scope="row" class="capa capa--7">7 · Aplicación</th><td data-col="Qué revisamos · con qué">¿Funciona el DNS? <code class="cod-cmd">nslookup</code> y <code class="cod-cmd">ping</code> a un nombre.</td><td data-col="Si falla">Revisar los Servidores DNS (<code class="cod-cmd">ipconfig /all</code>) y el nombre.</td></tr>
+          <tr><th scope="row" class="capa capa--4">4 · Transporte</th><td data-col="Qué revisamos · con qué">¿Hay conexión al puerto? <code class="cod-cmd">netstat</code>.</td><td data-col="Si falla">Ver si la conexión aparece y su estado.</td></tr>
+          <tr><th scope="row" class="capa capa--3">3 · Red</th><td data-col="Qué revisamos · con qué">¿Tiene IP? ¿Llega? <code class="cod-cmd">ipconfig</code>, <code class="cod-cmd">ping</code>, <code class="cod-cmd">tracert</code>.</td><td data-col="Si falla">Revisar IP, máscara y puerta de enlace. Una IP <code class="cod-ip">169.254…</code> indica que el servidor DHCP no le dio IP.</td></tr>
+          <tr><th scope="row" class="capa capa--1">1 y 2 · Física y enlace de datos</th><td data-col="Qué revisamos · con qué">¿Está conectada? Las luces de la placa, <code class="cod-cmd">ipconfig</code>.</td><td data-col="Si falla">«Medios desconectados»: conectar el cable o el Wi-Fi.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> diagnosticamos capa por capa, de abajo hacia arriba: si una capa falla, las de arriba tampoco funcionan.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 25">25</span>
+    </footer>
+  </article>
+
+  <!-- =================== LÁMINA 26 =================== -->
+  <article class="lamina lamina--densa lamina--router" id="pag-26" aria-labelledby="t26">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°8</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+
+    <div class="router-cab">
+      <div class="tit">
+        <h2 class="tit__h" id="t26"><span class="tit__num">26.</span> Dentro del router</h2>
+        <p class="tit__sub">Configurar la red</p>
+      </div>
+      <section class="ajuste ajuste--entrar" aria-labelledby="aj0">
+        <h3 class="ajuste__tit" id="aj0">Entrar al panel</h3>
+        <p>Se entra desde el navegador, con la IP del router: la <strong>puerta de enlace</strong> que muestra <code class="cod-cmd">ipconfig</code>. Cada router tiene la suya; muchos usan <code class="cod-ip">192.168.1.1</code>.</p>
+        <p><span class="menu">Wireless</span> › <span class="menu">Wireless Settings</span> quiere decir: abrir el menú Wireless y elegir Wireless Settings.</p>
+        <div class="lab">
+          <h4 class="lab__tit">En el router del laboratorio</h4>
+          <p><strong>TP-Link TL-WR850N v3:</strong> <code>http://tplinkwifi.net</code> o <code class="cod-ip">192.168.0.1</code>. Menús en inglés.</p>
+        </div>
+      </section>
+
+      <figure class="mapa-panel">
+        <svg viewBox="0 0 344 342" role="img" aria-labelledby="mp-t mp-d">
+          <title id="mp-t">Esquema del panel del TP-Link TL-WR850N v3</title>
+          <desc id="mp-d">Ventana del navegador con la dirección tplinkwifi.net y los menús del panel que usamos, en inglés y con su traducción. Status (Estado), opción 4. Network Map (Mapa de red), opción 3. Network (Red), con LAN Settings (Configuración de LAN), opción 3. Wireless (Inalámbrico), con Wireless Settings (Configuración inalámbrica), opción 2. NAT Forwarding (Reenvío NAT), con Virtual Servers (Servidores virtuales), opción 4. Security (Seguridad), con Access Control (Control de acceso), opción 5. System Tools (Herramientas del sistema), con Administration (Administración), opción 1, y Firmware Upgrade (Actualización de firmware), Backup &amp; Restore (Copia de seguridad y restauración) y Reboot (Reiniciar), opción 6.</desc>
+          <rect class="mp-ventana" x="1" y="1" width="342" height="340" rx="8"/>
+          <path class="mp-barra" d="M9 1h326a8 8 0 0 1 8 8v19H1V9a8 8 0 0 1 8-8z"/>
+          <circle class="mp-punto mp-punto--1" cx="13" cy="14.5" r="3.5"/>
+          <circle class="mp-punto mp-punto--2" cx="24" cy="14.5" r="3.5"/>
+          <circle class="mp-punto mp-punto--3" cx="35" cy="14.5" r="3.5"/>
+          <rect class="mp-dir" x="48" y="6" width="200" height="17" rx="8.5"/>
+          <text class="mp-url" x="58" y="18.5">tplinkwifi.net</text>
+
+          <g class="mp-item"><circle class="mp-n" cx="15" cy="45" r="7.5"/><text class="mp-n-txt" x="15" y="48.5">4</text><text x="28" y="49"><tspan class="mp-en">Status</tspan><tspan class="mp-es" dx="6">Estado</tspan></text></g>
+          <g class="mp-item"><circle class="mp-n" cx="15" cy="65" r="7.5"/><text class="mp-n-txt" x="15" y="68.5">3</text><text x="28" y="69"><tspan class="mp-en">Network Map</tspan><tspan class="mp-es" dx="6">Mapa de red</tspan></text></g>
+          <text x="28" y="89"><tspan class="mp-en">Network</tspan><tspan class="mp-es" dx="6">Red</tspan></text>
+          <path class="mp-rama" d="M32 94v11h8"/>
+          <g class="mp-item"><circle class="mp-n" cx="15" cy="105" r="7.5"/><text class="mp-n-txt" x="15" y="108.5">3</text><text x="44" y="109"><tspan class="mp-sub">LAN Settings</tspan><tspan class="mp-es" dx="6">Configuración de LAN</tspan></text></g>
+          <text x="28" y="129"><tspan class="mp-en">Wireless</tspan><tspan class="mp-es" dx="6">Inalámbrico</tspan></text>
+          <path class="mp-rama" d="M32 134v11h8"/>
+          <g class="mp-item"><circle class="mp-n" cx="15" cy="145" r="7.5"/><text class="mp-n-txt" x="15" y="148.5">2</text><text x="44" y="149"><tspan class="mp-sub">Wireless Settings</tspan><tspan class="mp-es" dx="6">Configuración inalámbrica</tspan></text></g>
+          <text x="28" y="169"><tspan class="mp-en">NAT Forwarding</tspan><tspan class="mp-es" dx="6">Reenvío NAT</tspan></text>
+          <path class="mp-rama" d="M32 174v11h8"/>
+          <g class="mp-item"><circle class="mp-n" cx="15" cy="185" r="7.5"/><text class="mp-n-txt" x="15" y="188.5">4</text><text x="44" y="189"><tspan class="mp-sub">Virtual Servers</tspan><tspan class="mp-es" dx="6">Servidores virtuales</tspan></text></g>
+          <text x="28" y="209"><tspan class="mp-en">Security</tspan><tspan class="mp-es" dx="6">Seguridad</tspan></text>
+          <path class="mp-rama" d="M32 214v11h8"/>
+          <g class="mp-item"><circle class="mp-n" cx="15" cy="225" r="7.5"/><text class="mp-n-txt" x="15" y="228.5">5</text><text x="44" y="229"><tspan class="mp-sub">Access Control</tspan><tspan class="mp-es" dx="6">Control de acceso</tspan></text></g>
+          <text x="28" y="249"><tspan class="mp-en">System Tools</tspan><tspan class="mp-es" dx="6">Herramientas del sistema</tspan></text>
+          <path class="mp-rama" d="M32 254v11h8M32 265v20h8M32 285v20h8M32 305v20h8"/>
+          <g class="mp-item"><circle class="mp-n" cx="15" cy="265" r="7.5"/><text class="mp-n-txt" x="15" y="268.5">1</text><text x="44" y="269"><tspan class="mp-sub">Administration</tspan><tspan class="mp-es" dx="6">Administración</tspan></text></g>
+          <g class="mp-item"><circle class="mp-n" cx="15" cy="285" r="7.5"/><text class="mp-n-txt" x="15" y="288.5">6</text><text x="44" y="289"><tspan class="mp-sub">Firmware Upgrade</tspan><tspan class="mp-es" dx="6">Actualización de firmware</tspan></text></g>
+          <g class="mp-item"><circle class="mp-n" cx="15" cy="305" r="7.5"/><text class="mp-n-txt" x="15" y="308.5">6</text><text x="44" y="309"><tspan class="mp-sub">Backup &amp; Restore</tspan><tspan class="mp-es" dx="6">Copia de seguridad y restauración</tspan></text></g>
+          <g class="mp-item"><circle class="mp-n" cx="15" cy="325" r="7.5"/><text class="mp-n-txt" x="15" y="328.5">6</text><text x="44" y="329"><tspan class="mp-sub">Reboot</tspan><tspan class="mp-es" dx="6">Reiniciar</tspan></text></g>
+        </svg>
+        <figcaption>Esquema simplificado: solo los menús que usamos. El número indica la opción (la 5 y la 6, en «Para profundizar»).</figcaption>
+      </figure>
+    </div>
+
+    <ol class="ajustes" aria-label="Opciones del router">
+      <li class="ajuste-fila">
+        <div class="ajuste-fila__gen"><h3><b class="ajuste__n" aria-hidden="true">1</b>Contraseña de administrador.</h3> <p>Protege el panel: quien la sabe puede cambiar todo. Muchos routers traen una de fábrica (por ejemplo, <em>admin</em>), igual en todo el modelo y publicada en Internet: es lo primero que hay que cambiar. No es la clave del Wi-Fi.</p></div>
+        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p>El primer ingreso pide crearla. Después: <span class="menu">System Tools</span> › <span class="menu">Administration</span> <span class="menu-trad">(Herramientas del sistema › Administración)</span>.</p></div>
+      </li>
+      <li class="ajuste-fila">
+        <div class="ajuste-fila__gen"><h3><b class="ajuste__n" aria-hidden="true">2</b>Nombre y clave del Wi-Fi.</h3> <p>El <strong>SSID</strong> es el nombre de la red; la clave la protege y cifra lo que viaja. <strong>WPA2</strong> es lo mínimo; <strong>WPA3</strong>, la versión más nueva, hace mucho más difícil adivinar la clave.</p></div>
+        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Wireless</span> › <span class="menu">Wireless Settings</span> <span class="menu-trad">(Inalámbrico › Configuración inalámbrica)</span>. Seguridad: <span class="menu">WPA/WPA2 Personal</span>, la recomendada. Este modelo no tiene WPA3.</p></div>
+      </li>
+      <li class="ajuste-fila">
+        <div class="ajuste-fila__gen"><h3><b class="ajuste__n" aria-hidden="true">3</b>DHCP y reserva de IP.</h3> <p>El servidor DHCP del router (TP7) reparte las IP de un rango. La lista de dispositivos conectados (tabla DHCP) muestra quién está en la red y con qué IP. La <strong>reserva de IP</strong> le da siempre la misma IP a un dispositivo, según su MAC: así, la impresora compartida del TP6 no cambia de IP.</p></div>
+        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Network</span> › <span class="menu">LAN Settings</span> <span class="menu-trad">(Red › Configuración de LAN)</span>: rango de <code class="cod-ip">192.168.0.100</code> a <code class="cod-ip">192.168.0.199</code> y <span class="menu">Address Reservation</span> <span class="menu-trad">(Reserva de direcciones)</span>. Dispositivos: <span class="menu">Status</span> / <span class="menu">Network Map</span> <span class="menu-trad">(Estado / Mapa de red)</span>.</p></div>
+      </li>
+      <li class="ajuste-fila">
+        <div class="ajuste-fila__gen"><h3><b class="ajuste__n" aria-hidden="true">4</b>IP pública y privada.</h3> <p>La IP <strong>privada</strong> del router es la puerta de enlace; la <strong>pública</strong>, del lado de Internet, se la da el proveedor. Con NAT (TP5), todos los equipos salen a Internet con esa IP pública. El <strong>port forwarding</strong> (redirección de puertos) pasa lo que llega a la IP pública por un puerto a un equipo de la red.</p></div>
+        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Status</span> <span class="menu-trad">(Estado)</span>: la IP del lado Internet, para compararla con la privada. Port forwarding: <span class="menu">NAT Forwarding</span> › <span class="menu">Virtual Servers</span> <span class="menu-trad">(Reenvío NAT › Servidores virtuales)</span>.</p></div>
+      </li>
+    </ol>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> el router se configura desde el navegador. Lo primero: cambiar la contraseña de administrador y proteger el Wi-Fi con WPA2 o WPA3.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 26">26</span>
+    </footer>
+  </article>
+
+  <!-- =================== SIMULADOR DE PING Y TRACERT (hoja propia, sin número de lámina) =================== -->
+  <article class="lamina lamina--sim" id="simulador" aria-labelledby="tsim">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°8</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="tsim">Simulador de ping y tracert</h2>
+      <p class="tit__sub">Qué muestra Windows en cada caso</p>
+    </div>
+
+    <section class="simulador" data-sim="ping" aria-labelledby="tsim">
+      <div class="sim__cab">
+        <span class="etq etq--sim">Simulador</span>
+        <p class="sim__aviso">Simulación: los valores son de ejemplo.</p>
+      </div>
+      <p class="sim__intro">Elegí el comando, escribí una IP o un nombre y mirá la salida. La PC del simulador tiene la IP <code class="cod-ip">192.168.1.25</code>; su puerta de enlace es <code class="cod-ip">192.168.1.1</code>, y su servidor DNS, <code class="cod-ip">8.8.8.8</code>. En la misma red está la PC de un compañero: <code class="cod-ip">192.168.1.30</code>.</p>
+
+      <div class="sim__controles no-imprimir" data-sim-js hidden>
+        <form class="sim__form" novalidate>
+          <fieldset class="sim__comando">
+            <legend>Comando</legend>
+            <label><input type="radio" name="sim-cmd" value="ping" checked> ping</label>
+            <label><input type="radio" name="sim-cmd" value="tracert"> tracert</label>
+          </fieldset>
+          <div class="sim__campo">
+            <label for="sim-destino">Destino (IP o nombre)</label>
+            <input id="sim-destino" type="text" value="www.redesdelaula.com" inputmode="url" autocomplete="off" autocapitalize="none" spellcheck="false">
+          </div>
+          <button class="boton" type="submit">Ejecutar</button>
+        </form>
+        <p class="sim__ejemplos" style="margin-top:8px">Probá con:
+          <button class="boton boton--claro boton--chico" type="button" data-destino="www.redesdelaula.com">www.redesdelaula.com (responde)</button>
+          <button class="boton boton--claro boton--chico" type="button" data-destino="203.0.113.250">203.0.113.250 (no responde)</button>
+          <button class="boton boton--claro boton--chico" type="button" data-destino="www.redesdelaula.con">www.redesdelaula.con (mal escrito)</button>
+        </p>
+      </div>
+
+      <p class="sim__estado sim__estado--ok" role="status" aria-live="polite">Ejemplo resuelto: ping a www.redesdelaula.com, un destino que responde.</p>
+
+      <div class="ventana-cod ventana-cod--terminal ventana-cod--sim" role="group" aria-label="Salida del comando">
+        <div class="ventana-cod__barra" aria-hidden="true">Símbolo del sistema</div>
+<pre class="ventana-cod__txt" tabindex="0" data-salida><span class="t-prompt">C:\Users\Alumno&gt;</span><span class="t-cmd">ping www.redesdelaula.com</span>
+
+Haciendo ping a www.redesdelaula.com [203.0.113.10] con 32 bytes de datos:
+<span class="t-ok">Respuesta desde 203.0.113.10: bytes=32 tiempo=36ms TTL=60</span>
+<span class="t-ok">Respuesta desde 203.0.113.10: bytes=32 tiempo=34ms TTL=60</span>
+<span class="t-ok">Respuesta desde 203.0.113.10: bytes=32 tiempo=35ms TTL=60</span>
+<span class="t-ok">Respuesta desde 203.0.113.10: bytes=32 tiempo=37ms TTL=60</span>
+
+Estadísticas de ping para 203.0.113.10:
+    Paquetes: enviados = 4, recibidos = 4, perdidos = 0
+    (0% perdidos),
+Tiempos aproximados de ida y vuelta en milisegundos:
+    Mínimo = 34ms, Máximo = 37ms, Media = 35ms
+
+<span class="t-prompt">C:\Users\Alumno&gt;</span></pre>
+      </div>
+
+      <section aria-labelledby="sim-casos">
+        <h3 class="subtitulo" id="sim-casos">Los tres casos</h3>
+        <ul class="casos casos--sim">
+          <li class="grupo grupo--ok"><strong>El destino responde</strong><code>Respuesta desde 203.0.113.10: bytes=32 tiempo=36ms TTL=60</code><span>Llegan las 4 respuestas: 0% perdidos. En tracert, el último salto es el destino y termina con «Traza completa».</span></li>
+          <li class="grupo grupo--error"><strong>El destino no responde</strong><code>Tiempo de espera agotado para esta solicitud.</code><span>Se pierden los 4 paquetes: 100% perdidos. En tracert, desde un salto todo da <code>*</code> hasta el salto 30.</span></li>
+          <li class="grupo grupo--error"><strong>El nombre no se resuelve</strong><code>La solicitud de ping no pudo encontrar el host www.redesdelaula.con.</code><span>No se envía ningún paquete: el DNS no encontró ese nombre. En tracert: «No se puede resolver el nombre del sistema de destino».</span></li>
+        </ul>
+      </section>
+    </section>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 8</span>
+    </footer>
+  </article>
+
+  <!-- =================== PARA PROFUNDIZAR =================== -->
+  <article class="lamina lamina--pf" id="profundizar" aria-labelledby="tpf">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°8</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="tpf"><span class="tit__num">+</span> Para profundizar</h2>
+      <p class="tit__sub">Más opciones de los comandos y del router</p>
+    </div>
+
+    <div class="pf-grid">
+      <section class="pf" aria-labelledby="pf24">
+        <p class="pf__etiqueta">Lámina 24</p>
+        <h3 class="pf__titulo" id="pf24">Más opciones de ipconfig y ping</h3>
+        <div class="pf__cols">
+          <div class="pf__texto">
+            <p><code class="cod-cmd">ipconfig /release</code> suelta la IP de la PC, e <code class="cod-cmd">ipconfig /renew</code> le pide una nueva al servidor DHCP (TP7). Sirve cuando la PC quedó con una IP equivocada.</p>
+            <p><code class="cod-cmd">ipconfig /flushdns</code> vacía la caché DNS de la PC (TP7).</p>
+          </div>
+          <div class="pf__caja">
+            <h4>ping, a medida</h4>
+            <p><code class="cod-cmd">ping -t 192.168.1.1</code> hace ping sin parar, hasta que apretamos <kbd>Ctrl</kbd> + <kbd>C</kbd>: sirve para mirar la conexión mientras movemos un cable.</p>
+            <p><code class="cod-cmd">ping -n 10 8.8.8.8</code> envía 10 paquetes en lugar de 4.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="pf" aria-labelledby="pf25">
+        <p class="pf__etiqueta">Lámina 25</p>
+        <h3 class="pf__titulo" id="pf25">Cómo encuentra tracert cada salto</h3>
+        <div class="pf__cols">
+          <div class="pf__texto">
+            <p>tracert usa el TTL. Envía un paquete con TTL 1: el primer router le resta 1, el TTL llega a 0 y el router lo descarta, pero avisa quién es. Así aparece el salto 1.</p>
+            <p>Después envía paquetes con TTL 2, 3, 4… hasta llegar al destino o a los 30 saltos.</p>
+          </div>
+          <div class="pf__caja">
+            <h4>netstat -an</h4>
+            <p><code class="cod-cmd">netstat -an</code> muestra, además, los puertos que esperan conexiones, con el estado <strong>LISTENING</strong> (escuchando). Así vemos qué servicios atiende la PC.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="pf pf--ancho" aria-labelledby="pf26">
+        <p class="pf__etiqueta">Lámina 26</p>
+        <h3 class="pf__titulo" id="pf26">Más opciones del router</h3>
+        <div class="pf__fila">
+          <p><b class="ajuste__n" aria-hidden="true">5</b><strong>Control de acceso:</strong> elige qué dispositivos pueden usar la red. Con una <strong>lista negra</strong> se bloquean los de la lista; con una <strong>lista blanca</strong>, solo se conectan los de la lista.</p>
+          <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Security</span> › <span class="menu">Access Control</span> <span class="menu-trad">(Seguridad › Control de acceso)</span>: <span class="menu">Blacklist</span> <span class="menu-trad">(lista negra)</span> o <span class="menu">Whitelist</span> <span class="menu-trad">(lista blanca)</span>.</p></div>
+        </div>
+        <div class="pf__fila">
+          <p><b class="ajuste__n" aria-hidden="true">6</b><strong>Mantenimiento:</strong> actualizar el <strong>firmware</strong> (el programa interno del router) corrige fallas. Se baja de la página del fabricante, para el mismo modelo y versión, y no hay que apagar el router mientras se actualiza. La <strong>copia de seguridad</strong> guarda la configuración en un archivo, y <strong>restaurar</strong> la vuelve a cargar: conviene hacerla antes de cambiar algo. <strong>Reiniciar</strong> no borra nada; el <strong>reset de fábrica</strong> borra toda la configuración, también la contraseña de administrador.</p>
+          <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">System Tools</span> › <span class="menu">Firmware Upgrade</span>, <span class="menu">Backup &amp; Restore</span> y <span class="menu">Reboot</span> <span class="menu-trad">(Herramientas del sistema › Actualización de firmware, Copia de seguridad y restauración, Reiniciar)</span>. Reset de fábrica: mantener apretado el botón WPS/RESET más de 5 segundos.</p></div>
+        </div>
+      </section>
+
+      <section class="pf pf--ancho" aria-labelledby="pf-linux">
+        <p class="pf__etiqueta">Láminas 24 y 25</p>
+        <h3 class="pf__titulo" id="pf-linux">Los mismos comandos en Linux</h3>
+        <p>En Linux hay comandos equivalentes: <code class="cod-cmd">ipconfig</code> se llama <code class="cod-cmd">ifconfig</code>, y <code class="cod-cmd">tracert</code>, <code class="cod-cmd">traceroute</code>. <code class="cod-cmd">ping</code>, <code class="cod-cmd">nslookup</code> y <code class="cod-cmd">netstat</code> se llaman igual.</p>
+      </section>
+    </div>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 8</span>
+    </footer>
+  </article>
+
+  <!-- =================== ACTIVIDADES EN LA CARPETA =================== -->
+  <article class="lamina lamina--act lamina--densa" id="actividades" aria-labelledby="act-1">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°8</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <header class="act-banda">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-lapiz"/></svg>
+      <div>
+        <h2 id="act-1">Actividades para hacer en la carpeta</h2>
+        <p>TP N°8 — Diagnóstico de red</p>
+      </div>
+    </header>
+
+    <p class="consigna"><strong>Consigna:</strong> Respondé cada punto de forma completa, usando tus propias palabras. Podés apoyarte en las láminas, en el simulador y en “Para profundizar” del TP N°8.</p>
+
+    <ol class="acts acts--2col">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">1-</span> ipconfig y ping</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>En la salida de <code class="cod-cmd">ipconfig</code> de la lámina 24, indicá la IP de la PC, la máscara de subred y la puerta de enlace. ¿Para qué sirve la puerta de enlace?</div></li>
+          <li><b class="act__letra">b)</b><div>Explicá qué indican el tiempo, el TTL y los paquetes perdidos en una respuesta de <code class="cod-cmd">ping</code>.</div></li>
+          <li><b class="act__letra">c)</b><div>Escribí el orden de prueba: los cuatro pasos, el comando de cada uno y qué significa si falla.</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">2-</span> tracert, nslookup y netstat</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>¿Qué muestra cada renglón de <code class="cod-cmd">tracert</code>? ¿Qué significa un <code>*</code>?</div></li>
+          <li><b class="act__letra">b)</b><div>¿Qué comando usás para saber la IP de un nombre? ¿Y para ver las conexiones de la PC?</div></li>
+          <li><b class="act__letra">c)</b><div>En la salida de <code class="cod-cmd">netstat -n</code> de la lámina 25, ¿a qué servicio se conecta la PC en la primera conexión y en qué estado está? ¿Cómo te das cuenta?</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <ol class="acts acts--2col" start="3">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">3-</span> Dentro del router</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>¿Cómo se entra al panel de un router? ¿Cómo averiguás su IP?</div></li>
+          <li><b class="act__letra">b)</b><div>¿Por qué lo primero es cambiar la contraseña de administrador? ¿Es la clave del Wi-Fi?</div></li>
+          <li><b class="act__letra">c)</b><div>¿En qué se diferencian WPA2 y WPA3? ¿Cuál usás en el router del laboratorio y por qué?</div></li>
+          <li><b class="act__letra">d)</b><div>Escribí la ruta del menú, en el router del laboratorio, para: cambiar el nombre del Wi-Fi / reservar una IP / ver la IP pública / bloquear un dispositivo / hacer una copia de seguridad.</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">4-</span> Caso integrador</h3>
+        <p class="act__caso">En el laboratorio, una PC no puede navegar: no abre ninguna página. Las demás navegan bien.</p>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Armá un diagnóstico ordenado por capas para encontrar la falla: qué comandos usás, en qué orden y qué capa revisa cada uno.</div></li>
+          <li><b class="act__letra">b)</b><div>Si <code class="cod-cmd">ping 192.168.1.1</code> y <code class="cod-cmd">ping 8.8.8.8</code> responden, pero <code class="cod-cmd">ping www.redesdelaula.com</code> dice «La solicitud de ping no pudo encontrar el host», ¿en qué capa está la falla? ¿Qué revisás?</div></li>
+          <li><b class="act__letra">c)</b><div>Si <code class="cod-cmd">ipconfig</code> dijera «medios desconectados», ¿en qué capa estaría la falla? ¿Cómo la resolvés?</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 8</span>
+    </footer>
+  </article>
+
+  <!-- =================== ACTIVIDADES EN LA COMPUTADORA =================== -->
+  <article class="lamina lamina--act lamina--compu lamina--densa" id="actividades-2" aria-labelledby="act-2">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°8</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <header class="act-banda">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pc"/></svg>
+      <div>
+        <h2 id="act-2">Actividades para hacer en la computadora</h2>
+        <p>TP N°8 — Diagnóstico de red · Práctica de laboratorio</p>
+      </div>
+    </header>
+
+    <p class="consigna"><strong>Consigna:</strong> Hacé cada prueba en una PC del laboratorio y sacá una captura de pantalla (<kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>). Anotá qué comando usaste, qué resultado obtuviste y qué significa.</p>
+
+    <ol class="acts acts--2col">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">1-</span> Preparación</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Abrí el Símbolo del sistema: <kbd>Win</kbd> + <kbd>R</kbd>, escribí <code class="cod-cmd">cmd</code> y apretá <kbd>Enter</kbd>.</div></li>
+          <li><b class="act__letra">b)</b><div>Ejecutá <code class="cod-cmd">ipconfig</code> y anotá la IP de tu PC y la puerta de enlace.</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">2-</span> ping</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>A IP locales: la de tu PC y la de la PC de un compañero (la ve con <code class="cod-cmd">ipconfig</code>). Si da «Tiempo de espera agotado», esa PC puede estar configurada para no contestar ping: probá con otra.</div></li>
+          <li><b class="act__letra">b)</b><div>A la puerta de enlace que anotaste.</div></li>
+          <li><b class="act__letra">c)</b><div>A servidores externos: <code class="cod-cmd">ping 8.8.8.8</code> y <code class="cod-cmd">ping www.google.com</code>.</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">3-</span> tracert y netstat</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Ejecutá <code class="cod-cmd">tracert www.google.com</code>. Contá los saltos y buscá la puerta de enlace.</div></li>
+          <li><b class="act__letra">b)</b><div>Abrí una página en el navegador y ejecutá <code class="cod-cmd">netstat -n</code>. Buscá una conexión al puerto 443 y anotá su estado.</div></li>
+        </ol>
+      </li>
+      <li class="act act--opcional">
+        <h3 class="act__titulo"><span class="act__num">4-</span> Opcional: Wireshark</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Si la PC tiene Wireshark (TP7), capturá el tráfico mientras abrís una página y buscá las filas de DNS, como en la captura anotada del TP7.</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <section class="entrega" aria-labelledby="entrega8">
+      <h3 class="entrega__tit" id="entrega8">Entrega</h3>
+      <p>Un documento con las capturas de pantalla, por Classroom. Marcá cada casilla cuando lo tengas.</p>
+      <ul class="casillas">
+        <li><code class="cod-cmd">ping</code> a IP locales, con su captura.</li>
+        <li><code class="cod-cmd">ping</code> a la puerta de enlace, con su captura.</li>
+        <li><code class="cod-cmd">ping</code> a servidores externos, con su captura.</li>
+        <li><code class="cod-cmd">tracert</code>, con su captura.</li>
+        <li><code class="cod-cmd">netstat</code>, con su captura.</li>
+        <li>Para cada herramienta: el comando, el resultado y qué significa.</li>
+        <li>El documento, entregado por Classroom.</li>
+      </ul>
+    </section>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 8</span>
+    </footer>
+  </article>
+</main>
+
+<script src="../assets/js/actividades.js"></script>
+<script src="../assets/js/simuladores.js"></script>
+</body>
+</html>
