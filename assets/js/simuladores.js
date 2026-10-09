@@ -252,294 +252,282 @@
   }
 
   /* ==========================================================
-     TP8 · ping y tracert, con la salida de Windows en español
+     TP8 · Panel de un router: Wi-Fi, rango DHCP y reservas
      ========================================================== */
-  function simuladorPing(sim) {
+  function simuladorRouter(sim) {
+    var RED = "192.168.1.";
     var PROMPT = "C:\\Users\\Alumno>";
-    var PC = "192.168.1.25", PC_NOMBRE = "PC-ALUMNO";
-    var PUERTA = "192.168.1.1", COMPANERO = "192.168.1.30";
-    /* Servidor de ejemplo que está apagado: no responde */
-    var APAGADO = "203.0.113.250";
-    /* Routers del proveedor entre la puerta de enlace y el destino (rango de documentación) */
-    var PROVEEDOR = ["203.0.113.1", "203.0.113.65", "203.0.113.129"];
-    /* Nombres que se conocen por su IP (tracert los muestra) */
-    var NOMBRE_DE = { "8.8.8.8": "dns.google" };
-    /* Tiempo de ida y vuelta (ms) de los destinos de las láminas; los demás salen de su IP */
-    var TIEMPO_DE = { "203.0.113.10": 34, "8.8.8.8": 40 };
-    /* Tiempos de los saltos 1 a 4 (puerta de enlace y routers del proveedor), como en la lámina 25 */
-    var TIEMPO_SALTO = [0, 7, 14, 31];
-    var SALTOS_MAX = 30;
+    var EQUIPOS = [
+      { nombre: "PC del aula", conexion: "Cable", mac: "3C-52-82-4A-1F-07" },
+      { nombre: "Notebook", conexion: "Wi-Fi", mac: "8C-16-45-2B-9E-31" },
+      { nombre: "Celular", conexion: "Wi-Fi", mac: "5A-7D-C3-90-12-6E" },
+      { nombre: "Impresora", conexion: "Cable", mac: "00-1B-A9-3F-52-C4" }
+    ];
+    /* Reservas: número del equipo → último número de su IP (el ejemplo resuelto: la impresora) */
+    var reservas = { 3: 10 };
 
-    var form = sim.querySelector(".sim__form");
-    var campo = sim.querySelector("#sim-destino");
-    var salida = sim.querySelector("[data-salida]");
+    var form = sim.querySelector(".rt-form");
+    var campo = {
+      ssid: sim.querySelector("#rt-ssid"), seg: sim.querySelector("#rt-seg"), clave: sim.querySelector("#rt-clave"),
+      desde: sim.querySelector("#rt-desde"), hasta: sim.querySelector("#rt-hasta"),
+      equipo: sim.querySelector("#rt-equipo"), ip: sim.querySelector("#rt-ip")
+    };
+    var listaReservas = sim.querySelector(".rt-reservas");
     var estado = sim.querySelector(".sim__estado");
-    var temporizador = null;
+    var config = sim.querySelector("[data-config]");
+    var tabla = sim.querySelector("[data-equipos]");
+    var ipconfig = sim.querySelector("[data-ipconfig]");
 
-    /* ---- Formato de la salida ---- */
-    function relleno(texto, ancho) {
-      texto = String(texto);
-      while (texto.length < ancho) { texto = " " + texto; }
-      return texto;
-    }
-    /* Un tiempo de tracert: "    <1 ms", "    12 ms" o "     *   " (9 caracteres) */
-    function tiempoSalto(t) {
-      if (t === null) { return "     *   "; }
-      return relleno(t < 1 ? "<1" : t, 6) + " ms";
-    }
-    function lineaSalto(n, tiempos, equipo) {
-      return relleno(n, 3) + tiempos.map(tiempoSalto).join("") + "  " + equipo;
-    }
-    function sorteo(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
-
-    /* ---- Qué hay en cada destino ---- */
-    function esIp(texto) {
-      if (!/^\d{1,3}(\.\d{1,3}){3}$/.test(texto)) { return false; }
-      return texto.split(".").every(function (n) { return Number(n) <= 255; });
-    }
-    function esPrivada(p) {
-      return p[0] === 10 || (p[0] === 172 && p[1] >= 16 && p[1] <= 31) || (p[0] === 192 && p[1] === 168) || (p[0] === 169 && p[1] === 254);
+    /* ---- Validación ---- */
+    /* Devuelve el último número de una IP de la red 192.168.1.0, o un texto con el error */
+    function numero(texto, que) {
+      var t = texto.trim();
+      if (!/^\d{1,3}(\.\d{1,3}){3}$/.test(t)) { return que + ": escribí una IP completa, como 192.168.1.30."; }
+      var p = t.split(".").map(Number);
+      if (p.some(function (n) { return n > 255; })) { return que + ": cada número de una IP va de 0 a 255."; }
+      if (p[0] !== 192 || p[1] !== 168 || p[2] !== 1) { return que + ": tiene que ser de la red del router (192.168.1.…)."; }
+      if (p[3] === 0 || p[3] === 255) { return que + ": las IP terminadas en 0 y en 255 no se pueden usar en un equipo."; }
+      return p[3];
     }
 
-    /* Devuelve el destino: su IP, el nombre que tiene, cómo responde y por dónde pasa */
-    function buscar(texto) {
-      var minus = texto.toLowerCase();
-      var d = { escrito: texto, ip: "", nombre: "", inverso: "", caso: "", ttl: 0, rango: [0, 0], camino: [] };
-      if (minus === "localhost" || minus === "::1") {
-        d.ip = "::1"; d.nombre = minus === "localhost" ? PC_NOMBRE : ""; d.inverso = PC_NOMBRE; d.caso = "propia";
-        return d;
+    function errorWifi() {
+      var ssid = campo.ssid.value.trim();
+      if (!ssid) { return [campo.ssid, "Escribí un nombre para la red (SSID)."]; }
+      if (ssid.length > 32) { return [campo.ssid, "El SSID puede tener hasta 32 caracteres; tiene " + ssid.length + "."]; }
+      if (campo.seg.value !== "Sin seguridad") {
+        var n = campo.clave.value.length;
+        if (n < 8 || n > 63) { return [campo.clave, "Con " + campo.seg.value + ", la clave lleva de 8 a 63 caracteres; tiene " + n + "."]; }
       }
-      if (minus.indexOf(":") !== -1 && /^[0-9a-f:.%]+$/.test(minus)) {
-        d.caso = "ipv6";
-        return d;
-      }
-      if (esIp(texto)) {
-        d.ip = texto.split(".").map(Number).join(".");
-      } else if (minus === "dns.google") {
-        d.ip = "8.8.8.8"; d.nombre = texto;
-      } else if (/^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(minus) && TERMINACIONES.indexOf(minus.split(".").pop()) !== -1) {
-        d.ip = ipDe(minus); d.nombre = texto;
-      } else {
-        d.caso = "sin-nombre";
-        return d;
-      }
-      var p = d.ip.split(".").map(Number);
-      if (NOMBRE_DE[d.ip]) { d.inverso = NOMBRE_DE[d.ip]; }
-      if (p[0] === 0 || p[0] >= 224) {
-        d.caso = "error-general"; d.codigo = p[0] === 0 ? 1214 : 1232;
-      } else if (p[0] === 127 || d.ip === PC) {
-        d.caso = "propia"; d.ttl = 128; d.inverso = PC_NOMBRE;
-      } else if (d.ip === PUERTA) {
-        d.caso = "responde"; d.ttl = 64; d.rango = [1, 3]; d.camino = [];
-      } else if (d.ip === COMPANERO) {
-        d.caso = "responde"; d.ttl = 128; d.rango = [0, 1]; d.camino = [];
-      } else if (p[0] === 192 && p[1] === 168 && p[2] === 1) {
-        d.caso = p[3] === 255 ? "no-responde" : "inaccesible"; d.ultimoSalto = 0;
-      } else if (esPrivada(p)) {
-        d.caso = "no-responde"; d.camino = [PUERTA]; d.ultimoSalto = 1;
-      } else if (d.ip === APAGADO) {
-        d.caso = "no-responde"; d.camino = [PUERTA].concat(PROVEEDOR); d.ultimoSalto = 4;
-      } else {
-        /* Destino en Internet: 4 routers hasta llegar, y cada uno le resta 1 al TTL (64) */
-        var base = TIEMPO_DE[d.ip] || 34 + (p[3] * 7 + p[2]) % 26;
-        d.caso = "responde"; d.ttl = 64 - 4; d.rango = [base, base + 3]; d.camino = [PUERTA].concat(PROVEEDOR);
-      }
-      return d;
+      return null;
     }
 
-    /* ---- La salida de cada comando: una lista de renglones { texto, clase } ---- */
-    function ping(d) {
-      var r = [];
-      function linea(texto, clase) { r.push({ texto: texto, clase: clase || "" }); }
-      if (d.caso === "ipv6") { return null; }
-      if (d.caso === "sin-nombre") {
-        linea("La solicitud de ping no pudo encontrar el host " + d.escrito + ". Compruebe el nombre y", "t-error");
-        linea("vuelva a intentarlo.", "t-error");
-        return { renglones: r, tipo: "error", resumen: "El nombre no se resuelve: no se encontró ninguna IP para «" + d.escrito + "». Está mal escrito o falla el DNS. No se envió ningún paquete." };
-      }
-      linea("");
-      linea("Haciendo ping a " + (d.nombre ? d.nombre + " [" + d.ip + "]" : d.ip) + " con 32 bytes de datos:");
-      var tiempos = [], recibidos = 0;
-      for (var i = 0; i < 4; i++) {
-        if (d.caso === "responde" || d.caso === "propia") {
-          var t = d.caso === "propia" ? 0 : sorteo(d.rango[0], d.rango[1]);
-          tiempos.push(t);
-          recibidos++;
-          var tiempo = t < 1 ? "tiempo<1m" : "tiempo=" + t + "ms";
-          linea(d.ip === "::1" ? "Respuesta desde ::1: " + tiempo + " " : "Respuesta desde " + d.ip + ": bytes=32 " + tiempo + " TTL=" + d.ttl, "t-ok");
-        } else if (d.caso === "inaccesible") {
-          recibidos++;
-          linea("Respuesta desde " + PC + ": Host de destino inaccesible.", "t-error");
-        } else if (d.caso === "error-general") {
-          linea("PING: error en la transmisión. Error general. ", "t-error");
-        } else {
-          linea("Tiempo de espera agotado para esta solicitud.", "t-error");
-        }
-      }
-      var perdidos = 4 - recibidos;
-      linea("");
-      linea("Estadísticas de ping para " + d.ip + ":");
-      linea("    Paquetes: enviados = 4, recibidos = " + recibidos + ", perdidos = " + perdidos);
-      linea("    (" + (perdidos * 25) + "% perdidos),");
-      if (tiempos.length) {
-        var suma = tiempos.reduce(function (a, b) { return a + b; }, 0);
-        linea("Tiempos aproximados de ida y vuelta en milisegundos:");
-        linea("    Mínimo = " + Math.min.apply(null, tiempos) + "ms, Máximo = " + Math.max.apply(null, tiempos) + "ms, Media = " + Math.floor(suma / 4) + "ms");
-      }
-      var resumen = {
-        "responde": ["ok", "El destino responde: 4 enviados, 4 recibidos, 0 perdidos (0% perdidos)."],
-        "propia": ["ok", "Responde la propia PC: TCP/IP funciona en esta PC."],
-        "no-responde": ["error", "El destino no responde: se perdieron los 4 paquetes (100% perdidos)."],
-        "inaccesible": ["error", "Ningún equipo de la red tiene la IP " + d.ip + ". «Host de destino inaccesible» lo responde la propia PC (" + PC + "): aunque diga «recibidos = 4», el destino no respondió."],
-        "error-general": ["error", "Esa dirección no sirve como destino: Windows no puede enviar el ping."]
-      }[d.caso];
-      return { renglones: r, tipo: resumen[0], resumen: resumen[1] };
+    function errorRango() {
+      var d = numero(campo.desde.value, "Desde");
+      if (typeof d === "string") { return [campo.desde, d]; }
+      var h = numero(campo.hasta.value, "Hasta");
+      if (typeof h === "string") { return [campo.hasta, h]; }
+      if (d > h) { return [campo.hasta, "«Hasta» tiene que ser mayor que «Desde»."]; }
+      if (d === 1) { return [campo.desde, "El rango no puede incluir la IP del router (192.168.1.1)."]; }
+      return null;
     }
 
-    function tracert(d) {
-      var r = [];
-      function linea(texto, clase) { r.push({ texto: texto, clase: clase || "" }); }
-      if (d.caso === "ipv6") { return null; }
-      if (d.caso === "sin-nombre") {
-        linea("No se puede resolver el nombre del sistema de destino " + d.escrito + ".", "t-error");
-        return { renglones: r, tipo: "error", resumen: "El nombre no se resuelve: tracert no tiene a qué IP mandar los paquetes. Está mal escrito o falla el DNS." };
-      }
-      /* El encabezado lleva el nombre escrito (o el que tiene la IP); el último salto, solo el nombre que tiene la IP */
-      var conNombre = d.nombre || d.inverso;
-      var equipoFinal = d.inverso ? d.inverso + " [" + d.ip + "]" : d.ip;
-      linea("");
-      if (conNombre && d.caso !== "error-general") {
-        linea("Traza a la dirección " + conNombre + " [" + d.ip + "]");
-        linea("sobre un máximo de " + SALTOS_MAX + " saltos:");
-      } else {
-        linea("Traza a " + d.ip + " sobre caminos de " + SALTOS_MAX + " saltos como máximo.");
-      }
-      linea("");
-      var resumen;
-      var sinRespuesta = "Tiempo de espera agotado para esta solicitud.";
-      if (d.caso === "error-general") {
-        linea("  1  Código de error Windows " + d.codigo, "t-error");
-        resumen = ["error", "Esa dirección no sirve como destino: tracert no puede enviar los paquetes."];
-      } else if (d.caso === "inaccesible") {
-        linea(lineaSalto(1, [null, null, null], sinRespuesta), "t-error");
-        linea(relleno(2, 3) + tiempoSalto(null) + tiempoSalto(null) + "  " + PC_NOMBRE + " [" + PC + "]  informes: Host de destino inaccesible.", "t-error");
-        resumen = ["error", "Ningún equipo de la red tiene la IP " + d.ip + ": la propia PC avisa «Host de destino inaccesible»."];
-      } else {
-        var saltos = d.camino.map(function (equipo, i) {
-          var desde = TIEMPO_SALTO[i], hasta = desde + (i === 0 ? 1 : 2);
-          return { equipo: equipo, tiempos: [sorteo(desde, hasta), sorteo(desde, hasta), sorteo(desde, hasta)] };
-        });
-        if (d.caso === "responde" || d.caso === "propia") {
-          var t = d.caso === "propia" ? [0, 0] : d.rango;
-          saltos.push({ equipo: equipoFinal, tiempos: [sorteo(t[0], t[1]), sorteo(t[0], t[1]), sorteo(t[0], t[1])] });
-          saltos.forEach(function (s, i) { linea(lineaSalto(i + 1, s.tiempos, s.equipo)); });
-          resumen = ["ok", saltos.length === 1 ? "Llegó al destino en 1 salto: está en la misma red (o es la propia PC)." : "Llegó al destino en " + saltos.length + " saltos. El 1 es la puerta de enlace; el último, el destino."];
-        } else {
-          saltos.forEach(function (s, i) { linea(lineaSalto(i + 1, s.tiempos, s.equipo)); });
-          for (var n = saltos.length + 1; n <= SALTOS_MAX; n++) { linea(lineaSalto(n, [null, null, null], sinRespuesta), "t-error"); }
-          resumen = ["error", d.ultimoSalto ? "El camino se corta después del salto " + d.ultimoSalto + ": desde ahí, todo da * hasta el salto " + SALTOS_MAX + "." : "Ningún salto responde: todo da * hasta el salto " + SALTOS_MAX + "."];
-        }
-      }
-      linea("");
-      linea("Traza completa.", resumen[0] === "ok" ? "t-ok" : "");
-      return { renglones: r, tipo: resumen[0], resumen: resumen[1] };
-    }
-
-    /* ---- Dibujo: los renglones aparecen de a uno, como en la consola ---- */
-    function renglon(texto, clase) {
-      var nodo = clase ? document.createElement("span") : document.createTextNode(texto);
-      if (clase) { nodo.className = clase; nodo.textContent = texto; }
-      return nodo;
-    }
-
+    /* ---- Avisos ---- */
     function avisar(texto, tipo) {
       estado.textContent = texto;
       estado.classList.toggle("sim__estado--error", tipo === "error");
       estado.classList.toggle("sim__estado--ok", tipo === "ok");
     }
-
-    function sinMovimiento() {
-      return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function limpiarErrores() {
+      Object.keys(campo).forEach(function (k) { campo[k].removeAttribute("aria-invalid"); });
+    }
+    function fallo(par, prefijo) {
+      par[0].setAttribute("aria-invalid", "true");
+      avisar((prefijo || "") + par[1], "error");
     }
 
-    function ejecutar(comando, texto) {
-      var destino = texto.trim();
-      if (!destino) {
-        campo.setAttribute("aria-invalid", "true");
-        avisar("Escribí una IP o un nombre, por ejemplo www.redesdelaula.com.", "error");
-        return;
+    /* ---- Reservas ---- */
+    function dibujarReservas() {
+      listaReservas.textContent = "";
+      var claves = Object.keys(reservas);
+      if (!claves.length) {
+        var vacia = document.createElement("li");
+        vacia.className = "sim__vacia";
+        vacia.textContent = "Ninguna reserva.";
+        listaReservas.appendChild(vacia);
       }
-      if (/\s/.test(destino)) {
-        campo.setAttribute("aria-invalid", "true");
-        avisar("El destino va sin espacios: una IP o un nombre.", "error");
-        return;
+      claves.forEach(function (k) {
+        var e = EQUIPOS[k];
+        var li = document.createElement("li");
+        li.appendChild(document.createTextNode(e.nombre + " (" + e.mac + ") → " + RED + reservas[k] + " "));
+        var quitar = document.createElement("button");
+        quitar.type = "button";
+        quitar.className = "boton boton--claro boton--chico";
+        quitar.textContent = "Quitar";
+        quitar.setAttribute("aria-label", "Quitar la reserva de " + e.nombre);
+        quitar.addEventListener("click", function () {
+          delete reservas[k];
+          dibujarReservas();
+          avisar("Se quitó la reserva de " + e.nombre + ". Guardá para volver a conectar los equipos.", "");
+        });
+        li.appendChild(quitar);
+        listaReservas.appendChild(li);
+      });
+    }
+
+    function agregarReserva() {
+      limpiarErrores();
+      var i = Number(campo.equipo.value);
+      var n = numero(campo.ip.value, "IP reservada");
+      if (typeof n === "string") { fallo([campo.ip, n]); return; }
+      if (n === 1) { fallo([campo.ip, "Esa es la IP del router: elegí otra."]); return; }
+      for (var k in reservas) {
+        if (reservas[k] === n && Number(k) !== i) { fallo([campo.ip, "La IP " + RED + n + " ya está reservada para " + EQUIPOS[k].nombre + "."]); return; }
       }
-      campo.removeAttribute("aria-invalid");
-      campo.value = destino;
+      var cambio = reservas[i] !== undefined;
+      reservas[i] = n;
+      campo.ip.value = RED + n;
+      dibujarReservas();
+      avisar((cambio ? "Reserva cambiada: " : "Reserva agregada: ") + EQUIPOS[i].nombre + " → " + RED + n + ". Guardá para conectar los equipos.", "");
+    }
 
-      var d = buscar(destino);
-      var resultado = comando === "tracert" ? tracert(d) : ping(d);
-      if (!resultado) {
-        campo.setAttribute("aria-invalid", "true");
-        avisar("El simulador trabaja con IPv4: escribí una IP como 192.168.1.1 o un nombre.", "error");
-        return;
-      }
-      var renglones = resultado.renglones.concat([{ texto: "", clase: "" }, { texto: PROMPT, clase: "t-prompt" }]);
-
-      /* Con una URL completa Windows no encuentra el host: se avisa qué escribir */
-      if (d.caso === "sin-nombre" && destino.indexOf("://") !== -1) {
-        resultado.resumen = "Windows no entiende «" + destino.split("://")[0] + "://»: el destino es solo el nombre, por ejemplo www.redesdelaula.com.";
-      }
-
-      clearTimeout(temporizador);
-      salida.textContent = "";
-      salida.appendChild(renglon(PROMPT, "t-prompt"));
-      salida.appendChild(renglon(comando + " " + destino, "t-cmd"));
-      avisar("Ejecutando " + comando + " " + destino + "…", "");
-
-      var i = 0;
-      var pausa = sinMovimiento() ? 0 : (comando === "tracert" ? 160 : 320);
-      function siguiente() {
-        while (i < renglones.length) {
-          var r = renglones[i];
-          i++;
-          salida.appendChild(document.createTextNode("\n"));
-          if (r.texto) { salida.appendChild(renglon(r.texto, r.clase)); }
-          salida.scrollTop = salida.scrollHeight;
-          /* Pausa en los renglones con respuesta (o sin ella), como cuando Windows espera */
-          if (pausa && /^(Respuesta|Tiempo de espera|PING:|\s+\d+ )/.test(r.texto)) {
-            temporizador = setTimeout(siguiente, pausa);
-            return;
-          }
+    /* ---- Conexión de los equipos: primero las reservas; después, la primera IP libre del rango ---- */
+    function conectar(desde, hasta) {
+      var usadas = {};
+      Object.keys(reservas).forEach(function (k) { usadas[reservas[k]] = true; });
+      return EQUIPOS.map(function (e, i) {
+        if (reservas[i] !== undefined) { return { ip: RED + reservas[i], como: "Reserva" }; }
+        for (var n = desde; n <= hasta; n++) {
+          if (!usadas[n]) { usadas[n] = true; return { ip: RED + n, como: "DHCP" }; }
         }
-        avisar(resultado.resumen, resultado.tipo);
-      }
-      siguiente();
+        return { ip: "", como: "Sin IP: el rango no alcanzó" };
+      });
     }
 
-    function comandoElegido() {
-      var marcado = sim.querySelector("input[name='sim-cmd']:checked");
-      return marcado ? marcado.value : "ping";
+    function celda(fila, etiqueta, texto) {
+      var c = document.createElement(etiqueta);
+      if (etiqueta === "th") { c.scope = "row"; }
+      c.textContent = texto;
+      fila.appendChild(c);
+      return c;
+    }
+
+    function dibujarTabla(resultado) {
+      tabla.textContent = "";
+      EQUIPOS.forEach(function (e, i) {
+        var tr = document.createElement("tr");
+        celda(tr, "th", e.nombre);
+        celda(tr, "td", e.conexion);
+        celda(tr, "td", e.mac);
+        celda(tr, "td", resultado[i].ip || "—");
+        var como = celda(tr, "td", resultado[i].como);
+        if (!resultado[i].ip) { tr.className = "rt-sin-ip"; como.className = "rt-falla"; }
+        tabla.appendChild(tr);
+      });
+    }
+
+    /* Salida de ipconfig en la PC (mismo formato que muestra Windows en español) */
+    function dibujarIpconfig(ip) {
+      ipconfig.textContent = "";
+      function linea(texto, clase) {
+        if (clase) {
+          var s = document.createElement("span");
+          s.className = clase;
+          s.textContent = texto;
+          ipconfig.appendChild(s);
+        } else {
+          ipconfig.appendChild(document.createTextNode(texto));
+        }
+      }
+      linea(PROMPT, "t-prompt");
+      linea("ipconfig", "t-cmd");
+      linea("\n\nConfiguración IP de Windows\n\n\nAdaptador de Ethernet Ethernet:\n\n" +
+        "   Sufijo DNS específico para la conexión. . :\n" +
+        "   Vínculo: dirección IPv6 local. . . : fe80::a1c:2b7e:91d3:6f5%7\n");
+      if (ip) {
+        linea("   Dirección IPv4. . . . . . . . . . . . . . : "); linea(ip, "t-str");
+        linea("\n   Máscara de subred . . . . . . . . . . . . : "); linea("255.255.255.0", "t-str");
+        linea("\n   Puerta de enlace predeterminada . . . . . : "); linea("192.168.1.1", "t-str");
+      } else {
+        /* Sin servidor DHCP que le responda, Windows se pone una IP 169.254 (ver "Para profundizar") */
+        linea("   Dirección IPv4 de configuración automática: "); linea("169.254.83.107", "t-error");
+        linea("\n   Máscara de subred . . . . . . . . . . . . : 255.255.0.0");
+        linea("\n   Puerta de enlace predeterminada . . . . . :");
+      }
+    }
+
+    function dibujarConfig(desde, hasta) {
+      config.textContent = "";
+      config.appendChild(document.createTextNode("Red Wi-Fi "));
+      var b = document.createElement("strong");
+      b.textContent = campo.ssid.value.trim();
+      config.appendChild(b);
+      var seg = campo.seg.value === "Sin seguridad" ? ", sin seguridad." : ", con " + campo.seg.value + ".";
+      var claves = Object.keys(reservas);
+      var lista = claves.map(function (k) { return EQUIPOS[k].nombre + " → " + RED + reservas[k]; }).join("; ");
+      config.appendChild(document.createTextNode(seg + " Rango DHCP: de " + RED + desde + " a " + RED + hasta + ". " +
+        (claves.length === 1 ? "Reserva: " : "Reservas: ") + (lista || "ninguna") + "."));
+    }
+
+    /* ---- Guardar ---- */
+    function guardar() {
+      limpiarErrores();
+      var e = errorWifi() || errorRango();
+      if (e) { fallo(e, "No se guardó. "); return; }
+      var desde = numero(campo.desde.value, ""), hasta = numero(campo.hasta.value, "");
+      campo.desde.value = RED + desde;
+      campo.hasta.value = RED + hasta;
+      var resultado = conectar(desde, hasta);
+      dibujarConfig(desde, hasta);
+      dibujarTabla(resultado);
+      dibujarIpconfig(resultado[0].ip);
+
+      var porDhcp = 0, conReserva = 0, sinIp = [];
+      resultado.forEach(function (r, i) {
+        if (r.como === "DHCP") { porDhcp++; } else if (r.como === "Reserva") { conReserva++; } else { sinIp.push(EQUIPOS[i].nombre); }
+      });
+      var texto, tipo = "ok";
+      if (sinIp.length) {
+        tipo = "error";
+        var nombres = sinIp.length === 1 ? sinIp[0] : sinIp.slice(0, -1).join(", ") + " y " + sinIp[sinIp.length - 1];
+        texto = "Guardado, pero el rango DHCP no alcanzó: " + nombres + (sinIp.length === 1 ? " quedó" : " quedaron") +
+          " sin IP. Un equipo sin IP del DHCP se pone una 169.254…, con la que no hay red.";
+      } else {
+        texto = "Guardado. Se conectaron los 4 equipos: " + porDhcp + " por DHCP y " + conReserva + " con reserva.";
+      }
+      if (campo.seg.value === "Sin seguridad") {
+        tipo = "error";
+        texto += " Ojo: la red Wi-Fi no tiene seguridad; cualquiera puede conectarse y ver lo que viaja.";
+      }
+      avisar(texto, tipo);
     }
 
     /* ---- Eventos ---- */
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      ejecutar(comandoElegido(), campo.value);
+    EQUIPOS.forEach(function (e, i) {
+      var op = document.createElement("option");
+      op.value = String(i);
+      op.textContent = e.nombre + " · " + e.mac;
+      campo.equipo.appendChild(op);
     });
-    Array.prototype.forEach.call(sim.querySelectorAll("[data-destino]"), function (b) {
+    form.addEventListener("submit", function (ev) { ev.preventDefault(); guardar(); });
+    sim.querySelector("[data-reservar]").addEventListener("click", agregarReserva);
+    campo.seg.addEventListener("change", function () {
+      campo.clave.disabled = campo.seg.value === "Sin seguridad";
+    });
+    /* La configuración del ejemplo resuelto: cada "Probá con" parte de acá y cambia una sola cosa */
+    function volverAlEjemplo() {
+      campo.ssid.value = "Aula-Redes";
+      campo.seg.value = "WPA2 Personal";
+      campo.clave.disabled = false;
+      campo.clave.value = "clave-del-aula";
+      campo.desde.value = "192.168.1.25";
+      campo.hasta.value = "192.168.1.199";
+      reservas = { 3: 10 };
+      dibujarReservas();
+    }
+    Array.prototype.forEach.call(sim.querySelectorAll("[data-probar]"), function (b) {
       b.addEventListener("click", function () {
-        campo.value = b.getAttribute("data-destino");
-        ejecutar(comandoElegido(), campo.value);
+        var caso = b.getAttribute("data-probar");
+        volverAlEjemplo();
+        if (caso === "clave") {
+          campo.clave.value = "123456";
+        } else if (caso === "router") {
+          campo.desde.value = "192.168.1.1";
+          campo.hasta.value = "192.168.1.199";
+        } else {
+          campo.desde.value = "192.168.1.25";
+          campo.hasta.value = "192.168.1.25";
+        }
+        guardar();
       });
     });
 
     /* ---- Estado inicial: el ejemplo resuelto que está escrito en el HTML ---- */
+    dibujarReservas();
     Array.prototype.forEach.call(sim.querySelectorAll("[data-sim-js]"), function (el) { el.hidden = false; });
   }
 
   var dns = document.querySelector("[data-sim='dns']");
   if (dns) { simuladorDns(dns); }
-  var pingSim = document.querySelector("[data-sim='ping']");
-  if (pingSim) { simuladorPing(pingSim); }
+  var router = document.querySelector("[data-sim='router']");
+  if (router) { simuladorRouter(router); }
 })();

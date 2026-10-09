@@ -166,12 +166,12 @@ El repo de origen no tiene nada interactivo. Lo que sigue se crea en el TP donde
   | 5 | Tabla NAT que se completa al "mandar" paquetes |
   | 6 | Validador de rutas UNC |
   | 7 | Resolución DNS paso a paso |
-  | 8 | `ping` y `tracert` con salida realista (destino que responde, destino que no, nombre que no resuelve) |
+  | 8 | Panel de un router genérico: Wi-Fi, rango DHCP y reservas por MAC; qué IP recibe cada equipo y qué muestra `ipconfig` en la PC |
   | 9 | Petición real a una API pública, con su código de respuesta y su JSON |
 
 - **Datos de ejemplo, iguales en todo el cuadernillo:** red `192.168.1.0/24`, puerta de enlace `192.168.1.1`, PC `192.168.1.25`, DNS `8.8.8.8`. IP públicas de ejemplo: rango `203.0.113.0/24`, reservado para documentación. Dominio de ejemplo: uno inventado, siempre el mismo. Los dominios reales van solo en la práctica de laboratorio, donde la salida la ve el alumno en su PC.
 - **Captura anotada** (TP7): esquema SVG de una ventana de Wireshark (columnas No., Time, Source, Destination, Protocol, Info) con una consulta DNS y su respuesta, y un GET de HTTP con su `200 OK`, con flechas que explican cada fila. Solo DNS y HTTP; ARP queda afuera.
-- **Pantallas del router** (TP8): esquemas SVG simplificados del panel del TP-Link, no capturas ni fotos. Cada esquema muestra solo lo que hay que tocar, con el nombre exacto de la opción. Los nombres salen del modelo que lleva Nicolás (ver "Pendientes").
+- **Pantallas del router** (TP8): esquemas SVG simplificados del panel del TP-Link, no capturas ni fotos. Cada esquema muestra solo lo que hay que tocar, con el nombre exacto de la opción. Modelo: TP-Link TL-WR850N v3, con el panel en inglés: cada menú va en inglés, como en el panel, con la traducción al lado. Los datos salen de la guía oficial que pasó Nicolás; lo que no esté ahí lleva el marcador visible [VERIFICAR EN EL PANEL].
 - **Diagramas:** todos en SVG simple, con `role="img"` y texto alternativo: topologías, recorrido de un paquete, handshake, encapsulación, cliente-servidor, capas, arquitectura del Yarvi. Si hace falta una foto real (rack, patch panel), dejar un marcador visible: `[FOTO: qué mostrar]`.
 - **Botón del mini-juego:** enlace a la app ya publicada (`https://prof-nkocussi.github.io/App-redes-games/`, repo `Prof-NkoCussi/App-redes-games`, un juego por carpeta `games/tpN/`). Confirmar la URL de cada juego en ese repo. Hoy hay juego de los TP1 a TP5. El botón va solo en los TPs que tienen juego. El cuadernillo linkea a la app: no se fusionan.
 - **Código JavaScript** (TP9 y TP10): `let` y `const`, `===`, punto y coma, comillas dobles, textos unidos con `+`. Las peticiones se escriben con `async function` y `await fetch()`, como receta fija; `.then()` solo se nombra en "Para profundizar". Al lado de cada ejemplo va escrita la salida esperada.
@@ -214,7 +214,7 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - **A quién va:** chicos de 16–17 años. Frases cortas, un concepto por bloque, ejemplos de la escuela y la vida cotidiana (el Wi-Fi de la casa, el laboratorio, el celular).
 - Teoría en tono neutro ("podemos…"); consignas en voseo ("Indicá", "Escribí", "Completá").
 - **No adelantar temas de TPs posteriores.** Sí retomar los anteriores, nombrando el TP.
-- **Windows:** `ipconfig`, `ping`, `tracert`, `nslookup`, `netstat`. Los equivalentes de Linux (`ifconfig`, `traceroute`) se nombran solo en "Para profundizar".
+- **Windows:** `ipconfig` en el TP8 y `ping`, explicado brevemente, en el TP10. `tracert`, `nslookup` y `netstat` quedan para Redes II. El equivalente de Linux (`ifconfig`) se nombra solo en "Para profundizar".
 - **Simplificaciones acordadas:** DNS y DHCP usan UDP; HTTP, HTTPS, FTP, SSH, SMTP, POP3 e IMAP usan TCP. No entrar en excepciones (DNS sobre TCP, HTTP/3).
 - **Seguridad:** el TP11 es de soporte y puede no darse. Lo mínimo va antes: HTTPS en el TP7; credenciales por defecto y WPA2/WPA3 en el TP8.
 - Palabras: "celular", "notebook", "puerta de enlace" (y `gateway` entre paréntesis la primera vez), "contraseña".
@@ -234,7 +234,7 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 | 6 | Recursos compartidos en red | 16–18 | carpetas compartidas y permisos · rutas UNC · impresora compartida | Rutas UNC |
 | **Unidad 2 · Protocolos, seguridad y aplicaciones** | | | | |
 | 7 | Transporte y protocolos de aplicación | 19–23 | TCP y UDP, con el handshake de tres pasos · puertos · DNS y DHCP · HTTP y HTTPS · FTP, SSH y correo | DNS |
-| 8 | Diagnóstico de red | 24–26 | `ipconfig` y `ping` · `tracert`, `nslookup`, `netstat` y diagnóstico por capas · dentro del router | `ping` y `tracert` |
+| 8 | Configurando el router | 24–26 | la IP de la PC: `ipconfig` e IP fija en Windows · cómo funciona un router y cómo se entra · configurar el router: Wi-Fi, DHCP e IP fijas | Panel del router |
 | 9 | APIs REST | 27–29 | cliente-servidor, recursos y endpoints · verbos HTTP y códigos de respuesta · JSON y `fetch` | Petición real |
 | 10 | Proyecto integrador Yarvi | 30–32 | arquitectura del sistema · MQTT · del botón al motor: endpoints y `fetch` | — |
 | 11 | Seguridad en redes (de soporte) | 33–35 | amenazas (sniffing, spoofing, Man-in-the-Middle, DoS) · firewall, DMZ y VPN · HTTPS, certificados y Wi-Fi (WPA2, WPA3, redes públicas) | — |
@@ -250,10 +250,14 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - Cada lámina dice el puerto y si usa TCP o UDP.
 - "Para profundizar": tabla resumen de puertos (20/21, 22, 25, 53, 67/68, 80, 110, 143, 443 y 3306 de MySQL) y la captura anotada.
 
-**TP8 · Diagnóstico de red**
-- L24 **`ipconfig` y `ping`:** IP, máscara y puerta de enlace; leer una respuesta (tiempo, TTL, paquetes perdidos); el orden de prueba: la propia PC, la puerta de enlace, una IP de Internet, un nombre.
-- L25 **`tracert`, `nslookup`, `netstat`** y el diagnóstico ordenado por capas.
-- L26 **Dentro del router:** entrar por el navegador con la puerta de enlace; credenciales por defecto y por qué cambiarlas primero; contraseña de administrador; SSID y clave, WPA2 y WPA3; dispositivos conectados y tabla DHCP; reserva de IP por MAC (retoma la impresora del TP6); IP pública y privada (NAT); mención de port forwarding.
+**TP8 · Configurando el router** (C, 9/10: antes "Diagnóstico de red")
+- Enfoque: que entiendan cómo funciona un router, entren al panel y lo configuren. Cada grupo deja armada la red de su router para el proyecto final.
+- L24 **La IP de la PC:** `ipconfig` y `ipconfig /all` (IP, máscara, puerta de enlace, MAC, DHCP habilitado); IP dinámica y fija; cómo poner una IP fija en Windows (`ncpa.cpl` › Propiedades › TCP/IPv4), con el esquema SVG de esa ventana.
+- L25 **Cómo funciona un router:** los dos lados (WAN con la IP pública, LAN con la puerta de enlace) en SVG; qué hace (enruta, NAT, DHCP, Wi-Fi, switch); entrar al panel; contraseña de administrador y credenciales por defecto; dónde se ve la IP pública.
+- L26 **Configurar el router:** plan de la red (router, IP fijas, rango DHCP); SSID, clave, WPA2 y WPA3; rango DHCP y dispositivos conectados; reserva de IP por MAC (retoma la impresora del TP6), comprobada con `ipconfig /release` y `/renew`; copia de seguridad. Esquema SVG del panel del TL-WR850N v3.
+- Cada opción lleva al lado el recuadro "En el router del laboratorio", con la ruta en el TL-WR850N v3.
+- "Para profundizar": la IP 169.254 cuando no hay DHCP; `ifconfig` en Linux; la IP pública en el laboratorio y port forwarding; control de acceso; firmware, reiniciar y reset de fábrica.
+- `ping`, `tracert`, `nslookup` y `netstat` quedan para Redes II.
 
 **TP9 · APIs REST**
 - L27 **Cliente-servidor, recursos y endpoints:** qué es una API REST y cómo se arma la URL.
@@ -267,6 +271,8 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - L32 **Del botón al motor:** qué hace un endpoint y qué hace el `fetch` de un botón.
 - **No se publica la solución.** Los alumnos completan los endpoints y los `fetch`: el cuadernillo explica la estructura con un ejemplo de otro sistema (por ejemplo, prender una luz), no con los comandos del robot.
 - Nombres de endpoints, tópicos y comandos: los del .docx del Yarvi y la plantilla. No inventar.
+- (C, 9/10) `ping`, explicado brevemente: lo justo para comprobar que el ESP32 y el servidor responden. Ya no se ve en el TP8.
+- El TP10 arranca con la red del router que cada grupo configuró en el TP8 (planilla y copia de seguridad).
 
 **TP11 · Seguridad en redes**
 - L33 **Amenazas:** sniffing, spoofing, Man-in-the-Middle y DoS: cómo funciona cada una, qué daño causa y cómo se defiende.
@@ -288,7 +294,7 @@ El contenido ya está escrito y verificado. Fuente: las diapositivas de Gamma (e
   - Puertos: tabla con los puertos 80, 443, 21, 22, 25, 53 y 3306 y su protocolo o servicio.
   - HTTP: analizar una solicitud (método, URL, headers) y los códigos de estado 200, 301, 404 y 500.
   - Caso integrador: "Un alumno enciende su notebook, se conecta al Wi-Fi, abre el navegador, escribe una URL, navega, descarga un archivo y envía un email". Identificar qué protocolo de aplicación interviene en cada paso y en qué orden. Tabla con DNS, DHCP, HTTP, HTTPS, FTP, SSH y SMTP: función, puerto, si usa TCP o UDP y un ejemplo de uso. (C) La captura se lee del cuadernillo: identificar los protocolos presentes.
-- **TP8.** Carpeta: un punto por lámina y el caso "una PC no puede navegar", con una metodología ordenada para encontrar en qué capa está la falla y cómo resolverla. Computadora (laboratorio): pruebas con `ping` (a IP locales, a la puerta de enlace, a servidores externos), `tracert` y `netstat`. Para cada herramienta: qué comando usaron, qué resultado obtuvieron y qué significa. (C) Wireshark queda como opcional. Entrega: documento con capturas de pantalla, por Classroom.
+- **TP8.** (C, 9/10) Carpeta: un punto por lámina y, como caso integrador, la planilla de configuración de la red (SSID, seguridad, IP del router, máscara, rango DHCP y las IP fijas con su MAC). Computadora: un router por grupo, que es la red del proyecto final. Reset de fábrica si ya se usó; entrar al panel y crear la contraseña de administrador; SSID y clave con WPA/WPA2 Personal; ver el rango DHCP y los dispositivos; reservar una IP para la PC y comprobarla con `ipconfig`; poner una IP fija en Windows; copia de seguridad. Entrega: documento con capturas, la planilla y el archivo de la copia de seguridad, por Classroom.
 - **TP9.** Carpeta: un punto por lámina y el caso integrador. Computadora: desarrollar en HTML + JavaScript una página que consuma al menos una API REST pública (clima, cotización del dólar, RestCountries o PokéAPI), con `fetch()`, procesando la respuesta JSON y mostrando los datos en el DOM. Entrega: carpeta en `.zip` por Classroom + informe breve (qué endpoints consumieron, qué métodos HTTP usaron y cómo procesaron la respuesta).
 - **TP10.** Proyecto grupal de 2 o 3 integrantes. El hardware lo provee el docente. (C) 6 clases, con un entregable por clase:
 
@@ -320,10 +326,17 @@ TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primer
 - Versión paso a paso por TP, abierta a todos y sin nombres.
 - Yarvi: los alumnos completan endpoints y `fetch`.
 
+## Decisiones confirmadas (9/10)
+
+- TP8 pasa a "Configurando el router": la IP de la PC, cómo funciona un router y cómo configurarlo. Un router por grupo; la configuración queda para el proyecto final.
+- Router del laboratorio: TP-Link TL-WR850N v3, panel en inglés (cada menú con su traducción al lado).
+- `ping`, `tracert`, `nslookup` y `netstat` quedan para Redes II; `ping` se explica brevemente en el TP10.
+- Las actividades no llevan cierre ("REALIZAR EN LA CARPETA." ni "Fecha límite").
+
 ## Pendientes a consultar con Nicolás
 
 - **TP5:** el detalle dice "Subnetting VLSM/CIDR + NAT" y el contexto "Enrutamiento y NAT". Falta definir título y láminas.
-- **TP8:** modelo del router TP-Link y si el panel está en español o en inglés, para nombrar cada opción.
+- **TP10:** la práctica dice "diagnostican con `ping` y `netstat`", pero `netstat` pasó a Redes II. ¿Se saca o se explica en el TP10?
 - **TP9:** qué API va en el simulador y en los ejemplos (dólar o PokéAPI). Hay que probarla desde el laboratorio y revisar la respuesta real antes de escribir el ejemplo.
 - **TP10:** copiar el .docx del Yarvi y el código de la plantilla en `_fuente/tp10/`.
 - **Paso a paso:** link del cuestionario de Google Forms de cada TP.

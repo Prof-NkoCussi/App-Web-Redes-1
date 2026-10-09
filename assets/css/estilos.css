@@ -22,7 +22,6 @@
   --acento-claro: #C9F2E8;   /* encabezados de tarjetas */
   --acento-suave: #E3F7F2;   /* fondo de "Idea clave" */
   --acento-texto: #096750;   /* texto de color sobre blanco o sobre el tono claro (5,6:1 o más) */
-  --acento-medio: #8FE3CE;   /* tono intermedio de la escala de capas (TP8). Encima va texto oscuro */
 
   /* Colores con significado propio */
   --archivo: #F59E0B;  --archivo-texto: #92400E;   --archivo-claro: #FEF3C7;  --archivo-linea: #FDE68A;
@@ -1115,7 +1114,7 @@ a.tp:hover { border-color: var(--acento); }
 }
 
 /* ==========================================================
-   TP8: terminal, orden de prueba, capas, router y simulador de ping
+   TP8: terminal, IP fija en Windows, router y simulador del router
    ========================================================== */
 /* Teclas (Win + R) */
 kbd {
@@ -1140,80 +1139,93 @@ kbd {
 .cmd__texto .subtitulo { font-size: 21px; }
 .cmd__texto .subtitulo::after { margin-top: 4px; height: 4px; }
 
-/* Lo que responde Windows y qué significa (los tres casos del simulador) */
-.casos { display: grid; gap: 6px; }
-.casos li {
-  display: grid; gap: 3px 12px; align-items: center;
-  background: var(--panel); border-radius: 8px; padding: 6px 12px 7px 15px;
-  box-shadow: inset 5px 0 0 var(--grupo, var(--linea));
-  font-size: 15px; line-height: 1.3;
-}
-.casos code { justify-self: start; font-size: 13px; }
-.casos .grupo--ok code { background: var(--ok-claro); color: var(--ok-oscuro); box-shadow: inset 0 0 0 1px var(--ok); }
-.casos .grupo--error code { background: var(--error-claro); color: var(--error); box-shadow: inset 0 0 0 1px var(--consola-error); }
-.casos strong { font-family: var(--fuente-titulo); font-size: 17px; line-height: 1.2; }
+/* Una línea de texto con un ícono chico delante */
+.texto--cmd { display: flex; align-items: center; gap: 10px; }
+.texto--cmd .ico { width: 34px; height: 34px; }
 
-/* El orden de prueba: cuatro pasos con su comando */
-.prueba {
-  display: grid; gap: 5px; align-content: start;
-  background: var(--blanco); border-radius: 8px; padding: 8px 10px 10px; box-shadow: inset 0 4px 0 var(--acento);
-}
-.prueba h4 { display: flex; align-items: center; gap: 8px; font-family: var(--fuente-titulo); font-weight: 700; font-size: 17px; line-height: 1.15; color: var(--tinta); }
-.prueba h4 b {
-  flex: none; display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 6px;
-  background: var(--acento); font-family: var(--fuente-titular); font-weight: 800; font-size: 18px;
-}
-.prueba code { justify-self: start; font-size: 12.5px; overflow-wrap: normal; }   /* se corta en el espacio, no dentro del nombre */
-.prueba p { font-size: 14.5px; line-height: 1.3; }
-
-/* Diagnóstico por capas: escala de tonos del acento, con el nombre de la capa escrito */
-.tabla-capas { width: 100%; border-collapse: separate; border-spacing: 0 4px; font-size: 14.5px; line-height: 1.3; }
-.tabla-capas thead th {
-  font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--gris);
-  text-align: left; padding: 0 8px;
-}
-.tabla-capas td, .tabla-capas tbody th { background: var(--blanco); padding: 5px 8px; text-align: left; vertical-align: top; }
-.tabla-capas tbody th { font-family: var(--fuente-titulo); font-weight: 700; font-size: 15.5px; color: var(--tinta); border-radius: 6px 0 0 6px; }
-.tabla-capas td:last-child { border-radius: 0 6px 6px 0; }
-.tabla-capas tbody th.capa--1 { background: var(--acento-suave); }
-.tabla-capas tbody th.capa--3 { background: var(--acento-claro); }
-.tabla-capas tbody th.capa--4 { background: var(--acento-medio); }
-.tabla-capas tbody th.capa--7 { background: var(--acento); }
 /* En las consignas, un comando corto no se corta en dos renglones */
 .act code.cod-cmd { white-space: nowrap; }
-.capas { display: grid; gap: 6px; }
-.capas .tabla-capas td { background: var(--panel); }
-.subtitulo__nota { font-family: var(--fuente); font-weight: 600; font-size: .7em; color: var(--gris); }
 
-/* Dentro del router: cada opción (genérica) con el recuadro del router del laboratorio al lado */
+/* Recuadro "Importante" dentro de una sección (con título h4) */
+.nota h4 { font-family: var(--fuente-titulo); font-weight: 700; font-size: 18px; line-height: 1.2; }
+.nota--importante h4 { color: var(--naranja-texto); }
+
+/* IP fija en Windows: los pasos y el esquema de la ventana de TCP/IPv4 */
+.fija { display: grid; gap: 12px; align-items: start; }
+.fija__pasos { display: grid; gap: 8px; align-content: start; }
+.fija__vuelta { font-size: 15px; line-height: 1.35; }
+.esquema--ventana svg { max-width: 330px; }
+.dlg-ventana { fill: var(--blanco); stroke: var(--gris); stroke-width: 1.2; }
+.dlg-barra { fill: var(--panel-oscuro); }
+.esquema .dlg-titulo { font-size: 9.6px; font-weight: 600; }
+.dlg-pestana, .dlg-marco { fill: var(--blanco); stroke: var(--linea); stroke-width: 1.2; }
+.esquema .dlg-txt { font-size: 9.8px; }
+.esquema .dlg-txt--si { font-weight: 700; }
+.dlg-radio { fill: var(--blanco); stroke: var(--gris); stroke-width: 1.2; }
+.dlg-radio--si { stroke: var(--acento-texto); }
+.dlg-punto { fill: var(--acento-texto); }
+.dlg-campo { fill: var(--blanco); stroke: var(--gris); stroke-width: 1; }
+.dlg-campo--si { fill: var(--acento-suave); stroke: var(--acento-texto); }
+.esquema .dlg-valor { font-family: var(--fuente-mono); font-size: 9.2px; }
+.dlg-boton { fill: var(--panel); stroke: var(--gris); stroke-width: 1; }
+
+/* Cómo funciona un router: los dos lados (Internet en naranja, la red en el acento) y qué hace */
+.router-funciones { display: grid; gap: 12px; align-items: start; }
+.router-funciones .panel { display: grid; gap: 8px; align-content: start; }
+.router-funciones .panel__cab { margin-bottom: 0; }
+.router-funciones .lista-pasos li { font-size: 14.5px; }
+.esquema--router svg { max-width: 460px; }
+.esquema .rd-lado { font-size: 12.5px; font-weight: 700; }
+.esquema .rd-lado--wan { fill: var(--naranja-texto); }
+.esquema .rd-lado--lan { fill: var(--acento-texto); }
+.rd-nube { fill: var(--naranja-claro); stroke: var(--naranja); stroke-width: 2; }
+.rd-cable { fill: none; stroke-width: 3; stroke-linecap: round; }
+.rd-cable--wan { stroke: var(--naranja); }
+.rd-cable--lan { stroke: var(--acento); }
+.rd-wifi { fill: none; stroke: var(--acento); stroke-width: 2.5; stroke-linecap: round; }
+.rd-antena { stroke: var(--tinta); stroke-width: 3; stroke-linecap: round; }
+.rd-caja { fill: var(--panel-oscuro); stroke: var(--tinta); stroke-width: 2; }
+.rd-equipo { fill: var(--acento-suave); stroke: var(--acento); stroke-width: 1.5; }
+.esquema .rd-nombre { font-size: 11.5px; font-weight: 700; }
+.esquema .rd-ip { font-family: var(--fuente-mono); font-size: 11px; }
+.esquema .rd-ip--wan { fill: var(--naranja-texto); font-size: 10px; }
+.esquema .rd-ip--lan { fill: var(--acento-texto); }
+
+/* Configurar el router: título, plan de la red y esquema del panel */
 .router-cab { display: grid; gap: 10px; align-items: start; }
+.router-plan { display: grid; gap: 8px; align-content: start; }
+.router-plan > p { font-size: 15px; line-height: 1.38; }
+.esquema--plan svg { max-width: 400px; margin: 0; }
+.esquema--plan figcaption { text-align: left; font-size: 14px; }
+.esquema .plan-rot { font-size: 11px; font-weight: 700; }
+.esquema .plan-num { font-family: var(--fuente-mono); font-size: 10.5px; }
+.plan-router { fill: var(--tinta); }
+.plan-fijas { fill: var(--naranja-claro); stroke: var(--naranja); stroke-width: 1.5; }
+.plan-dhcp { fill: var(--acento-claro); stroke: var(--acento); stroke-width: 1.5; }
+.plan-libres { fill: var(--panel); stroke: var(--linea); stroke-width: 1.5; }
+
+/* Cada opción (genérica) con el recuadro del router del laboratorio al lado */
 .ajustes { display: grid; gap: 5px; }
 .ajuste-fila { display: grid; gap: 6px; background: var(--panel); border-radius: 8px; padding: 7px 8px 7px 12px; }
 .ajuste-fila__gen { font-size: 14.5px; line-height: 1.38; }
 .ajuste-fila__gen h3, .ajuste-fila__gen p { display: inline; }
 .ajuste-fila__gen h3 { font-family: var(--fuente-titulo); font-weight: 700; font-size: 16.5px; color: var(--tinta); }
-.ajuste-fila__gen .ajuste__n { width: 21px; height: 21px; font-size: 14px; margin-right: 6px; vertical-align: 1px; }
-.ajuste-fila .lab { display: block; align-self: stretch; }
-.ajuste-fila .lab__tit { display: inline; margin-right: 3px; }
-.ajuste-fila .lab p { display: inline; font-size: 14px; line-height: 1.38; }
-.ajuste { display: grid; gap: 6px; align-content: start; background: var(--panel); border-radius: 10px; padding: 10px 12px 12px; }
-.ajuste__tit {
-  display: flex; align-items: center; gap: 8px;
-  font-family: var(--fuente-titulo); font-weight: 700; font-size: 19px; line-height: 1.15; color: var(--tinta);
-}
 .ajuste__n {
-  flex: none; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%;
-  background: var(--acento); color: var(--tinta); font-family: var(--fuente-titular); font-weight: 800; font-size: 16px;
+  flex: none; display: inline-flex; align-items: center; justify-content: center; width: 21px; height: 21px; border-radius: 50%;
+  margin-right: 6px; vertical-align: 1px;
+  background: var(--acento); color: var(--tinta); font-family: var(--fuente-titular); font-weight: 800; font-size: 14px;
 }
-.ajuste > p { font-size: 15.5px; line-height: 1.38; }
-.lab { display: grid; gap: 2px; background: var(--blanco); border-radius: 8px; padding: 6px 10px 8px 14px; box-shadow: inset 4px 0 0 var(--ok); }
-.lab__tit { font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ok); }
-.lab p { font-size: 15px; line-height: 1.38; }
+.lab { display: block; background: var(--blanco); border-radius: 8px; padding: 6px 10px 8px 14px; box-shadow: inset 4px 0 0 var(--ok); }
+.lab__tit { display: inline; margin-right: 3px; font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ok); }
+.lab p { display: inline; font-size: 14px; line-height: 1.38; }
+.ajuste-fila .lab { align-self: stretch; }
+.pf__caja .lab { margin-top: 2px; }
 /* Nombre de un menú del panel, como aparece en pantalla, y su traducción */
 .menu {
   font-family: var(--fuente-titulo); font-weight: 700; color: var(--tinta); white-space: nowrap;
   background: var(--panel); box-shadow: inset 0 0 0 1px var(--linea); border-radius: 4px; padding: 0 4px;
 }
+.lab .menu, .act .menu { background: var(--blanco); }
 .menu-trad { color: var(--gris); }
 
 /* Esquema del panel del router */
@@ -1232,18 +1244,40 @@ kbd {
 .mp-sub { font-weight: 600; font-size: 12.5px; }
 .mapa-panel .mp-es { font-weight: 400; font-size: 11px; fill: var(--gris); }
 .mp-n { fill: var(--acento); }
+.mp-n--otra { fill: var(--panel-oscuro); }
 .mapa-panel .mp-n-txt { font-family: var(--fuente-titular); font-weight: 800; font-size: 11.5px; text-anchor: middle; }
 .mp-rama { fill: none; stroke: var(--linea); stroke-width: 1.5; }
 
-/* Simulador de ping y tracert */
-.sim__comando { border: 0; margin: 0; padding: 0 0 6px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; }
-.sim__comando legend { float: left; margin-right: 4px; padding: 0; font-weight: 700; font-size: 15px; color: var(--tinta); }
-.sim__comando label { display: inline-flex; align-items: center; gap: 6px; font-family: var(--fuente-mono); font-size: 16px; font-weight: 600; color: var(--tinta); cursor: pointer; }
-.sim__comando input { width: 18px; height: 18px; margin: 0; accent-color: var(--tinta); }
-.sim__estado--ok { color: var(--ok-oscuro); }
-.ventana-cod--sim .ventana-cod__txt { max-height: 25em; overflow-y: auto; }
-.casos--sim { margin-top: 8px; }
-.casos--sim li { background: var(--blanco); }
+/* Simulador del router */
+.rt-form { display: grid; gap: 10px; }
+.rt-grupo {
+  display: flex; flex-wrap: wrap; align-items: end; gap: 8px 10px; min-width: 0;
+  margin: 0; padding: 6px 12px 10px; border: 1.5px solid var(--linea); border-radius: 8px; background: var(--blanco);
+}
+.rt-grupo legend { padding: 0 4px; font-weight: 700; font-size: 14px; color: var(--tinta); }
+.rt-grupo .sim__campo { flex: 1 1 170px; }
+.sim__campo select {
+  width: 100%; min-width: 0; padding: 8px 10px;
+  font-family: var(--fuente); font-size: 16px; color: var(--tinta);
+  background: var(--blanco); border: 2px solid var(--gris); border-radius: 8px;
+}
+.sim__campo input:disabled { background: var(--panel); color: var(--gris); }
+.rt-reservas { flex: 1 1 100%; display: grid; gap: 4px; font-family: var(--fuente-mono); font-size: 13px; color: var(--tinta); overflow-wrap: anywhere; }
+.rt-reservas li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+.rt-resultado { display: grid; gap: 10px; }
+.rt-config { font-size: 15px; line-height: 1.35; }
+.rt-equipos { width: 100%; border-collapse: collapse; background: var(--blanco); font-size: 14px; line-height: 1.3; }
+.rt-equipos caption { text-align: left; font-weight: 700; font-size: 15px; color: var(--tinta); padding-bottom: 4px; }
+.rt-equipos th, .rt-equipos td { padding: 5px 8px; text-align: left; border-bottom: 1px solid var(--linea); }
+.rt-equipos thead th { background: var(--acento-claro); color: var(--tinta); font-size: 13px; }
+.rt-equipos tbody th { font-weight: 700; color: var(--tinta); }
+.rt-equipos td:nth-child(3), .rt-equipos td:nth-child(4) { font-family: var(--fuente-mono); font-size: 13px; }
+.rt-equipos .rt-sin-ip th, .rt-equipos .rt-sin-ip td { background: var(--error-claro); }
+.rt-falla { color: var(--error); font-weight: 700; }
+
+/* Planilla de configuración (caso integrador) */
+.planilla { display: grid; gap: 6px; }
+.planilla .act-tabla tbody th { width: 45%; }
 
 /* Entrega de la práctica: casillas para marcar con lápiz */
 .entrega { display: grid; gap: 6px; background: var(--ok-claro); border-radius: var(--radio); padding: 10px 16px 12px 18px; box-shadow: inset 4px 0 0 var(--ok); }
@@ -1256,30 +1290,36 @@ kbd {
   border: 2px solid var(--tinta); border-radius: 3px; background: var(--blanco);
 }
 
+/* "Para profundizar": el recuadro del laboratorio en línea */
+.pf .lab__tit { margin-right: 3px; }
+
 @media (max-width: 599px) {
-  /* Capas: cada fila como una tarjeta, con el nombre de cada columna */
-  .tabla-capas thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-  .tabla-capas, .tabla-capas tbody, .tabla-capas tr, .tabla-capas th, .tabla-capas td { display: block; }
-  .tabla-capas tr { margin-bottom: 6px; }
-  .tabla-capas tbody th { border-radius: 6px 6px 0 0; }
-  .tabla-capas td:last-child { border-radius: 0 0 6px 6px; }
-  .tabla-capas td[data-col]::before {
-    content: attr(data-col); display: block;
-    font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gris);
+  /* Equipos del simulador: cada fila como una tarjeta, con el nombre de cada dato */
+  .rt-equipos thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .rt-equipos, .rt-equipos tbody, .rt-equipos tr, .rt-equipos th, .rt-equipos td { display: block; }
+  .rt-equipos tr { border: 1.5px solid var(--linea); border-radius: 8px; margin-bottom: 6px; overflow: hidden; }
+  .rt-equipos th, .rt-equipos td { border-bottom: 0; padding: 3px 10px; }
+  .rt-equipos tbody th { background: var(--acento-claro); }
+  .rt-equipos td::before {
+    display: inline-block; min-width: 9em; margin-right: 4px;
+    font-family: var(--fuente); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gris);
   }
+  .rt-equipos td:nth-child(2)::before { content: "Conexión"; }
+  .rt-equipos td:nth-child(3)::before { content: "MAC"; }
+  .rt-equipos td:nth-child(4)::before { content: "IP"; }
+  .rt-equipos td:nth-child(5)::before { content: "Cómo la obtuvo"; }
 }
 
 @media (min-width: 600px), print {
-  /* Título y "Entrar al panel" a la izquierda; el esquema del panel a la derecha */
-  .router-cab { grid-template-columns: 1fr 290px; grid-template-areas: "tit mapa" "entrar mapa"; grid-template-rows: auto 1fr; }
+  /* Título y plan de la red a la izquierda; el esquema del panel a la derecha */
+  .router-cab { grid-template-columns: 1fr 290px; grid-template-areas: "tit mapa" "plan mapa"; grid-template-rows: auto 1fr; }
   .router-cab > .tit { grid-area: tit; }
-  .router-cab > .ajuste--entrar { grid-area: entrar; }
+  .router-cab > .router-plan { grid-area: plan; }
   .router-cab > .mapa-panel { grid-area: mapa; }
   .ajuste-fila { grid-template-columns: 1fr 1fr; align-items: center; gap: 10px; }
-  /* El paso 4 lleva el comando más largo */
-  .secuencia--prueba { grid-auto-columns: 1fr 1fr 1fr 1.3fr; gap: 24px; }
-  .secuencia--prueba > li:not(:last-child)::after { right: -21px; }
   .casillas { grid-template-columns: 1fr 1fr; }
+  .fija { grid-template-columns: 1fr 300px; }
+  .router-funciones { grid-template-columns: 1.3fr 1fr; }
 }
 
 @media (min-width: 860px), print {
@@ -1289,17 +1329,6 @@ kbd {
   .cmd__texto p, .cmd__texto .lista-txt { font-size: 14.5px; line-height: 1.33; }
   .cmd__texto .lista-txt { gap: 3px; }
   .lamina .texto--cmd { font-size: 17px; }
-  .tabla-capas { font-size: 13px; border-spacing: 0 2px; }
-  .tabla-capas td, .tabla-capas tbody th { padding: 4px 8px; }
-  .tabla-capas tbody th { font-size: 14.5px; }
-  .tabla-capas thead th:first-child { width: 21%; }
-  .tabla-capas thead th:nth-child(2) { width: 38%; }
-  /* Dos terminales lado a lado, cada una con su explicación abajo (del ancho de la terminal) */
-  .cmd-par { display: grid; grid-template-columns: max-content max-content; justify-content: space-between; gap: 10px; align-items: start; }
-  .cmd.cmd--abajo { grid-template-columns: min-content; gap: 6px; }
-  .lamina--densa .ventana-cod--terminal .ventana-cod__txt { font-size: 10.5px; line-height: 1.36; }
-  .lamina--densa .cmd__texto p, .lamina--densa .cmd__texto .lista-txt { font-size: 14px; line-height: 1.3; }
-  .lamina--densa .cmd__texto .subtitulo { font-size: 19px; }
   /* Láminas con mucho contenido: menos espacio entre bloques y una "Idea clave" más baja */
   .lamina--densa { gap: 3.5mm; }
   .lamina--densa .idea { grid-template-columns: 18mm 1fr; }
@@ -1311,28 +1340,27 @@ kbd {
   .lamina--densa .ajuste-fila .lab { padding: 5px 10px 6px 14px; }
   .lamina--densa .ajuste-fila .lab p { font-size: 13.5px; line-height: 1.33; }
   .lamina--densa .cmd__texto .subtitulo::after { margin-top: 3px; height: 3px; }
-  .lamina--densa .cmd.cmd--abajo { gap: 4px; }
-  .lamina--densa .capas { gap: 3px; }
-  .lamina--pf .pf--ancho p, .lamina--pf .pf--ancho .lab p { font-size: 13.5px; }
   .lamina--densa .panel { padding: 10px 14px 12px; }
   .lamina--densa .panel__cab { margin-bottom: 8px; }
-  /* "Para profundizar": bloque a lo ancho de la hoja */
-  .pf--ancho { grid-column: 1 / -1; }
-  .pf__fila { grid-template-columns: 1.2fr 1fr; gap: 14px; }
+  .lamina--densa .texto { font-size: 16.5px; }
+  .lamina--densa .comparar.comparar--compacto li { padding: 8px 14px; }
+  .lamina--densa .comparar.comparar--compacto p { font-size: 14.5px; }
+  .lamina--densa .lista-pasos li { font-size: 14.5px; }
+  /* Planilla: los datos generales y las IP fijas, lado a lado */
+  .planilla { grid-template-columns: 2fr 3fr; gap: 10px; align-items: start; }
+  /* Actividades con planilla: incisos más juntos */
+  .lamina--densa .acts { gap: 2.5mm; }
+  .lamina--densa .act-banda { padding: 8px 18px; }
+  .lamina--densa .act-banda h2 { font-size: 32px; }
+  .lamina--densa .fija .lista-pasos { gap: 4px; }
+  .lamina--densa .act { padding: 9px 12px 10px; }
+  .lamina--densa .consigna { padding: 7px 14px; }
+  .lamina--densa .act__caso { margin-top: 6px; }
+  .planilla .act-tabla.act-tabla--compacta th, .planilla .act-tabla.act-tabla--compacta td { height: 24px; padding-top: 2px; padding-bottom: 2px; }
+  .lamina--densa .act__items { gap: 3px; margin-top: 6px; }
+  .lamina--densa .act__items > li { padding: 4px 12px 4px 8px; }
 }
-
-/* "Para profundizar": una opción con su recuadro del router del laboratorio al lado */
-.pf__fila { display: grid; gap: 8px; align-items: start; }
-.pf__fila .ajuste__n { width: 21px; height: 21px; font-size: 14px; margin-right: 6px; vertical-align: 1px; }
-.pf .lab { display: block; }
-.pf .lab__tit { display: inline; margin-right: 3px; }
-.pf .lab p { display: inline; }
-
-/* Una línea de texto con un ícono chico delante */
-.texto--cmd { display: flex; align-items: center; gap: 10px; }
-.texto--cmd .ico { width: 34px; height: 34px; }
 
 @media print {
   :root { --consola-ok: #166534; --consola-error: #B91C1C; }
-  .ventana-cod--sim .ventana-cod__txt { max-height: none; overflow: visible; }
 }
