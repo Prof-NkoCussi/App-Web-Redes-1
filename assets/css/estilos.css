@@ -1281,16 +1281,13 @@ kbd {
 .planilla { display: grid; gap: 6px; }
 .planilla .act-tabla tbody th { width: 45%; }
 
-/* Entrega de la práctica: casillas para marcar con lápiz */
+/* Entrega de la práctica: lo que se entrega, con viñetas */
 .entrega { display: grid; gap: 6px; background: var(--acento-suave); border-radius: var(--radio); padding: 10px 16px 12px 18px; box-shadow: inset 4px 0 0 var(--acento-fuerte); }
 .entrega__tit { font-family: var(--fuente-titulo); font-weight: 700; font-size: 21px; line-height: 1.2; color: var(--acento-texto); }
 .entrega > p { font-size: 15.5px; line-height: 1.35; }
-.casillas { display: grid; gap: 5px 18px; }
-.casillas li { position: relative; padding-left: 28px; font-size: 15.5px; line-height: 1.35; }
-.casillas li::before {
-  content: ""; position: absolute; left: 0; top: .12em; width: 17px; height: 17px;
-  border: 2px solid var(--tinta); border-radius: 3px; background: var(--blanco);
-}
+.entrega__lista { display: grid; gap: 5px 18px; }
+.entrega__lista li { position: relative; padding-left: 16px; font-size: 15.5px; line-height: 1.35; }
+.entrega__lista li::before { content: "•"; position: absolute; left: 2px; top: 0; font-weight: 700; color: var(--acento-texto); }
 
 /* "Para profundizar": el recuadro del laboratorio en línea */
 .pf .lab__tit { margin-right: 3px; }
@@ -1319,7 +1316,7 @@ kbd {
   .router-cab > .router-plan { grid-area: plan; }
   .router-cab > .mapa-panel { grid-area: mapa; }
   .ajuste-fila { grid-template-columns: 1fr 1fr; align-items: center; gap: 10px; }
-  .casillas { grid-template-columns: 1fr 1fr; }
+  .entrega__lista { grid-template-columns: 1fr 1fr; }
   .fija { grid-template-columns: 1fr 300px; }
   .router-funciones { grid-template-columns: 1.3fr 1fr; }
 }

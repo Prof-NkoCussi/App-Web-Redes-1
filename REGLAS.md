@@ -135,7 +135,7 @@ Copiar la estructura de `_fuente/modelo-tp01.html` hasta que exista el primer TP
    - **Un punto por lámina + un caso integrador.** En una sola hoja (dos en el TP7). Más cortas que en Base de Datos: no se suman 2 o 3 puntos extra.
    - Sin cierre: no llevan `REALIZAR EN LA CARPETA.` ni `Fecha límite`.
    - Sin corrección automática.
-5. **Actividades para hacer en la computadora** (`article.lamina--compu#actividades-2`), solo en los TP8, TP9 y TP10: pasos numerados y un recuadro "Entrega" con casillas para marcar con lápiz.
+5. **Actividades para hacer en la computadora** (`article.lamina--compu#actividades-2`), solo en los TP8, TP9 y TP10: pasos numerados y un recuadro "Entrega" con la lista de lo que se entrega, con viñetas (10/10: sin casillas).
 6. **Mini-juego:** si el TP tiene juego en la app Redes I Games, cierra con el botón "Jugar el mini-juego de este TP". Ver "Componentes nuevos".
 
 Reglas fijas:
