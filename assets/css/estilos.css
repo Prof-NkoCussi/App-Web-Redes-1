@@ -22,6 +22,7 @@
   --acento-claro: #C9F2E8;   /* encabezados de tarjetas */
   --acento-suave: #E3F7F2;   /* fondo de "Idea clave" */
   --acento-texto: #096750;   /* texto de color sobre blanco o sobre el tono claro (5,6:1 o más) */
+  --acento-fuerte: #1AA483;  /* actividades en la computadora: el acento, un tono más oscuro. Encima va texto oscuro (5,7:1) */
 
   /* Colores con significado propio */
   --archivo: #F59E0B;  --archivo-texto: #92400E;   --archivo-claro: #FEF3C7;  --archivo-linea: #FDE68A;
@@ -509,11 +510,9 @@ button.boton { border: 0; font-family: inherit; line-height: inherit; cursor: po
 .act-tabla tbody th { font-weight: 600; color: var(--tinta); }
 
 /* Actividades en la computadora (solo TP8, TP9 y TP10) */
-.lamina--compu .act-banda { background: var(--ok); color: var(--blanco); }
-.lamina--compu .act-banda .ico { color: var(--blanco); --ac: var(--ok-oscuro); }
-.lamina--compu .act-banda__parte { border-left-color: rgba(255, 255, 255, .5); }
-.lamina--compu .act__num { background: var(--ok); color: var(--blanco); }
-.lamina--compu .act__letra, .lamina--compu .consigna { background: var(--ok-claro); }
+/* Mismo hilo de color que la carpeta: el acento, un tono más oscuro, con texto oscuro encima */
+.lamina--compu .act-banda { background: var(--acento-fuerte); }
+.lamina--compu .act__num { background: var(--acento-fuerte); }
 
 /* Recuadros "Importante" y "Recomendación" (solo en láminas nuevas y "Para profundizar") */
 .nota { display: grid; gap: 4px; border-radius: var(--radio); padding: 12px 14px 12px 18px; }
@@ -1145,6 +1144,7 @@ kbd {
 
 /* En las consignas, un comando corto no se corta en dos renglones */
 .act code.cod-cmd { white-space: nowrap; }
+.sin-corte { white-space: nowrap; }
 
 /* Recuadro "Importante" dentro de una sección (con título h4) */
 .nota h4 { font-family: var(--fuente-titulo); font-weight: 700; font-size: 18px; line-height: 1.2; }
@@ -1282,8 +1282,8 @@ kbd {
 .planilla .act-tabla tbody th { width: 45%; }
 
 /* Entrega de la práctica: casillas para marcar con lápiz */
-.entrega { display: grid; gap: 6px; background: var(--ok-claro); border-radius: var(--radio); padding: 10px 16px 12px 18px; box-shadow: inset 4px 0 0 var(--ok); }
-.entrega__tit { font-family: var(--fuente-titulo); font-weight: 700; font-size: 21px; line-height: 1.2; color: var(--ok-oscuro); }
+.entrega { display: grid; gap: 6px; background: var(--acento-suave); border-radius: var(--radio); padding: 10px 16px 12px 18px; box-shadow: inset 4px 0 0 var(--acento-fuerte); }
+.entrega__tit { font-family: var(--fuente-titulo); font-weight: 700; font-size: 21px; line-height: 1.2; color: var(--acento-texto); }
 .entrega > p { font-size: 15.5px; line-height: 1.35; }
 .casillas { display: grid; gap: 5px 18px; }
 .casillas li { position: relative; padding-left: 28px; font-size: 15.5px; line-height: 1.35; }

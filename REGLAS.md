@@ -105,7 +105,7 @@ Cada color significa algo y nunca es el único dato: siempre va con texto o íco
 |---|---|---|
 | **Verde azulado** (`--acento…`) | La materia. En un esquema cliente-servidor, el cliente: quien pide | Barras, íconos, recuadros, "Idea clave" |
 | **Naranja** (`--naranja…`) | El servidor: quien responde. "El otro grupo" de un esquema. Los avisos "Importante" | Esquemas, recuadros |
-| **Verde** (`--ok…`) | Funciona. "En la computadora". "Recomendación" | Resultados, actividades prácticas, recuadros |
+| **Verde** (`--ok…`) | Funciona. "En el router del laboratorio". "Recomendación" | Resultados, recuadros |
 | **Rojo** (`--error…`) | Falla: sin respuesta, error | Resultados de diagnóstico |
 | **Ámbar** (`--archivo…`) | Carpetas y archivos | TP6, nombres de archivo |
 
@@ -118,7 +118,7 @@ Cada color significa algo y nunca es el único dato: siempre va con texto o íco
 - **Ventanas de código y terminal:** `div.ventana-cod` > `div.ventana-cod__barra` (`aria-hidden`, con el rótulo: "JavaScript", "JSON", "HTTP", "Símbolo del sistema") + el contenido. Colores: `<b>` palabras clave, `.t-fun` funciones, `.t-str` textos, `.t-atr` campos y propiedades, `.t-num` números, `.t-com` comentarios. En la terminal, lo que sale bien en `--consola-ok` y los errores en `--consola-error`. En la impresión pasan a fondo claro (el CSS ya lo hace).
 - **Código dentro del texto:** `<code>` toma el acento. Sirve para comandos, IP, puertos y rutas. `code.cod-archivo` para carpetas y nombres de archivo.
 - **Recuadros:** `div.nota.nota--importante` (naranja) y `div.nota.nota--consejo` o `.pf__caja--consejo` ("Recomendación", verde), con su ícono delante del título (`#i-importante`, `#i-consejo`).
-- **Actividades:** en la carpeta, con el acento. En la computadora, `article.lamina--compu` (verde).
+- **Actividades:** en la carpeta, con el acento. En la computadora, `article.lamina--compu`, con `--acento-fuerte` (el acento un tono más oscuro, con texto oscuro encima), para seguir el mismo hilo de color (10/10).
 - **Portada:** cada tarjeta `.tp` lleva la franja izquierda del acento. Etiquetas en `.tp__meta`, antes de "Láminas": `etq--sim` ("Simulador", en los TPs que tienen uno) y `etq--compu` ("En la compu", verde, en los TP8, TP9 y TP10).
 
 ## Formato de cada TP
