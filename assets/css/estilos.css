@@ -1277,10 +1277,6 @@ kbd {
 .rt-equipos .rt-sin-ip th, .rt-equipos .rt-sin-ip td { background: var(--error-claro); }
 .rt-falla { color: var(--error); font-weight: 700; }
 
-/* Planilla de configuración (caso integrador) */
-.planilla { display: grid; gap: 6px; }
-.planilla .act-tabla tbody th { width: 45%; }
-
 /* Entrega de la práctica: lo que se entrega, con viñetas */
 .entrega { display: grid; gap: 6px; background: var(--acento-suave); border-radius: var(--radio); padding: 10px 16px 12px 18px; box-shadow: inset 4px 0 0 var(--acento-fuerte); }
 .entrega__tit { font-family: var(--fuente-titulo); font-weight: 700; font-size: 21px; line-height: 1.2; color: var(--acento-texto); }
@@ -1345,9 +1341,7 @@ kbd {
   .lamina--densa .comparar.comparar--compacto li { padding: 8px 14px; }
   .lamina--densa .comparar.comparar--compacto p { font-size: 14.5px; }
   .lamina--densa .lista-pasos li { font-size: 14.5px; }
-  /* Planilla: los datos generales y las IP fijas, lado a lado */
-  .planilla { grid-template-columns: 2fr 3fr; gap: 10px; align-items: start; }
-  /* Actividades con planilla: incisos más juntos */
+  /* Actividades: incisos más juntos */
   .lamina--densa .acts { gap: 2.5mm; }
   .lamina--densa .act-banda { padding: 8px 18px; }
   .lamina--densa .act-banda h2 { font-size: 32px; }
@@ -1355,7 +1349,6 @@ kbd {
   .lamina--densa .act { padding: 9px 12px 10px; }
   .lamina--densa .consigna { padding: 7px 14px; }
   .lamina--densa .act__caso { margin-top: 6px; }
-  .planilla .act-tabla.act-tabla--compacta th, .planilla .act-tabla.act-tabla--compacta td { height: 24px; padding-top: 2px; padding-bottom: 2px; }
   .lamina--densa .act__items { gap: 3px; margin-top: 6px; }
   .lamina--densa .act__items > li { padding: 4px 12px 4px 8px; }
 }

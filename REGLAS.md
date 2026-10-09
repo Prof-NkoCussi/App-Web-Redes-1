@@ -272,7 +272,7 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - **No se publica la solución.** Los alumnos completan los endpoints y los `fetch`: el cuadernillo explica la estructura con un ejemplo de otro sistema (por ejemplo, prender una luz), no con los comandos del robot.
 - Nombres de endpoints, tópicos y comandos: los del .docx del Yarvi y la plantilla. No inventar.
 - (C, 9/10) `ping`, explicado brevemente: lo justo para comprobar que el ESP32 y el servidor responden. Ya no se ve en el TP8.
-- El TP10 arranca con cada grupo configurando la red de su router, como lo practicó en el TP8 (planilla y copia de seguridad).
+- El TP10 arranca con cada grupo configurando la red de su router, como lo practicó en el TP8.
 
 **TP11 · Seguridad en redes**
 - L33 **Amenazas:** sniffing, spoofing, Man-in-the-Middle y DoS: cómo funciona cada una, qué daño causa y cómo se defiende.
@@ -294,7 +294,7 @@ El contenido ya está escrito y verificado. Fuente: las diapositivas de Gamma (e
   - Puertos: tabla con los puertos 80, 443, 21, 22, 25, 53 y 3306 y su protocolo o servicio.
   - HTTP: analizar una solicitud (método, URL, headers) y los códigos de estado 200, 301, 404 y 500.
   - Caso integrador: "Un alumno enciende su notebook, se conecta al Wi-Fi, abre el navegador, escribe una URL, navega, descarga un archivo y envía un email". Identificar qué protocolo de aplicación interviene en cada paso y en qué orden. Tabla con DNS, DHCP, HTTP, HTTPS, FTP, SSH y SMTP: función, puerto, si usa TCP o UDP y un ejemplo de uso. (C) La captura se lee del cuadernillo: identificar los protocolos presentes.
-- **TP8.** (C, 9/10) Carpeta: un punto por lámina y, como caso integrador, la planilla de configuración de la red (SSID, seguridad, IP del router, máscara, rango DHCP y las IP fijas con su MAC). Computadora, individual: configurar el router del laboratorio, como práctica para el proyecto final. Reset de fábrica si ya se usó; entrar al panel y crear la contraseña de administrador; SSID y clave con WPA/WPA2 Personal; ver el rango DHCP y los dispositivos; reservar una IP para la PC y comprobarla con `ipconfig`; poner una IP fija en Windows; copia de seguridad. Entrega: documento con capturas, la planilla y el archivo de la copia de seguridad, por Classroom.
+- **TP8.** (C, 9/10) Carpeta: un punto por lámina, sin caso integrador (10/10: se sacó la planilla de configuración). Computadora, individual: configurar el router del laboratorio, como práctica para el proyecto final. Reset de fábrica si ya se usó; entrar al panel y crear la contraseña de administrador; SSID y clave con WPA/WPA2 Personal; ver el rango DHCP y los dispositivos; reservar una IP para la PC y comprobarla con `ipconfig`; poner una IP fija en Windows; copia de seguridad. Entrega: documento con capturas y los datos configurados, y el archivo de la copia de seguridad, por Classroom.
 - **TP9.** Carpeta: un punto por lámina y el caso integrador. Computadora: desarrollar en HTML + JavaScript una página que consuma al menos una API REST pública (clima, cotización del dólar, RestCountries o PokéAPI), con `fetch()`, procesando la respuesta JSON y mostrando los datos en el DOM. Entrega: carpeta en `.zip` por Classroom + informe breve (qué endpoints consumieron, qué métodos HTTP usaron y cómo procesaron la respuesta).
 - **TP10.** Proyecto grupal de 2 o 3 integrantes. El hardware lo provee el docente. (C) 6 clases, con un entregable por clase:
 
