@@ -119,9 +119,9 @@ Adaptador de Ethernet Ethernet:
         <ul class="lista-txt pf__lista">
           <li><strong>Dirección IPv4:</strong> la IP de la PC.</li>
           <li><strong>Máscara de subred:</strong> qué parte de la IP es la red (TP4).</li>
-          <li><strong>Puerta de enlace predeterminada</strong> (<em>gateway</em>): la IP del router, la salida hacia otras redes e Internet.</li>
+          <li><strong>Puerta de enlace predeterminada</strong> (<em>gateway</em>): la IP del router, la salida a otras redes e Internet.</li>
         </ul>
-        <p><code class="cod-cmd">ipconfig /all</code> suma la <strong>Dirección física</strong> (la MAC) y <strong>DHCP habilitado</strong>: «sí» si la IP es dinámica.</p>
+        <p><code class="cod-cmd">ipconfig /all</code> suma <strong>DHCP habilitado</strong> («sí» si la IP es dinámica) y la <strong>Dirección física</strong> o <strong>MAC</strong>: el número de fábrica de la placa de red.</p>
       </div>
     </section>
 
@@ -188,7 +188,7 @@ Adaptador de Ethernet Ethernet:
 
     <aside class="idea" aria-label="Idea clave">
       <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
-      <p><strong>Idea clave:</strong> ipconfig muestra la IP de la PC. La dinámica la da el servidor DHCP; la fija la ponemos nosotros: de la misma red que el router, fuera del rango DHCP y sin repetir.</p>
+      <p><strong>Idea clave:</strong> ipconfig muestra la IP de la PC. La IP fija la ponemos nosotros: de la misma red que el router, fuera del rango DHCP y sin repetir.</p>
     </aside>
 
     <footer class="pie">
@@ -387,7 +387,7 @@ Adaptador de Ethernet Ethernet:
         <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Network</span> › <span class="menu">LAN Settings</span> <span class="menu-trad">(Red › Configuración de LAN)</span>: de <code class="cod-ip">192.168.0.100</code> a <code class="cod-ip">192.168.0.199</code>. Dispositivos: <span class="menu">Status</span> / <span class="menu">Network Map</span> <span class="menu-trad">(Estado / Mapa de red)</span>.</p></div>
       </li>
       <li class="ajuste-fila">
-        <div class="ajuste-fila__gen"><h3><b class="ajuste__n" aria-hidden="true">3</b>IP fijas: la reserva.</h3> <p>La <strong>reserva de IP</strong> le da siempre la misma IP a un equipo, según su MAC (la Dirección física de <code class="cod-cmd">ipconfig /all</code>). Para comprobarla en la PC: <code class="cod-cmd">ipconfig /release</code> suelta la IP e <code class="cod-cmd">ipconfig /renew</code> pide otra.</p></div>
+        <div class="ajuste-fila__gen"><h3><b class="ajuste__n" aria-hidden="true">3</b>IP fijas: la reserva.</h3> <p>La <strong>reserva de IP</strong> le da siempre la misma IP a un equipo, según su MAC (la Dirección física de <code class="cod-cmd">ipconfig /all</code>), que no cambia aunque cambie la IP. Para comprobarla en la PC: <code class="cod-cmd">ipconfig /release</code> suelta la IP e <code class="cod-cmd">ipconfig /renew</code> pide otra.</p></div>
         <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p>En <span class="menu">Network</span> › <span class="menu">LAN Settings</span>: <span class="menu">Address Reservation</span> <span class="menu-trad">(Reserva de direcciones)</span>.</p></div>
       </li>
       <li class="ajuste-fila">
