@@ -251,7 +251,7 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - "Para profundizar": tabla resumen de puertos (20/21, 22, 25, 53, 67/68, 80, 110, 143, 443 y 3306 de MySQL) y la captura anotada.
 
 **TP8 · Configurando el router** (C, 9/10: antes "Diagnóstico de red")
-- Enfoque: que entiendan cómo funciona un router, entren al panel y lo configuren. Cada grupo deja armada la red de su router para el proyecto final.
+- Enfoque: que entiendan cómo funciona un router, entren al panel y lo configuren. Es individual y sirve de práctica para el proyecto final, donde cada grupo configura su router.
 - L24 **La IP de la PC:** `ipconfig` y `ipconfig /all` (IP, máscara, puerta de enlace, MAC, DHCP habilitado); IP dinámica y fija; cómo poner una IP fija en Windows (`ncpa.cpl` › Propiedades › TCP/IPv4), con el esquema SVG de esa ventana.
 - L25 **Cómo funciona un router:** los dos lados (WAN con la IP pública, LAN con la puerta de enlace) en SVG; qué hace (enruta, NAT, DHCP, Wi-Fi, switch); entrar al panel; contraseña de administrador y credenciales por defecto; dónde se ve la IP pública.
 - L26 **Configurar el router:** plan de la red (router, IP fijas, rango DHCP); SSID, clave, WPA2 y WPA3; rango DHCP y dispositivos conectados; reserva de IP por MAC (retoma la impresora del TP6), comprobada con `ipconfig /release` y `/renew`; copia de seguridad. Esquema SVG del panel del TL-WR850N v3.
@@ -272,7 +272,7 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - **No se publica la solución.** Los alumnos completan los endpoints y los `fetch`: el cuadernillo explica la estructura con un ejemplo de otro sistema (por ejemplo, prender una luz), no con los comandos del robot.
 - Nombres de endpoints, tópicos y comandos: los del .docx del Yarvi y la plantilla. No inventar.
 - (C, 9/10) `ping`, explicado brevemente: lo justo para comprobar que el ESP32 y el servidor responden. Ya no se ve en el TP8.
-- El TP10 arranca con la red del router que cada grupo configuró en el TP8 (planilla y copia de seguridad).
+- El TP10 arranca con cada grupo configurando la red de su router, como lo practicó en el TP8 (planilla y copia de seguridad).
 
 **TP11 · Seguridad en redes**
 - L33 **Amenazas:** sniffing, spoofing, Man-in-the-Middle y DoS: cómo funciona cada una, qué daño causa y cómo se defiende.
@@ -294,7 +294,7 @@ El contenido ya está escrito y verificado. Fuente: las diapositivas de Gamma (e
   - Puertos: tabla con los puertos 80, 443, 21, 22, 25, 53 y 3306 y su protocolo o servicio.
   - HTTP: analizar una solicitud (método, URL, headers) y los códigos de estado 200, 301, 404 y 500.
   - Caso integrador: "Un alumno enciende su notebook, se conecta al Wi-Fi, abre el navegador, escribe una URL, navega, descarga un archivo y envía un email". Identificar qué protocolo de aplicación interviene en cada paso y en qué orden. Tabla con DNS, DHCP, HTTP, HTTPS, FTP, SSH y SMTP: función, puerto, si usa TCP o UDP y un ejemplo de uso. (C) La captura se lee del cuadernillo: identificar los protocolos presentes.
-- **TP8.** (C, 9/10) Carpeta: un punto por lámina y, como caso integrador, la planilla de configuración de la red (SSID, seguridad, IP del router, máscara, rango DHCP y las IP fijas con su MAC). Computadora: un router por grupo, que es la red del proyecto final. Reset de fábrica si ya se usó; entrar al panel y crear la contraseña de administrador; SSID y clave con WPA/WPA2 Personal; ver el rango DHCP y los dispositivos; reservar una IP para la PC y comprobarla con `ipconfig`; poner una IP fija en Windows; copia de seguridad. Entrega: documento con capturas, la planilla y el archivo de la copia de seguridad, por Classroom.
+- **TP8.** (C, 9/10) Carpeta: un punto por lámina y, como caso integrador, la planilla de configuración de la red (SSID, seguridad, IP del router, máscara, rango DHCP y las IP fijas con su MAC). Computadora, individual: configurar el router del laboratorio, como práctica para el proyecto final. Reset de fábrica si ya se usó; entrar al panel y crear la contraseña de administrador; SSID y clave con WPA/WPA2 Personal; ver el rango DHCP y los dispositivos; reservar una IP para la PC y comprobarla con `ipconfig`; poner una IP fija en Windows; copia de seguridad. Entrega: documento con capturas, la planilla y el archivo de la copia de seguridad, por Classroom.
 - **TP9.** Carpeta: un punto por lámina y el caso integrador. Computadora: desarrollar en HTML + JavaScript una página que consuma al menos una API REST pública (clima, cotización del dólar, RestCountries o PokéAPI), con `fetch()`, procesando la respuesta JSON y mostrando los datos en el DOM. Entrega: carpeta en `.zip` por Classroom + informe breve (qué endpoints consumieron, qué métodos HTTP usaron y cómo procesaron la respuesta).
 - **TP10.** Proyecto grupal de 2 o 3 integrantes. El hardware lo provee el docente. (C) 6 clases, con un entregable por clase:
 
@@ -328,7 +328,7 @@ TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primer
 
 ## Decisiones confirmadas (9/10)
 
-- TP8 pasa a "Configurando el router": la IP de la PC, cómo funciona un router y cómo configurarlo. Un router por grupo; la configuración queda para el proyecto final.
+- TP8 pasa a "Configurando el router": la IP de la PC, cómo funciona un router y cómo configurarlo. Es individual y sirve de práctica para el proyecto final, donde cada grupo configura su router.
 - Router del laboratorio: TP-Link TL-WR850N v3, panel en inglés (cada menú con su traducción al lado).
 - `ping`, `tracert`, `nslookup` y `netstat` quedan para Redes II; `ping` se explica brevemente en el TP10.
 - Las actividades no llevan cierre ("REALIZAR EN LA CARPETA." ni "Fecha límite").
