@@ -270,11 +270,11 @@ Adaptador de Ethernet Ethernet:
       </li>
       <li class="ajuste-fila">
         <div class="ajuste-fila__gen"><h3>Contraseña de administrador.</h3> <p>Protege el panel: quien la sabe puede cambiar todo. Muchos routers traen una de fábrica (por ejemplo, <em>admin</em>), igual en todo el modelo y publicada en Internet: es lo primero que hay que cambiar. No es la clave del Wi-Fi.</p></div>
-        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p>El primer ingreso pide crearla. Después se cambia en <span class="menu">System Tools</span> › <span class="menu">Administration</span> <span class="menu-trad">(Herramientas del sistema › Administración)</span>.</p></div>
+        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p>El primer ingreso pide crearla. Después se cambia en <span class="menu">Advanced</span> › <span class="menu">System Tools</span> › <span class="menu">Administration</span> <span class="menu-trad">(Herramientas del sistema › Administración)</span>.</p></div>
       </li>
       <li class="ajuste-fila">
         <div class="ajuste-fila__gen"><h3>La IP pública.</h3> <p>El panel muestra las dos IP del router: la del lado de la red, con la que entramos, y la del lado Internet.</p></div>
-        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Status</span> <span class="menu-trad">(Estado)</span>: la IP del lado Internet.</p></div>
+        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Advanced</span> › <span class="menu">Status</span> <span class="menu-trad">(Estado)</span>: la IP del lado Internet.</p></div>
       </li>
     </ol>
 
@@ -306,7 +306,7 @@ Adaptador de Ethernet Ethernet:
         <p class="tit__sub">Wi-Fi, DHCP e IP fijas</p>
       </div>
       <div class="router-plan">
-        <p><span class="menu">Wireless</span> › <span class="menu">Wireless Settings</span> quiere decir: abrir el menú Wireless y elegir Wireless Settings.</p>
+        <p>En el panel del laboratorio, <span class="menu">Advanced</span> › <span class="menu">Wireless</span> quiere decir: abrir la pestaña Advanced <span class="menu-trad">(avanzado)</span>, que tiene todos los menús, y elegir Wireless. La pestaña <span class="menu">Basic</span> <span class="menu-trad">(básico)</span> trae solo los más usados.</p>
         <figure class="esquema esquema--plan">
           <svg viewBox="0 0 380 74" role="img" aria-labelledby="plan-t plan-d">
             <title id="plan-t">Plan de ejemplo para repartir las IP de la red 192.168.1.0</title>
@@ -329,49 +329,60 @@ Adaptador de Ethernet Ethernet:
       </div>
 
       <figure class="mapa-panel">
-        <svg viewBox="0 0 344 362" role="img" aria-labelledby="mp-t mp-d">
+        <svg viewBox="0 0 344 356" role="img" aria-labelledby="mp-t mp-d">
           <title id="mp-t">Esquema del panel del TP-Link TL-WR850N v3</title>
-          <desc id="mp-d">Ventana del navegador con la dirección tplinkwifi.net y los menús del panel, en inglés y con su traducción. Opciones de esta lámina: Wireless Settings (Configuración inalámbrica), opción 1; Network Map (Mapa de red) y LAN Settings (Configuración de LAN), opción 2; Address Reservation (Reserva de direcciones), dentro de LAN Settings, opción 3; Backup &amp; Restore (Copia de seguridad y restauración), opción 4. Con un signo más, las que están en la lámina 25 o en Para profundizar: Status (Estado), Virtual Servers (Servidores virtuales), Access Control (Control de acceso), Administration (Administración), Firmware Upgrade (Actualización de firmware) y Reboot (Reiniciar).</desc>
-          <rect class="mp-ventana" x="1" y="1" width="342" height="360" rx="8"/>
+          <desc id="mp-d">Ventana del navegador con la dirección tplinkwifi.net. Arriba, las pestañas Quick Setup, Basic y Advanced. En Basic: Network Map (Mapa de red), opción 2. En Advanced: Network (Red), con LAN Settings (Configuración de LAN), opción 2, y dentro Address Reservation (Reserva de direcciones), opción 3; Wireless (Inalámbrico), con Wireless Settings (Configuración inalámbrica), opción 1; System Tools (Herramientas del sistema), con Backup &amp; Restore (Copia de seguridad y restauración), opción 4. Con un signo más, las que están en la lámina 25 o en Para profundizar: Status (Estado), NAT Forwarding › Virtual Servers (Servidores virtuales), Security › Access Control (Control de acceso), y en System Tools: Administration, Firmware Upgrade y Reboot.</desc>
+          <rect class="mp-ventana" x="1" y="1" width="342" height="354" rx="8"/>
           <path class="mp-barra" d="M9 1h326a8 8 0 0 1 8 8v19H1V9a8 8 0 0 1 8-8z"/>
           <circle class="mp-punto mp-punto--1" cx="13" cy="14.5" r="3.5"/>
           <circle class="mp-punto mp-punto--2" cx="24" cy="14.5" r="3.5"/>
           <circle class="mp-punto mp-punto--3" cx="35" cy="14.5" r="3.5"/>
           <rect class="mp-dir" x="48" y="6" width="200" height="17" rx="8.5"/>
           <text class="mp-url" x="58" y="18.5">tplinkwifi.net</text>
-
-          <circle class="mp-n mp-n--otra" cx="15" cy="45" r="7.5"/><text class="mp-n-txt" x="15" y="48.5">+</text>
-          <text x="28" y="49"><tspan class="mp-en">Status</tspan><tspan class="mp-es" dx="6">Estado</tspan></text>
-          <circle class="mp-n" cx="15" cy="65" r="7.5"/><text class="mp-n-txt" x="15" y="68.5">2</text>
-          <text x="28" y="69"><tspan class="mp-en">Network Map</tspan><tspan class="mp-es" dx="6">Mapa de red</tspan></text>
-          <text x="28" y="89"><tspan class="mp-en">Network</tspan><tspan class="mp-es" dx="6">Red</tspan></text>
-          <path class="mp-rama" d="M32 94v11h8M48 114v11h8"/>
-          <circle class="mp-n" cx="15" cy="105" r="7.5"/><text class="mp-n-txt" x="15" y="108.5">2</text>
-          <text x="44" y="109"><tspan class="mp-sub">LAN Settings</tspan><tspan class="mp-es" dx="6">Configuración de LAN</tspan></text>
-          <circle class="mp-n" cx="15" cy="125" r="7.5"/><text class="mp-n-txt" x="15" y="128.5">3</text>
-          <text x="60" y="129"><tspan class="mp-sub">Address Reservation</tspan><tspan class="mp-es" dx="6">Reserva de direcciones</tspan></text>
-          <text x="28" y="149"><tspan class="mp-en">Wireless</tspan><tspan class="mp-es" dx="6">Inalámbrico</tspan></text>
-          <path class="mp-rama" d="M32 154v11h8"/>
-          <circle class="mp-n" cx="15" cy="165" r="7.5"/><text class="mp-n-txt" x="15" y="168.5">1</text>
-          <text x="44" y="169"><tspan class="mp-sub">Wireless Settings</tspan><tspan class="mp-es" dx="6">Configuración inalámbrica</tspan></text>
-          <text x="28" y="189"><tspan class="mp-en">NAT Forwarding</tspan><tspan class="mp-es" dx="6">Reenvío NAT</tspan></text>
-          <path class="mp-rama" d="M32 194v11h8"/>
-          <circle class="mp-n mp-n--otra" cx="15" cy="205" r="7.5"/><text class="mp-n-txt" x="15" y="208.5">+</text>
-          <text x="44" y="209"><tspan class="mp-sub">Virtual Servers</tspan><tspan class="mp-es" dx="6">Servidores virtuales</tspan></text>
-          <text x="28" y="229"><tspan class="mp-en">Security</tspan><tspan class="mp-es" dx="6">Seguridad</tspan></text>
-          <path class="mp-rama" d="M32 234v11h8"/>
-          <circle class="mp-n mp-n--otra" cx="15" cy="245" r="7.5"/><text class="mp-n-txt" x="15" y="248.5">+</text>
-          <text x="44" y="249"><tspan class="mp-sub">Access Control</tspan><tspan class="mp-es" dx="6">Control de acceso</tspan></text>
-          <text x="28" y="269"><tspan class="mp-en">System Tools</tspan><tspan class="mp-es" dx="6">Herramientas del sistema</tspan></text>
-          <path class="mp-rama" d="M32 274v11h8M32 285v20h8M32 305v20h8M32 325v20h8"/>
-          <circle class="mp-n mp-n--otra" cx="15" cy="285" r="7.5"/><text class="mp-n-txt" x="15" y="288.5">+</text>
-          <text x="44" y="289"><tspan class="mp-sub">Administration</tspan><tspan class="mp-es" dx="6">Administración</tspan></text>
-          <circle class="mp-n mp-n--otra" cx="15" cy="305" r="7.5"/><text class="mp-n-txt" x="15" y="308.5">+</text>
-          <text x="44" y="309"><tspan class="mp-sub">Firmware Upgrade</tspan><tspan class="mp-es" dx="6">Actualización de firmware</tspan></text>
-          <circle class="mp-n" cx="15" cy="325" r="7.5"/><text class="mp-n-txt" x="15" y="328.5">4</text>
-          <text x="44" y="329"><tspan class="mp-sub">Backup &amp; Restore</tspan><tspan class="mp-es" dx="6">Copia de seguridad y restauración</tspan></text>
-          <circle class="mp-n mp-n--otra" cx="15" cy="345" r="7.5"/><text class="mp-n-txt" x="15" y="348.5">+</text>
-          <text x="44" y="349"><tspan class="mp-sub">Reboot</tspan><tspan class="mp-es" dx="6">Reiniciar</tspan></text>
+          <path class="mp-pestanas" d="M1 28h342v22H1z"/>
+          <text class="mp-pestana" x="40" y="43" text-anchor="middle">Quick Setup</text>
+          <rect class="mp-pestana-activa" x="86" y="31" width="70" height="19" rx="3"/>
+          <text class="mp-pestana mp-pestana--activa" x="121" y="43" text-anchor="middle">Basic</text>
+          <rect class="mp-pestana-activa" x="160" y="31" width="80" height="19" rx="3"/>
+          <text class="mp-pestana mp-pestana--activa" x="200" y="43" text-anchor="middle">Advanced</text>
+          <text class="mp-grupo" x="28" y="66">Basic <tspan class="mp-es">· Básico</tspan></text>
+          <circle class="mp-n" cx="15" cy="76" r="6.5"/><text class="mp-n-txt" x="15" y="79.5">2</text>
+          <text x="28" y="80"><tspan class="mp-en">Network Map</tspan><tspan class="mp-es" dx="6">Mapa de red</tspan></text>
+          <text class="mp-grupo" x="28" y="100">Advanced <tspan class="mp-es">· Avanzado</tspan></text>
+          <circle class="mp-n mp-n--otra" cx="15" cy="110" r="6.5"/><text class="mp-n-txt" x="15" y="113.5">+</text>
+          <text x="28" y="114"><tspan class="mp-en">Status</tspan><tspan class="mp-es" dx="6">Estado</tspan></text>
+          <text x="28" y="130"><tspan class="mp-en">Network</tspan><tspan class="mp-es" dx="6">Red</tspan></text>
+          <circle class="mp-n" cx="15" cy="142" r="6.5"/><text class="mp-n-txt" x="15" y="145.5">2</text>
+          <path class="mp-rama" d="M32 134V142h8"/>
+          <text x="44" y="146"><tspan class="mp-sub">LAN Settings</tspan><tspan class="mp-es" dx="6">Configuración de LAN</tspan></text>
+          <circle class="mp-n" cx="15" cy="158" r="6.5"/><text class="mp-n-txt" x="15" y="161.5">3</text>
+          <path class="mp-rama" d="M48 150V158h8"/>
+          <text x="60" y="162"><tspan class="mp-sub">Address Reservation</tspan><tspan class="mp-es" dx="6">Reserva de direcciones</tspan></text>
+          <text x="28" y="178"><tspan class="mp-en">Wireless</tspan><tspan class="mp-es" dx="6">Inalámbrico</tspan></text>
+          <circle class="mp-n" cx="15" cy="190" r="6.5"/><text class="mp-n-txt" x="15" y="193.5">1</text>
+          <path class="mp-rama" d="M32 182V190h8"/>
+          <text x="44" y="194"><tspan class="mp-sub">Wireless Settings</tspan><tspan class="mp-es" dx="6">Configuración inalámbrica</tspan></text>
+          <text x="28" y="210"><tspan class="mp-en">NAT Forwarding</tspan><tspan class="mp-es" dx="6">Reenvío NAT</tspan></text>
+          <circle class="mp-n mp-n--otra" cx="15" cy="222" r="6.5"/><text class="mp-n-txt" x="15" y="225.5">+</text>
+          <path class="mp-rama" d="M32 214V222h8"/>
+          <text x="44" y="226"><tspan class="mp-sub">Virtual Servers</tspan><tspan class="mp-es" dx="6">Servidores virtuales</tspan></text>
+          <text x="28" y="242"><tspan class="mp-en">Security</tspan><tspan class="mp-es" dx="6">Seguridad</tspan></text>
+          <circle class="mp-n mp-n--otra" cx="15" cy="254" r="6.5"/><text class="mp-n-txt" x="15" y="257.5">+</text>
+          <path class="mp-rama" d="M32 246V254h8"/>
+          <text x="44" y="258"><tspan class="mp-sub">Access Control</tspan><tspan class="mp-es" dx="6">Control de acceso</tspan></text>
+          <text x="28" y="274"><tspan class="mp-en">System Tools</tspan><tspan class="mp-es" dx="6">Herramientas del sistema</tspan></text>
+          <circle class="mp-n mp-n--otra" cx="15" cy="286" r="6.5"/><text class="mp-n-txt" x="15" y="289.5">+</text>
+          <path class="mp-rama" d="M32 278V286h8"/>
+          <text x="44" y="290"><tspan class="mp-sub">Administration</tspan><tspan class="mp-es" dx="6">Administración</tspan></text>
+          <circle class="mp-n mp-n--otra" cx="15" cy="302" r="6.5"/><text class="mp-n-txt" x="15" y="305.5">+</text>
+          <path class="mp-rama" d="M32 294V302h8"/>
+          <text x="44" y="306"><tspan class="mp-sub">Firmware Upgrade</tspan><tspan class="mp-es" dx="6">Actualización de firmware</tspan></text>
+          <circle class="mp-n" cx="15" cy="318" r="6.5"/><text class="mp-n-txt" x="15" y="321.5">4</text>
+          <path class="mp-rama" d="M32 310V318h8"/>
+          <text x="44" y="322"><tspan class="mp-sub">Backup &amp; Restore</tspan><tspan class="mp-es" dx="6">Copia de seguridad y restauración</tspan></text>
+          <circle class="mp-n mp-n--otra" cx="15" cy="334" r="6.5"/><text class="mp-n-txt" x="15" y="337.5">+</text>
+          <path class="mp-rama" d="M32 326V334h8"/>
+          <text x="44" y="338"><tspan class="mp-sub">Reboot</tspan><tspan class="mp-es" dx="6">Reiniciar</tspan></text>
         </svg>
         <figcaption>Esquema simplificado del panel. Del 1 al 4: las opciones de esta lámina; +: en la lámina 25 o en «Para profundizar».</figcaption>
       </figure>
@@ -380,19 +391,19 @@ Adaptador de Ethernet Ethernet:
     <ol class="ajustes" aria-label="Opciones del router">
       <li class="ajuste-fila">
         <div class="ajuste-fila__gen"><h3><b class="ajuste__n" aria-hidden="true">1</b>Nombre y clave del Wi-Fi.</h3> <p>El <strong>SSID</strong> es el nombre de la red (hasta 32 caracteres). La clave la protege y cifra lo que viaja; con WPA2 lleva de 8 a 63 caracteres. <strong>WPA2</strong> es lo mínimo; <strong>WPA3</strong>, la versión más nueva, hace mucho más difícil adivinar la clave.</p></div>
-        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Wireless</span> › <span class="menu">Wireless Settings</span> <span class="menu-trad">(Inalámbrico › Configuración inalámbrica)</span>. Seguridad: <span class="menu">WPA/WPA2 Personal</span>, la recomendada. Este modelo no tiene WPA3.</p></div>
+        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Advanced</span> › <span class="menu">Wireless</span> › <span class="menu">Wireless Settings</span> <span class="menu-trad">(Inalámbrico › Configuración inalámbrica)</span>. Seguridad: <span class="menu">WPA/WPA2 Personal</span>, la recomendada. Este modelo no tiene WPA3.</p></div>
       </li>
       <li class="ajuste-fila">
         <div class="ajuste-fila__gen"><h3><b class="ajuste__n" aria-hidden="true">2</b>DHCP y dispositivos.</h3> <p>El <strong>rango DHCP</strong> dice desde qué IP hasta qué IP reparte el router. La lista de dispositivos conectados (tabla DHCP) muestra quién está en la red y con qué IP.</p></div>
-        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Network</span> › <span class="menu">LAN Settings</span> <span class="menu-trad">(Red › Configuración de LAN)</span>: de <code class="cod-ip">192.168.0.100</code> a <code class="cod-ip">192.168.0.199</code>. Dispositivos: <span class="menu">Status</span> / <span class="menu">Network Map</span> <span class="menu-trad">(Estado / Mapa de red)</span>.</p></div>
+        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Advanced</span> › <span class="menu">Network</span> › <span class="menu">LAN Settings</span> <span class="menu-trad">(Red › Configuración de LAN)</span>: de <code class="cod-ip">192.168.0.100</code> a <code class="cod-ip">192.168.0.199</code>. Dispositivos: <span class="menu">Client List</span> <span class="menu-trad">(lista de clientes)</span>, en la misma página, o <span class="menu">Basic</span> › <span class="menu">Network Map</span> <span class="menu-trad">(Mapa de red)</span>.</p></div>
       </li>
       <li class="ajuste-fila">
         <div class="ajuste-fila__gen"><h3><b class="ajuste__n" aria-hidden="true">3</b>IP fijas: la reserva.</h3> <p>La <strong>reserva de IP</strong> le da siempre la misma IP a un equipo, según su MAC (la Dirección física de <code class="cod-cmd">ipconfig /all</code>), que no cambia aunque cambie la IP. Para comprobarla en la PC: <code class="cod-cmd">ipconfig /release</code> suelta la IP e <code class="cod-cmd">ipconfig /renew</code> pide otra.</p></div>
-        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p>En <span class="menu">Network</span> › <span class="menu">LAN Settings</span>: <span class="menu">Address Reservation</span> <span class="menu-trad">(Reserva de direcciones)</span>.</p></div>
+        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p>En <span class="menu">LAN Settings</span>, más abajo: <span class="menu">Address Reservation</span> <span class="menu-trad">(Reserva de direcciones)</span>.</p></div>
       </li>
       <li class="ajuste-fila">
         <div class="ajuste-fila__gen"><h3><b class="ajuste__n" aria-hidden="true">4</b>Copia de seguridad.</h3> <p>Guarda toda la configuración en un archivo; <strong>restaurar</strong> la vuelve a cargar. Conviene hacerla al terminar de configurar.</p></div>
-        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">System Tools</span> › <span class="menu">Backup &amp; Restore</span> <span class="menu-trad">(Herramientas del sistema › Copia de seguridad y restauración)</span>.</p></div>
+        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Advanced</span> › <span class="menu">System Tools</span> › <span class="menu">Backup &amp; Restore</span> <span class="menu-trad">(Herramientas del sistema › Copia de seguridad y restauración)</span>.</p></div>
       </li>
     </ol>
 
@@ -566,7 +577,7 @@ Adaptador de Ethernet Ethernet:
           <div class="pf__caja">
             <h4>Port forwarding</h4>
             <p>La redirección de puertos pasa lo que llega a la IP pública por un puerto a un equipo de la red; por ejemplo, para publicar un servidor.</p>
-            <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">NAT Forwarding</span> › <span class="menu">Virtual Servers</span> <span class="menu-trad">(Reenvío NAT › Servidores virtuales)</span>.</p></div>
+            <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Advanced</span> › <span class="menu">NAT Forwarding</span> › <span class="menu">Virtual Servers</span> <span class="menu-trad">(Reenvío NAT › Servidores virtuales)</span>.</p></div>
           </div>
         </div>
       </section>
@@ -578,7 +589,7 @@ Adaptador de Ethernet Ethernet:
           <div class="pf__texto">
             <p>Elige qué dispositivos pueden usar la red. Con una <strong>lista negra</strong> se bloquean los de la lista; con una <strong>lista blanca</strong>, solo se conectan los de la lista.</p>
           </div>
-          <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Security</span> › <span class="menu">Access Control</span> <span class="menu-trad">(Seguridad › Control de acceso)</span>: <span class="menu">Blacklist</span> <span class="menu-trad">(lista negra)</span> o <span class="menu">Whitelist</span> <span class="menu-trad">(lista blanca)</span>.</p></div>
+          <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Advanced</span> › <span class="menu">Security</span> › <span class="menu">Access Control</span> <span class="menu-trad">(Seguridad › Control de acceso)</span>: <span class="menu">Blacklist</span> <span class="menu-trad">(lista negra)</span> o <span class="menu">Whitelist</span> <span class="menu-trad">(lista blanca)</span>.</p></div>
         </div>
       </section>
 
@@ -590,7 +601,7 @@ Adaptador de Ethernet Ethernet:
             <p>Actualizar el <strong>firmware</strong> (el programa interno del router) corrige fallas. Se baja de la página del fabricante, para el mismo modelo y versión, y no hay que apagar el router mientras se actualiza.</p>
             <p><strong>Reiniciar</strong> no borra nada. El <strong>reset de fábrica</strong> borra toda la configuración, también la contraseña de administrador: sirve si nadie la recuerda.</p>
           </div>
-          <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">System Tools</span> › <span class="menu">Firmware Upgrade</span> y <span class="menu">Reboot</span> <span class="menu-trad">(Herramientas del sistema › Actualización de firmware y Reiniciar)</span>. Reset de fábrica: mantener apretado el botón WPS/RESET más de 5 segundos.</p></div>
+          <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Advanced</span> › <span class="menu">System Tools</span> › <span class="menu">Firmware Upgrade</span> y <span class="menu">Reboot</span> <span class="menu-trad">(Herramientas del sistema › Actualización de firmware y Reiniciar)</span>. Reset de fábrica: mantener apretado el botón WPS/RESET más de 5 segundos.</p></div>
         </div>
       </section>
     </div>
@@ -677,50 +688,50 @@ Adaptador de Ethernet Ethernet:
       </div>
     </header>
 
-    <p class="consigna"><strong>Consigna:</strong> Configurá el router del laboratorio (TP-Link TL-WR850N v3): es la práctica para el proyecto final. Anotá los datos que configures y capturá cada paso <span class="sin-corte">(<kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>).</span></p>
+    <p class="consigna"><strong>Consigna:</strong> Hacé la práctica en el simulador del router, desde una computadora: <a class="enlace" href="https://prof-nkocussi.github.io/App-Router-Simulador/" target="_blank" rel="noopener"><span class="sin-corte">prof-nkocussi.github.io/</span><wbr><span class="sin-corte">App-Router-Simulador</span></a>. Tiene el mismo panel que el router del laboratorio (TP-Link TL-WR850N v3) y es la práctica para el proyecto final. Anotá los datos que configures.</p>
 
     <ol class="acts acts--2col">
       <li class="act">
         <h3 class="act__titulo"><span class="act__num">1-</span> Entrar al router</h3>
         <ol class="act__items">
-          <li><b class="act__letra">a)</b><div>Si el router ya se usó, reset de fábrica: botón WPS/RESET apretado más de 5 segundos.</div></li>
-          <li><b class="act__letra">b)</b><div>Conectá la PC a un puerto LAN del router con un cable y buscá la puerta de enlace con <code class="cod-cmd">ipconfig</code>.</div></li>
+          <li><b class="act__letra">a)</b><div>Si el router ya se usó, reset de fábrica: en «Router», botón WPS/RESET apretado más de 5 segundos.</div></li>
+          <li><b class="act__letra">b)</b><div>En «Tu PC», buscá la puerta de enlace con <code class="cod-cmd">ipconfig</code>.</div></li>
           <li><b class="act__letra">c)</b><div>Entrá a <code>http://tplinkwifi.net</code> o a <code class="cod-ip">192.168.0.1</code> y creá la contraseña de administrador.</div></li>
         </ol>
       </li>
       <li class="act">
         <h3 class="act__titulo"><span class="act__num">2-</span> Wi-Fi</h3>
         <ol class="act__items">
-          <li><b class="act__letra">a)</b><div>En <span class="menu">Wireless</span> › <span class="menu">Wireless Settings</span>: tu SSID y una clave de 8 caracteres o más, con <span class="menu">WPA/WPA2 Personal</span>.</div></li>
-          <li><b class="act__letra">b)</b><div>Conectá un celular o una notebook a la red nueva.</div></li>
+          <li><b class="act__letra">a)</b><div>En <span class="menu">Advanced</span> › <span class="menu">Wireless</span> › <span class="menu">Wireless Settings</span>: tu SSID y una clave de 8 caracteres o más, con <span class="menu">WPA/WPA2 Personal</span>.</div></li>
+          <li><b class="act__letra">b)</b><div>En «Celular», conectate a la red nueva.</div></li>
         </ol>
       </li>
       <li class="act">
         <h3 class="act__titulo"><span class="act__num">3-</span> DHCP e IP fijas</h3>
         <ol class="act__items">
-          <li><b class="act__letra">a)</b><div>En <span class="menu">Network</span> › <span class="menu">LAN Settings</span>, anotá el rango DHCP. En <span class="menu">Status</span> / <span class="menu">Network Map</span>, mirá los dispositivos conectados.</div></li>
-          <li><b class="act__letra">b)</b><div>Buscá la MAC de la PC con <code class="cod-cmd">ipconfig /all</code> y reservale una IP en <span class="menu">Address Reservation</span>. Comprobala con <code class="cod-cmd">ipconfig /release</code> y <code class="cod-cmd">/renew</code>.</div></li>
+          <li><b class="act__letra">a)</b><div>En <span class="menu">Advanced</span> › <span class="menu">Network</span> › <span class="menu">LAN Settings</span>, anotá el rango DHCP. Mirá los dispositivos conectados en <span class="menu">Client List</span> o en <span class="menu">Basic</span> › <span class="menu">Network Map</span>.</div></li>
+          <li><b class="act__letra">b)</b><div>Buscá la MAC de «Tu PC» con <code class="cod-cmd">ipconfig /all</code> y reservale una IP en <span class="menu">Address Reservation</span>. Comprobala con <code class="cod-cmd">ipconfig /release</code> y <code class="cod-cmd">/renew</code>.</div></li>
         </ol>
       </li>
       <li class="act">
         <h3 class="act__titulo"><span class="act__num">4-</span> IP fija y copia de seguridad</h3>
         <ol class="act__items">
-          <li><b class="act__letra">a)</b><div>En otra PC, poné una IP fija en Windows, fuera del rango DHCP, y comprobala con <code class="cod-cmd">ipconfig</code>.</div></li>
-          <li><b class="act__letra">b)</b><div>En <span class="menu">System Tools</span> › <span class="menu">Backup &amp; Restore</span>, guardá la configuración en un archivo.</div></li>
+          <li><b class="act__letra">a)</b><div>En «Otra PC», poné una IP fija en Windows, fuera del rango DHCP, y comprobala con <code class="cod-cmd">ipconfig</code>.</div></li>
+          <li><b class="act__letra">b)</b><div>En <span class="menu">Advanced</span> › <span class="menu">System Tools</span> › <span class="menu">Backup &amp; Restore</span>, guardá la configuración en un archivo.</div></li>
         </ol>
       </li>
     </ol>
 
     <section class="entrega" aria-labelledby="entrega8">
       <h3 class="entrega__tit" id="entrega8">Entrega</h3>
-      <p>Por Classroom: un documento con las capturas y los datos que configuraste, y el archivo de la copia de seguridad.</p>
+      <p>Por Classroom: la captura del resumen del simulador (pestaña «Práctica», <span class="sin-corte"><kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>)</span> y el archivo <code>config.bin</code> de la copia de seguridad. El resumen tiene que mostrar:</p>
       <ul class="entrega__lista">
         <li>Contraseña de administrador creada.</li>
-        <li>SSID y clave nuevos, con WPA/WPA2 Personal, y un equipo conectado.</li>
+        <li>SSID y clave nuevos, con WPA/WPA2 Personal, y el celular conectado.</li>
         <li>Rango DHCP y dispositivos conectados.</li>
         <li>Reserva de IP comprobada con <code class="cod-cmd">ipconfig</code>.</li>
         <li>IP fija en Windows comprobada con <code class="cod-cmd">ipconfig</code>.</li>
-        <li>Archivo de la copia de seguridad.</li>
+        <li>Copia de seguridad descargada.</li>
       </ul>
     </section>
 

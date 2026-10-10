@@ -1145,6 +1145,9 @@ kbd {
 /* En las consignas, un comando corto no se corta en dos renglones */
 .act code.cod-cmd { white-space: nowrap; }
 .sin-corte { white-space: nowrap; }
+/* Link a una página de afuera (el simulador del router) */
+a.enlace { font-weight: 700; color: var(--acento-texto); text-decoration: underline; text-underline-offset: 2px; }
+a.enlace:hover { text-decoration-thickness: 2px; }
 
 /* Recuadro "Importante" dentro de una sección (con título h4) */
 .nota h4 { font-family: var(--fuente-titulo); font-weight: 700; font-size: 18px; line-height: 1.2; }
@@ -1249,6 +1252,11 @@ kbd {
 .mp-n--otra { fill: var(--panel-oscuro); }
 .mapa-panel .mp-n-txt { font-family: var(--fuente-titular); font-weight: 800; font-size: 11.5px; text-anchor: middle; }
 .mp-rama { fill: none; stroke: var(--linea); stroke-width: 1.5; }
+.mp-pestanas { fill: var(--panel); }
+.mp-pestana-activa { fill: var(--blanco); stroke: var(--linea); }
+.mapa-panel .mp-pestana { font-weight: 600; font-size: 11.5px; fill: var(--gris); }
+.mapa-panel .mp-pestana--activa { font-weight: 700; fill: var(--tinta); }
+.mapa-panel .mp-grupo { font-family: var(--fuente-titulo); font-weight: 700; font-size: 12px; fill: var(--acento-texto); }
 
 /* Simulador del router */
 .rt-form { display: grid; gap: 10px; }
