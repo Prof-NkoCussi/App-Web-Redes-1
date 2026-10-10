@@ -260,7 +260,7 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - Enfoque: que entiendan cómo funciona un router, entren al panel y lo configuren. Es individual y sirve de práctica para el proyecto final, donde cada grupo configura su router.
 - L24 **La IP de la PC:** `ipconfig` y `ipconfig /all` (IP, máscara, puerta de enlace, MAC, DHCP habilitado); IP dinámica y fija; cómo poner una IP fija en Windows (`ncpa.cpl` › Propiedades › TCP/IPv4), con el esquema SVG de esa ventana.
 - L25 **Cómo funciona un router:** los dos lados (WAN con la IP pública, LAN con la puerta de enlace) en SVG; qué hace (enruta, NAT, DHCP, Wi-Fi, switch); entrar al panel; contraseña de administrador y credenciales por defecto; dónde se ve la IP pública.
-- L26 **Configurar el router:** plan de la red (router, IP fijas, rango DHCP); SSID, clave, WPA2 y WPA3; rango DHCP y dispositivos conectados; reserva de IP por MAC (retoma la impresora del TP6), comprobada con `ipconfig /release` y `/renew`; copia de seguridad. Esquema SVG del panel del TL-WR850N v3.
+- L26 **Configurar el router:** plan de la red (router, IP fijas, rango DHCP); SSID, clave, WPA2 y WPA3; rango DHCP y dispositivos conectados; reserva de IP por MAC (retoma la impresora del TP6), comprobada con `ipconfig /release` e `ipconfig /renew`; copia de seguridad. Esquema SVG del panel del TL-WR850N v3.
 - Cada opción lleva al lado el recuadro "En el router del laboratorio", con la ruta en el TL-WR850N v3.
 - "Para profundizar": la IP 169.254 cuando no hay DHCP; `ifconfig` en Linux; la IP pública en el laboratorio y port forwarding; control de acceso; firmware, reiniciar y reset de fábrica.
 - `ping`, `tracert`, `nslookup` y `netstat` quedan para Redes II.
