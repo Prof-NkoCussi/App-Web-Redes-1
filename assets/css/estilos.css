@@ -1072,8 +1072,10 @@ button.boton:disabled { opacity: .45; cursor: not-allowed; }
 .portada__hero h1 span { color: var(--acento-numero); }
 .portada__hero .tit__sub { margin-top: 8px; }
 .portada__datos { font-size: 15px; color: var(--gris); line-height: 1.5; }
-.portada__datos strong { color: var(--gris-sub); font-weight: 600; }
+.portada__datos strong { color: var(--gris); font-weight: 600; }
 .portada__datos .portada__escuela { font-size: 17px; color: var(--tinta); }
+/* En la portada, "5.º AÑO" de la cabecera va en negrita */
+.portada .cab__marca span { font-weight: 700; }
 
 .bloque h2 { margin-bottom: 12px; }
 .lista-tp { display: grid; gap: 10px; }
