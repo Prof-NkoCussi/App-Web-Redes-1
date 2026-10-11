@@ -1258,33 +1258,12 @@ a.enlace:hover { text-decoration-thickness: 2px; }
 .mapa-panel .mp-pestana--activa { font-weight: 700; fill: var(--tinta); }
 .mapa-panel .mp-grupo { font-family: var(--fuente-titulo); font-weight: 700; font-size: 12px; fill: var(--acento-texto); }
 
-/* Simulador del router */
-.rt-form { display: grid; gap: 10px; }
-.rt-grupo {
-  display: flex; flex-wrap: wrap; align-items: end; gap: 8px 10px; min-width: 0;
-  margin: 0; padding: 6px 12px 10px; border: 1.5px solid var(--linea); border-radius: 8px; background: var(--blanco);
-}
-.rt-grupo legend { padding: 0 4px; font-weight: 700; font-size: 14px; color: var(--tinta); }
-.rt-grupo .sim__campo { flex: 1 1 170px; }
 .sim__campo select {
   width: 100%; min-width: 0; padding: 8px 10px;
   font-family: var(--fuente); font-size: 16px; color: var(--tinta);
   background: var(--blanco); border: 2px solid var(--gris); border-radius: 8px;
 }
 .sim__campo input:disabled { background: var(--panel); color: var(--gris); }
-.rt-reservas { flex: 1 1 100%; display: grid; gap: 4px; font-family: var(--fuente-mono); font-size: 13px; color: var(--tinta); overflow-wrap: anywhere; }
-.rt-reservas li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
-.rt-resultado { display: grid; gap: 10px; }
-.rt-config { font-size: 15px; line-height: 1.35; }
-.rt-equipos { width: 100%; border-collapse: collapse; background: var(--blanco); font-size: 14px; line-height: 1.3; }
-.rt-equipos caption { text-align: left; font-weight: 700; font-size: 15px; color: var(--tinta); padding-bottom: 4px; }
-.rt-equipos th, .rt-equipos td { padding: 5px 8px; text-align: left; border-bottom: 1px solid var(--linea); }
-.rt-equipos thead th { background: var(--acento-claro); color: var(--tinta); font-size: 13px; }
-.rt-equipos tbody th { font-weight: 700; color: var(--tinta); }
-.rt-equipos td:nth-child(3), .rt-equipos td:nth-child(4) { font-family: var(--fuente-mono); font-size: 13px; }
-.rt-equipos .rt-sin-ip th, .rt-equipos .rt-sin-ip td { background: var(--error-claro); }
-.rt-falla { color: var(--error); font-weight: 700; }
-
 /* Entrega de la práctica: lo que se entrega, con viñetas */
 .entrega { display: grid; gap: 6px; background: var(--acento-suave); border-radius: var(--radio); padding: 10px 16px 12px 18px; box-shadow: inset 4px 0 0 var(--acento-fuerte); }
 .entrega__tit { font-family: var(--fuente-titulo); font-weight: 700; font-size: 21px; line-height: 1.2; color: var(--acento-texto); }
@@ -1295,23 +1274,6 @@ a.enlace:hover { text-decoration-thickness: 2px; }
 
 /* "Para profundizar": el recuadro del laboratorio en línea */
 .pf .lab__tit { margin-right: 3px; }
-
-@media (max-width: 599px) {
-  /* Equipos del simulador: cada fila como una tarjeta, con el nombre de cada dato */
-  .rt-equipos thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-  .rt-equipos, .rt-equipos tbody, .rt-equipos tr, .rt-equipos th, .rt-equipos td { display: block; }
-  .rt-equipos tr { border: 1.5px solid var(--linea); border-radius: 8px; margin-bottom: 6px; overflow: hidden; }
-  .rt-equipos th, .rt-equipos td { border-bottom: 0; padding: 3px 10px; }
-  .rt-equipos tbody th { background: var(--acento-claro); }
-  .rt-equipos td::before {
-    display: inline-block; min-width: 9em; margin-right: 4px;
-    font-family: var(--fuente); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gris);
-  }
-  .rt-equipos td:nth-child(2)::before { content: "Conexión"; }
-  .rt-equipos td:nth-child(3)::before { content: "MAC"; }
-  .rt-equipos td:nth-child(4)::before { content: "IP"; }
-  .rt-equipos td:nth-child(5)::before { content: "Cómo la obtuvo"; }
-}
 
 @media (min-width: 600px), print {
   /* Título y plan de la red a la izquierda; el esquema del panel a la derecha */

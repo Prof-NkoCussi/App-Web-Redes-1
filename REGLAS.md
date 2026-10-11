@@ -166,7 +166,7 @@ El repo de origen no tiene nada interactivo. Lo que sigue se crea en el TP donde
   | 5 | Tabla NAT que se completa al "mandar" paquetes |
   | 6 | Validador de rutas UNC |
   | 7 | Resolución DNS paso a paso |
-  | 8 | Panel de un router genérico: Wi-Fi, rango DHCP y reservas por MAC; qué IP recibe cada equipo y qué muestra `ipconfig` en la PC. La práctica en la compu usa además el simulador del panel, que es una app aparte (ver abajo) |
+  | 8 | (11/10) Sin simulador dentro de la página: se sacó el panel genérico porque la práctica se hace en el simulador del panel, una app aparte (ver abajo) |
   | 9 | Petición real a una API pública, con su código de respuesta y su JSON |
 
 - **Datos de ejemplo, iguales en todo el cuadernillo:** red `192.168.1.0/24`, puerta de enlace `192.168.1.1`, PC `192.168.1.25`, DNS `8.8.8.8`. IP públicas de ejemplo: rango `203.0.113.0/24`, reservado para documentación. Dominio de ejemplo: uno inventado, siempre el mismo. Los dominios reales van solo en la práctica de laboratorio, donde la salida la ve el alumno en su PC.
@@ -240,7 +240,7 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 | 6 | Recursos compartidos en red | 16–18 | carpetas compartidas y permisos · rutas UNC · impresora compartida | Rutas UNC |
 | **Unidad 2 · Protocolos, seguridad y aplicaciones** | | | | |
 | 7 | Transporte y protocolos de aplicación | 19–23 | TCP y UDP, con el handshake de tres pasos · puertos · DNS y DHCP · HTTP y HTTPS · FTP, SSH y correo | DNS |
-| 8 | Configurando el router | 24–26 | la IP de la PC: `ipconfig` e IP fija en Windows · cómo funciona un router y cómo se entra · configurar el router: Wi-Fi, DHCP e IP fijas | Panel del router |
+| 8 | Configurando el router | 24–26 | la IP de la PC: `ipconfig` e IP fija en Windows · cómo funciona un router y cómo se entra · configurar el router: Wi-Fi, DHCP e IP fijas | Simulador del panel, app aparte |
 | 9 | APIs REST | 27–29 | cliente-servidor, recursos y endpoints · verbos HTTP y códigos de respuesta · JSON y `fetch` | Petición real |
 | 10 | Proyecto integrador Yarvi | 30–32 | arquitectura del sistema · MQTT · del botón al motor: endpoints y `fetch` | — |
 | 11 | Seguridad en redes (de soporte) | 33–35 | amenazas (sniffing, spoofing, Man-in-the-Middle, DoS) · firewall, DMZ y VPN · HTTPS, certificados y Wi-Fi (WPA2, WPA3, redes públicas) | — |

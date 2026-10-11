@@ -72,7 +72,6 @@
     <a href="#pag-24">24 · La IP de la PC</a>
     <a href="#pag-25">25 · Cómo funciona un router</a>
     <a href="#pag-26">26 · Configurar el router</a>
-    <a href="#simulador">Simulador del router</a>
     <a href="#profundizar">Para profundizar</a>
     <a href="#actividades">Actividades</a>
     <a href="#actividades-2">En la compu</a>
@@ -420,123 +419,6 @@ Adaptador de Ethernet Ethernet:
     </footer>
   </article>
 
-  <!-- =================== SIMULADOR DEL ROUTER (hoja propia, sin número de lámina) =================== -->
-  <article class="lamina lamina--sim" id="simulador" aria-labelledby="tsim">
-    <div class="cab" aria-hidden="true">
-      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
-      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
-      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°8</span></div>
-      <span class="cab__raya"></span>
-    </div>
-
-    <div class="tit">
-      <h2 class="tit__h" id="tsim">Simulador del router</h2>
-      <p class="tit__sub">Configurar la red y ver qué IP recibe cada equipo</p>
-    </div>
-
-    <section class="simulador" data-sim="router" aria-labelledby="tsim">
-      <div class="sim__cab">
-        <span class="etq etq--sim">Simulador</span>
-        <p class="sim__aviso">Simulación: los valores son de ejemplo. Es un panel genérico, no el del router del laboratorio.</p>
-      </div>
-      <p class="sim__intro">Cambiá la configuración del router, guardala y mirá qué IP recibe cada equipo y qué muestra <code class="cod-cmd">ipconfig</code> en la PC. El router tiene la IP 192.168.1.1 y la máscara 255.255.255.0.</p>
-
-      <div class="sim__controles no-imprimir" data-sim-js hidden>
-        <form class="rt-form" novalidate>
-          <fieldset class="rt-grupo">
-            <legend>Wi-Fi</legend>
-            <div class="sim__campo">
-              <label for="rt-ssid">Nombre de la red (SSID)</label>
-              <input id="rt-ssid" type="text" value="Aula-Redes" autocomplete="off" spellcheck="false">
-            </div>
-            <div class="sim__campo">
-              <label for="rt-seg">Seguridad</label>
-              <select id="rt-seg">
-                <option value="WPA2 Personal" selected>WPA2 Personal</option>
-                <option value="WPA3 Personal">WPA3 Personal</option>
-                <option value="Sin seguridad">Sin seguridad</option>
-              </select>
-            </div>
-            <div class="sim__campo">
-              <label for="rt-clave">Clave</label>
-              <input id="rt-clave" type="text" value="clave-del-aula" autocomplete="off" spellcheck="false">
-            </div>
-          </fieldset>
-          <fieldset class="rt-grupo">
-            <legend>Rango DHCP</legend>
-            <div class="sim__campo">
-              <label for="rt-desde">Desde</label>
-              <input id="rt-desde" type="text" value="192.168.1.25" inputmode="decimal" autocomplete="off" spellcheck="false">
-            </div>
-            <div class="sim__campo">
-              <label for="rt-hasta">Hasta</label>
-              <input id="rt-hasta" type="text" value="192.168.1.199" inputmode="decimal" autocomplete="off" spellcheck="false">
-            </div>
-          </fieldset>
-          <fieldset class="rt-grupo rt-grupo--reservas">
-            <legend>IP fijas (reserva por MAC)</legend>
-            <div class="sim__campo">
-              <label for="rt-equipo">Equipo</label>
-              <select id="rt-equipo"></select>
-            </div>
-            <div class="sim__campo">
-              <label for="rt-ip">IP reservada</label>
-              <input id="rt-ip" type="text" value="192.168.1.11" inputmode="decimal" autocomplete="off" spellcheck="false">
-            </div>
-            <button class="boton boton--claro" type="button" data-reservar>Agregar reserva</button>
-            <ul class="rt-reservas" aria-label="Reservas guardadas"></ul>
-          </fieldset>
-          <div class="sim__botones">
-            <button class="boton" type="submit">Guardar y conectar los equipos</button>
-          </div>
-        </form>
-        <p class="sim__ejemplos" style="margin-top:8px">Probá con:
-          <button class="boton boton--claro boton--chico" type="button" data-probar="clave">una clave de 6 caracteres</button>
-          <button class="boton boton--claro boton--chico" type="button" data-probar="router">un rango con la IP del router</button>
-          <button class="boton boton--claro boton--chico" type="button" data-probar="lleno">un rango de una sola IP</button>
-        </p>
-      </div>
-
-      <p class="sim__estado sim__estado--ok" role="status" aria-live="polite">Ejemplo resuelto: se conectaron los 4 equipos, 3 por DHCP y 1 con reserva.</p>
-
-      <div class="rt-resultado">
-        <p class="rt-config" data-config>Red Wi-Fi <strong>Aula-Redes</strong>, con WPA2 Personal. Rango DHCP: de 192.168.1.25 a 192.168.1.199. Reserva: Impresora → 192.168.1.10.</p>
-        <table class="rt-equipos">
-          <caption>Equipos conectados</caption>
-          <thead><tr><th scope="col">Equipo</th><th scope="col">Conexión</th><th scope="col">MAC</th><th scope="col">IP</th><th scope="col">Cómo la obtuvo</th></tr></thead>
-          <tbody data-equipos>
-            <tr><th scope="row">PC del aula</th><td>Cable</td><td>3C-52-82-4A-1F-07</td><td>192.168.1.25</td><td>DHCP</td></tr>
-            <tr><th scope="row">Notebook</th><td>Wi-Fi</td><td>8C-16-45-2B-9E-31</td><td>192.168.1.26</td><td>DHCP</td></tr>
-            <tr><th scope="row">Celular</th><td>Wi-Fi</td><td>5A-7D-C3-90-12-6E</td><td>192.168.1.27</td><td>DHCP</td></tr>
-            <tr><th scope="row">Impresora</th><td>Cable</td><td>00-1B-A9-3F-52-C4</td><td>192.168.1.10</td><td>Reserva</td></tr>
-          </tbody>
-        </table>
-        <div class="ventana-cod ventana-cod--terminal" role="group" aria-label="ipconfig en la PC del aula">
-          <div class="ventana-cod__barra" aria-hidden="true">Símbolo del sistema · PC del aula</div>
-<pre class="ventana-cod__txt" tabindex="0" data-ipconfig><span class="t-prompt">C:\Users\Alumno&gt;</span><span class="t-cmd">ipconfig</span>
-
-Configuración IP de Windows
-
-
-Adaptador de Ethernet Ethernet:
-
-   Sufijo DNS específico para la conexión. . :
-   Vínculo: dirección IPv6 local. . . : fe80::a1c:2b7e:91d3:6f5%7
-   Dirección IPv4. . . . . . . . . . . . . . : <span class="t-str">192.168.1.25</span>
-   Máscara de subred . . . . . . . . . . . . : <span class="t-str">255.255.255.0</span>
-   Puerta de enlace predeterminada . . . . . : <span class="t-str">192.168.1.1</span></pre>
-        </div>
-      </div>
-    </section>
-
-    <footer class="pie">
-      <span class="pie__linea"></span>
-      <span>Redes I — Prof. Nicolás A. Cussi</span>
-      <span class="pie__linea"></span>
-      <span class="pie__num">TP 8</span>
-    </footer>
-  </article>
-
   <!-- =================== PARA PROFUNDIZAR =================== -->
   <article class="lamina lamina--pf" id="profundizar" aria-labelledby="tpf">
     <div class="cab" aria-hidden="true">
@@ -737,6 +619,5 @@ Adaptador de Ethernet Ethernet:
 </main>
 
 <script src="../assets/js/actividades.js"></script>
-<script src="../assets/js/simuladores.js"></script>
 </body>
 </html>
