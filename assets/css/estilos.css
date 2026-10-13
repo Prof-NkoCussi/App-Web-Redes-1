@@ -1373,6 +1373,7 @@ code.cod-bloque { display: block; width: fit-content; max-width: 100%; margin: 3
 .http-par { display: grid; gap: 6px; }
 .http-par .ventana-cod { min-width: 0; }
 .http__nota { font-size: 14.5px; line-height: 1.35; }
+.tabla-verbos__nota { margin-top: 6px; font-size: 14.5px; line-height: 1.35; }
 .codigos__intro { margin-top: 8px; }
 
 /* Cómo se escribe JSON: el ejemplo, las reglas y cómo se lee un dato */
@@ -1404,6 +1405,35 @@ code.cod-bloque { display: block; width: fit-content; max-width: 100%; margin: 3
 }
 .salida .salida__dato { font-size: 17px; font-weight: 700; color: var(--tinta); white-space: nowrap; }
 .salida .salida__nota { font-size: 13.5px; color: var(--gris); }
+
+/* El modelo armado (lámina 29): index.html con su explicación al lado, y app.js abajo */
+.modelo { display: grid; gap: 10px; align-items: start; margin: 8px 0; }
+.modelo .ventana-cod { min-width: 0; }
+.modelo__lado { display: grid; gap: 7px; align-content: start; }
+.modelo__lado > p { font-size: 14.5px; line-height: 1.38; }
+.modelo__lado .salida { display: grid; gap: 2px; }
+.panel__cab .boton { align-self: center; }
+.panel__nota--papel { display: none; }
+@media print { .panel__nota--papel { display: block; } }
+.json-ej__izq { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.modelo__lado .salida__dato { white-space: normal; }
+
+/* "(opcional)" al lado del título de una actividad */
+.act__opcional { font-family: var(--fuente); font-size: .72em; font-weight: 600; color: var(--gris); }
+
+/* Para profundizar: dónde conseguir una API, con tres filas de la lista public-apis */
+.pf--api { align-content: start; }
+.lista-apis { margin: 4px 0 2px; display: grid; gap: 5px; }
+.lista-apis figcaption { font-size: 13.5px; color: var(--gris); }
+.lista-apis table { width: 100%; border-collapse: collapse; background: var(--blanco); font-size: 14px; line-height: 1.3; }
+.lista-apis th, .lista-apis td { padding: 5px 8px; text-align: left; border-bottom: 1px solid var(--linea); }
+.lista-apis thead th { background: var(--panel-oscuro); font-weight: 700; color: var(--tinta); }
+.lista-apis tbody th { font-weight: 700; color: var(--tinta); }
+.lista-apis td.si { background: var(--ok-claro); color: var(--ok-oscuro); font-weight: 700; }
+.lista-apis td.no { background: var(--error-claro); color: var(--error); font-weight: 700; }
+.lista-apis td.duda { background: var(--naranja-claro); color: var(--naranja-texto); font-weight: 700; }
+.lista-apis__nota { font-size: 14px; }
+.pf--api .nota h4 { font-size: 17px; }
 
 /* MQTT: los pasos del esquema */
 .columnas .esquema--mqtt .lista-pasos li { font-size: 14.5px; }
@@ -1462,6 +1492,8 @@ code.cod-url { overflow-wrap: normal; }
   }
   .json-ej { grid-template-columns: auto minmax(0, 1fr); }
   .receta .lista-pasos { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); }
+  .modelo { grid-template-columns: auto minmax(0, 1fr); }
+  .pf--api .pf__cols { grid-template-columns: 1fr 1fr; }
   .apis li { grid-template-columns: 96px minmax(0, 1fr); }
   .columnas--api { align-items: center; }
   .api { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "ej ej" "url url" "cod json" "pag json"; grid-template-rows: auto auto auto 1fr; }
@@ -1473,6 +1505,7 @@ code.cod-url { overflow-wrap: normal; }
   .tabla-verbos { font-size: 14px; }
   .tabla-verbos th, .tabla-verbos td { padding: 3px 8px; }
   .json-ej .ventana-cod__txt, .http-par .ventana-cod__txt { font-size: 12.5px; line-height: 1.45; padding: 6px 12px 8px; }
+  .lamina--compacta .json-ej .ventana-cod__txt { font-size: 11.5px; line-height: 1.4; }
   /* Láminas con mucho texto (TP9): letra un poco más chica que en .lamina--densa */
   .lamina--compacta .intro { padding: 10px 16px; }
   .lamina--compacta .intro p { font-size: 16px; line-height: 1.38; }
@@ -1498,7 +1531,22 @@ code.cod-url { overflow-wrap: normal; }
   .act .cod-bloque { font-size: 12px; }
   .act .ventana-cod__txt { font-size: 12.5px; line-height: 1.4; padding: 6px 12px 8px; }
   /* Hoja del simulador: el contenido arriba y el pie abajo, como en las actividades */
-  .lamina--sim { justify-content: flex-start; }
-  .lamina--sim > .pie { margin-top: auto; }
+  .lamina--sim, .lamina--arriba { justify-content: flex-start; }
+  .lamina--sim > .pie, .lamina--arriba > .pie { margin-top: auto; }
   .lamina--compacta .texto { font-size: 15px; line-height: 1.4; }
+  /* Lámina con el modelo completo (TP9, lámina 29): todavía menos aire entre bloques */
+  .lamina--apretada { gap: 2.5mm; }
+  .lamina--apretada .panel { padding: 8px 12px 10px; }
+  .lamina--apretada .panel__cab { margin-bottom: 6px; }
+  .lamina--apretada .lectura ul { gap: 3px; }
+  .lamina--apretada .lectura li { padding: 2px 10px 3px; }
+  .lamina--apretada .modelo { margin: 6px 0; }
+  .lamina--apretada .subtitulo { font-size: 21px; }
+  .lamina--apretada .subtitulo::after { margin-top: 3px; height: 3px; }
+  .lamina--apretada .idea p { padding: 7px 16px; }
+  .lamina--compacta [data-modelo] { font-size: 10.5px; line-height: 1.36; padding: 5px 10px 7px; }
+  .pf--api { padding: 14px 18px 16px 20px; gap: 8px; }
+  .pf--api p, .pf--api li { font-size: 15.5px; line-height: 1.42; }
+  .pf--api .pf__titulo { font-size: 24px; }
+  .pf--api .lista-apis table { font-size: 14.5px; }
 }

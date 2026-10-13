@@ -33,6 +33,7 @@ assets/js/actividades.js    botón PDF, resaltado de la barra, "✓ Visto" (loca
 assets/js/simuladores.js    simuladores (se crea con el primero)
 assets/fonts/               Barlow, Barlow Semi Condensed, Barlow Condensed (locales)
 assets/img/
+assets/descargas/          carpetas para descargar (TP9: api-dolar/ con index.html, app.js y api-dolar.zip)
 README.md                   presentación del sitio + tabla de TPs con su estado
 REGLAS.md                   este archivo
 ```
@@ -184,6 +185,8 @@ El repo de origen no tiene nada interactivo. Lo que sigue se crea en el TP donde
 - **Diagramas:** todos en SVG simple, con `role="img"` y texto alternativo: topologías, recorrido de un paquete, handshake, encapsulación, cliente-servidor, capas, publicar/suscribirse de MQTT, arquitectura del YoLo. Si hace falta una foto real (rack, patch panel), dejar un marcador visible: `[FOTO: qué mostrar]`.
 - **Botón del mini-juego:** enlace a la app ya publicada (`https://prof-nkocussi.github.io/App-redes-games/`, repo `Prof-NkoCussi/App-redes-games`, un juego por carpeta `games/tpN/`). Confirmar la URL de cada juego en ese repo. Hoy hay juego de los TP1 a TP5. El botón va solo en los TPs que tienen juego. El cuadernillo linkea a la app: no se fusionan.
 - **Código JavaScript** (TP9 y TP10): `let` y `const`, `===`, punto y coma, comillas dobles, textos unidos con `+`. Las peticiones se escriben con `async function` y `await fetch()`, como receta fija; `.then()` solo se nombra en "Para profundizar". Al lado de cada ejemplo va escrita la salida esperada.
+  - **(13/10) Los alumnos recién empiezan a programar.** El `fetch` se queda, pero no lo escriben desde cero: usan un **modelo armado** y lo modifican de a una cosa (la URL o un campo). En las actividades no se pide escribir código desde cero: a lo sumo, completar una sola cosa del modelo.
+  - El modelo del TP9 está en `assets/descargas/api-dolar/` (`index.html` + `app.js` con comentarios, y `api-dolar.zip`), y se muestra **tal cual** en la lámina 29, con los comentarios en `.t-com`. Si se cambia el modelo, se cambian los tres archivos y la lámina, y se vuelve a probar con doble clic, con DolarAPI y con PokéAPI. El `.zip` se arma con `tar -a` de Windows, para que las rutas vayan con `/`.
 
 ## Versión paso a paso
 
@@ -271,15 +274,15 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 **TP9 · APIs REST y MQTT** (C, 13/10: antes "APIs REST", 3 láminas; MQTT sale del TP10 y entra acá)
 - L27 **Cliente-servidor y API REST:** cliente (acento) y servidor (naranja), como en el TP7; qué es una API REST, qué es un recurso y qué es un endpoint. Esquema de la URL en partes: `https://` + dominio + ruta del recurso + parámetros después del `?`, con la URL de Open-Meteo (clima de Ushuaia).
 - L28 **Verbos y códigos:** GET, POST, PUT y DELETE, cada uno con su acción. Códigos: se retoman 200, 404 y 500 del TP7 y se suman 201 y 400. Las API públicas solo dejan leer (GET): POST, PUT y DELETE se explican con la API inventada de la biblioteca de la escuela (`/libros`, `/libros/12`). No se usa la luz, que es el ejemplo del TP10.
-- L29 **JSON y `fetch`:** sintaxis de JSON (objeto, clave y valor, textos, números, `true`/`false` y listas) y la receta fija: `async function`, `await fetch()`, `await respuesta.json()` y mostrar el dato en la página. Al lado de cada ejemplo, la salida esperada.
+- L29 **JSON y `fetch`** (C, 13/10): JSON para leer (objeto, clave y valor, textos, números, `true`/`false` y listas) y el modelo completo como receta fija: `index.html` y `app.js` tal cual, con sus comentarios, y el botón para descargar la carpeta. Al lado de cada ejemplo, la salida esperada.
 - L30 **MQTT:** qué es y para qué se usa (dispositivos como el ESP32); broker (Mosquitto, el del proyecto), publisher, subscriber y tópicos; puerto 1883. Cuadro HTTP vs MQTT: pedir/responder o publicar/suscribirse, conexión que se abre y se cierra o que queda abierta, mensaje pesado o liviano, cuándo conviene cada uno. Esquema SVG de publicar/suscribirse con el broker en el medio.
 - Simulador "Petición real", en una hoja propia después de las láminas: el alumno elige un endpoint de DolarAPI, toca "Enviar GET" y ve la URL armada, el código (200 en verde, 404 en rojo), el JSON que llegó y el dato mostrado en la página. El 404 de DolarAPI se muestra tal cual: "404, sin JSON". Sin Internet o si la API falla: aviso claro, y queda a la vista el ejemplo resuelto escrito en el HTML.
-- "Para profundizar", un bloque por lámina: CORS (por qué algunas API no responden desde el navegador), ver la petición con F12 › Red, por qué JSON reemplazó a XML y `.then()` solo nombrado, y un bloque de MQTT.
+- "Para profundizar", un bloque por lámina: CORS (por qué algunas API no responden desde el navegador), ver la petición con F12 › Red, por qué JSON reemplazó a XML y `.then()` solo nombrado, y un bloque de MQTT. (13/10) En una segunda hoja, "¿Dónde consigo una API?": la lista public-apis de GitHub (`github.com/public-apis/public-apis`) con las columnas Auth (No), HTTPS (Yes) y CORS (Yes); datos.gob.ar; y el aviso de no subir nunca una clave de API a un repositorio público.
 - Sin mini-juego.
 - **API probadas** (13/10, desde la compu de Nicolás; falta la prueba en el colegio). Antes de escribir un ejemplo, se vuelve a pedir la API y se copia la respuesta real, sin inventar campos.
   - **DolarAPI** (`https://dolarapi.com/v1/dolares/oficial`): 200, permite CORS, JSON de 6 campos (`moneda`, `casa`, `nombre`, `compra`, `venta`, `fechaActualizacion`). Un recurso inventado da 404 vacío, sin JSON. Va en el simulador y en los ejemplos.
-  - **Open-Meteo** (clima de Ushuaia): 200, sin clave, con parámetros `?latitude=…&longitude=…`. Va en el esquema de las partes de la URL de la lámina 27.
-  - **PokéAPI:** 200, pero el JSON pesa unos 300 KB; un nombre mal escrito da 404 con un JSON corto. Solo como opción de la práctica.
+  - **Open-Meteo** (clima de Ushuaia): 200, sin clave, con parámetros `?latitude=…&longitude=…`. (13/10) Solo en el esquema de las partes de la URL de la lámina 27 y para mirar en el navegador: sus datos vienen anidados.
+  - **PokéAPI:** 200, pero el JSON pesa unos 300 KB; un nombre mal escrito da 404 con un JSON corto. (13/10) En la práctica, al cambiar el modelo de API: `https://pokeapi.co/api/v2/pokemon/pikachu`, con `datos.name` y `datos.height`.
   - **RestCountries:** contesta 301. No va.
 
 **TP10 · Proyecto integrador YoLo** (C, 13/10)
@@ -308,7 +311,10 @@ El contenido ya está escrito y verificado. Fuente: las diapositivas de Gamma (e
   - HTTP: analizar una solicitud (método, URL, headers) y los códigos de estado 200, 301, 404 y 500.
   - Caso integrador: "Un alumno enciende su notebook, se conecta al Wi-Fi, abre el navegador, escribe una URL, navega, descarga un archivo y envía un email". Identificar qué protocolo de aplicación interviene en cada paso y en qué orden. Tabla con DNS, DHCP, HTTP, HTTPS, FTP, SSH y SMTP: función, puerto, si usa TCP o UDP y un ejemplo de uso. (C) La captura se lee del cuadernillo: identificar los protocolos presentes.
 - **TP8.** (C, 9/10) Carpeta: un punto por lámina, sin caso integrador (10/10: se sacó la planilla de configuración). Computadora, individual: configurar el router en el simulador del panel (10/10), como práctica para el proyecto final. Reset de fábrica si ya se usó; entrar al panel y crear la contraseña de administrador; SSID y clave con WPA/WPA2 Personal; ver el rango DHCP y los dispositivos; reservar una IP para la PC y comprobarla con `ipconfig`; poner una IP fija en Windows; copia de seguridad. Entrega por Classroom: la captura del resumen del simulador, con todos los pasos en ✓.
-- **TP9.** Carpeta: un punto por lámina (separar las partes de una URL, cuadro de verbos y códigos, leer un JSON y completar un `fetch`, cuadro HTTP vs MQTT) y el caso integrador: el recorrido botón → `fetch` → servidor → código → JSON → página, que cierra con el tramo siguiente: el servidor publica en MQTT y el ESP32 lo recibe. Sin cierre, como el TP8. Computadora: desarrollar en HTML + JavaScript una página que consuma al menos una API pública (C, 13/10: DolarAPI, PokéAPI mostrando solo algunos campos, u Open-Meteo; RestCountries sale porque contesta 301), con `fetch()`, procesando la respuesta JSON y mostrando los datos en la página, en pasos numerados. Entrega, con viñetas y sin casillas: carpeta en `.zip` por Classroom + informe breve (qué endpoints consumieron, qué métodos HTTP usaron y cómo procesaron la respuesta).
+- **TP9.** (C, 13/10: reemplaza el texto anterior; los alumnos recién empiezan a programar: el `fetch` se queda, pero usan un modelo armado y lo modifican).
+  - Carpeta: leer un JSON y sacar datos, separar las partes de una URL, verbos y códigos, HTTP vs MQTT, y en el modelo completar UNA cosa (el campo o la URL), nada más. Sin escribir código desde cero. Sin cierre, como el TP8. (Se mantiene el caso integrador, que no pide código: el recorrido botón → `fetch` → servidor → código → JSON → página, y el tramo siguiente: el servidor publica en MQTT y el ESP32 lo recibe.)
+  - Computadora, en pasos chicos: 1. Pegar en el navegador la URL de DolarAPI y mirar el JSON. 2. Descargar la carpeta, abrirla en VS Code, abrir `index.html` con doble clic y tocar "Consultar": aparece el dólar. 3. Cambiar `datos.venta` por otro campo del JSON (por ejemplo `datos.nombre`) y ver el cambio. 4. Cambiar la URL por la de PokéAPI (`https://pokeapi.co/api/v2/pokemon/pikachu`) y los campos por `datos.name` y `datos.height`; cambiar también el título de la página. 5. Probar con otro Pokémon cambiando el nombre en la URL. 6. (Opcional) Mostrar un dato más o darle estilo con CSS.
+  - Entrega, con viñetas y sin casillas: la carpeta en `.zip` por Classroom, con una captura de la página funcionando.
 - **TP10.** (C, 13/10) Una sola lámina, el mapa del proyecto. El resto del TP10 es todo práctica: una guía de 6 clases en la computadora. Nicolás les da una app web muy básica, que los alumnos reestructuran y diseñan con CSS a su gusto. Además usan GitHub y README (articula con Software II), configuran en el router una red Wi-Fi fija para el robot y prueban las conexiones con `ping`. El cuadernillo no publica la solución. La tabla de clases se rearma cuando se haga el TP10. (C) "Identificar vulnerabilidades" pasa al TP11.
 - **TP11.** Trabajo grupal: cada grupo toma una amenaza (sniffing, spoofing, Man-in-the-Middle, DoS) y explica cómo funciona, qué daño causa y qué defensas existen. Cuadro general de amenazas y contramedidas. Diagrama con la ubicación de firewall, DMZ y VPN. Diferencia entre HTTP y HTTPS y qué son los certificados digitales. WPA2, WPA3 y riesgos de las redes Wi-Fi públicas. (C) "Investigación" pasa a "explicación con el material". (C) Caso integrador sobre el YoLo.
 
@@ -344,10 +350,11 @@ TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primer
 - TP5: "Enrutamiento y NAT, PAT".
 - `netstat` sale del TP10: pasó a Redes II.
 - TP9: las API públicas van con su dominio real; la API inventada de la biblioteca, con un dominio inventado.
+- TP9 (ajuste): los alumnos recién empiezan a programar. El `fetch` se queda, pero no lo escriben desde cero: usan un modelo armado (`assets/descargas/api-dolar/`) y lo modifican. La práctica en la compu es la del modelo, en 6 pasos chicos.
 
 ## Pendientes a consultar con Nicolás
 
-- **TP9:** probar desde el colegio DolarAPI (simulador y ejemplos), Open-Meteo y PokéAPI.
+- **TP9:** probar desde el colegio DolarAPI (simulador y ejemplos), Open-Meteo y PokéAPI, y el modelo: descargar el `.zip`, descomprimirlo y abrir `index.html` con doble clic.
 - **TP9:** versión paso a paso (`tp09-pasos.html`), después de que Nicolás apruebe el texto. Solo conceptos, sin programar.
 - **TP10:** copiar el .docx del YoLo y el código de la plantilla en `_fuente/tp10/`.
 - **Paso a paso:** link del cuestionario de Google Forms de cada TP.

@@ -46,6 +46,10 @@
       <rect x="17" y="17" width="14" height="14" rx="1.5" style="fill:var(--ac);stroke:none"/>
       <path d="M18 4v7M24 4v7M30 4v7M18 37v7M24 37v7M30 37v7M4 18h7M4 24h7M4 30h7M37 18h7M37 24h7M37 30h7"/>
     </symbol>
+    <symbol id="i-importante" viewBox="0 0 48 48">
+      <path d="M24 5 3 42h42z" style="fill:var(--ac)"/>
+      <path d="M24 18v12M24 35.5v.5" style="stroke:var(--blanco)"/>
+    </symbol>
     <symbol id="i-pc" viewBox="0 0 48 48">
       <rect x="4" y="7" width="40" height="27" rx="3"/>
       <rect x="8.5" y="11.5" width="31" height="18" rx="1" style="fill:var(--ac);stroke:none"/>
@@ -180,7 +184,7 @@
   </article>
 
   <!-- =================== LÁMINA 28 =================== -->
-  <article class="lamina lamina--densa lamina--compacta" id="pag-28" aria-labelledby="t28">
+  <article class="lamina lamina--densa lamina--compacta lamina--apretada" id="pag-28" aria-labelledby="t28">
     <div class="cab" aria-hidden="true">
       <svg class="cab__logo"><use href="#i-red-solido"/></svg>
       <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
@@ -200,7 +204,7 @@
         <h3 class="subtitulo" id="vb28">Los cuatro verbos</h3>
         <p class="panel__nota">Ejemplo: la API de la biblioteca<br>de la escuela (inventada)</p>
       </div>
-      <p class="texto">Las API públicas, como DolarAPI y Open-Meteo, <strong>solo dejan leer</strong> (<code>GET</code>): nadie de afuera puede crear, cambiar ni borrar sus datos. Para ver los cuatro verbos usamos una API inventada, la de la biblioteca de la escuela, en <code>https://api.redesdelaula.com</code>.</p>
+      <p class="texto">Las API públicas, como DolarAPI, <strong>solo dejan leer</strong> (<code>GET</code>): nadie de afuera puede crear, cambiar ni borrar sus datos. Para ver los cuatro verbos usamos una API inventada, la de la biblioteca de la escuela, en <code>https://api.redesdelaula.com</code>.</p>
       <table class="tabla-puertos tabla-verbos">
         <caption class="sr-only">Los cuatro verbos HTTP, su acción, un ejemplo con la API de la biblioteca y el código si sale bien</caption>
         <thead><tr><th scope="col">Verbo</th><th scope="col">Acción</th><th scope="col">En la API de la biblioteca</th><th scope="col">Si sale bien</th></tr></thead>
@@ -211,6 +215,7 @@
           <tr><th scope="row">DELETE</th><td><strong>Borrar</strong></td><td><code>DELETE /libros/12</code> borra el libro 12</td><td>200</td></tr>
         </tbody>
       </table>
+      <p class="tabla-verbos__nota">En JavaScript, <code>fetch</code> (lámina 29) envía un GET si no se le indica otro verbo.</p>
     </section>
 
     <section class="http-par" aria-labelledby="hp28">
@@ -261,7 +266,7 @@
   </article>
 
   <!-- =================== LÁMINA 29 =================== -->
-  <article class="lamina lamina--densa lamina--compacta" id="pag-29" aria-labelledby="t29">
+  <article class="lamina lamina--densa lamina--compacta lamina--apretada" id="pag-29" aria-labelledby="t29">
     <div class="cab" aria-hidden="true">
       <svg class="cab__logo"><use href="#i-red-solido"/></svg>
       <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
@@ -275,9 +280,9 @@
     </div>
 
     <section class="panel" aria-labelledby="js29">
-      <div class="panel__cab"><h3 class="subtitulo" id="js29">Cómo se escribe JSON</h3></div>
-      <p class="texto"><strong>JSON</strong> (en inglés, <em>JavaScript Object Notation</em>) es el formato de texto de casi todas las API REST.</p>
+      <div class="panel__cab"><h3 class="subtitulo" id="js29">Leer un JSON, el formato de las API</h3></div>
       <div class="json-ej">
+        <div class="json-ej__izq">
         <div class="ventana-cod" role="group" aria-label="JSON de ejemplo: el libro 12">
           <div class="ventana-cod__barra" aria-hidden="true">JSON · GET /libros/12</div>
 <pre class="ventana-cod__txt">{
@@ -288,13 +293,14 @@
   <span class="t-atr">"temas"</span>: [<span class="t-str">"cables"</span>, <span class="t-str">"wifi"</span>]
 }</pre>
         </div>
+        </div>
         <div class="lectura">
-          <p class="lectura__tit">Un <strong>objeto</strong> va entre llaves <code>{ }</code>, con pares <strong>clave: valor</strong> separados por comas; la <strong>clave</strong> es el nombre del dato, entre comillas dobles. Convertido en el objeto <code>datos</code>, se lee así:</p>
+          <p class="lectura__tit">Un <strong>objeto</strong> va entre llaves <code>{ }</code>, con pares <strong>clave: valor</strong> separados por comas; la <strong>clave</strong> es el nombre del dato. Se lee así:</p>
           <ul>
             <li><code>datos.titulo</code><span class="lectura__flecha" aria-hidden="true">→</span><span class="sr-only">: </span><samp>Manual de redes</samp><span class="lectura__tipo"><strong>texto</strong>, entre comillas</span></li>
             <li><code>datos.paginas</code><span class="lectura__flecha" aria-hidden="true">→</span><span class="sr-only">: </span><samp>120</samp><span class="lectura__tipo"><strong>número</strong>, sin comillas</span></li>
             <li><code>datos.prestado</code><span class="lectura__flecha" aria-hidden="true">→</span><span class="sr-only">: </span><samp>true</samp><span class="lectura__tipo"><strong>true</strong> o <strong>false</strong>, sin comillas</span></li>
-            <li><code>datos.temas[0]</code><span class="lectura__flecha" aria-hidden="true">→</span><span class="sr-only">: </span><samp>cables</samp><span class="lectura__tipo"><strong>lista</strong>, entre corchetes <code>[ ]</code>, con comas; se cuenta desde 0</span></li>
+            <li><code>datos.temas[0]</code><span class="lectura__flecha" aria-hidden="true">→</span><span class="sr-only">: </span><samp>cables</samp><span class="lectura__tipo"><strong>lista</strong>, entre <code>[ ]</code>; se cuenta desde 0</span></li>
           </ul>
         </div>
       </div>
@@ -302,39 +308,62 @@
 
     <section class="panel" aria-labelledby="fe29">
       <div class="panel__cab">
-        <h3 class="subtitulo" id="fe29">La receta: pedir, convertir y mostrar</h3>
-        <p class="panel__nota">Probala en el simulador<br>«Petición real»</p>
+        <h3 class="subtitulo" id="fe29">La receta: un modelo armado</h3>
+        <a class="boton no-imprimir" href="../assets/descargas/api-dolar/api-dolar.zip" download><svg aria-hidden="true" focusable="false"><use href="#i-descarga"/></svg><span>Descargar el modelo</span><span class="sr-only"> (api-dolar.zip)</span></a>
+        <p class="panel__nota panel__nota--papel">Se descarga desde<br>el cuadernillo web</p>
       </div>
-      <div class="ventana-cod" role="group" aria-label="Código de ejemplo: un botón que muestra el dólar oficial">
-        <div class="ventana-cod__barra" aria-hidden="true">HTML + JavaScript</div>
-<pre class="ventana-cod__txt">&lt;<b>button</b> <span class="t-atr">onclick</span>=<span class="t-str">"mostrarDolar()"</span>&gt;Ver el dólar&lt;/<b>button</b>&gt;
-&lt;<b>p</b> <span class="t-atr">id</span>=<span class="t-str">"precio"</span>&gt;&lt;/<b>p</b>&gt;
-&lt;<b>script</b>&gt;
-<b>async function</b> <span class="t-fun">mostrarDolar</span>() {
-  <b>const</b> respuesta = <b>await</b> <span class="t-fun">fetch</span>(<span class="t-str">"https://dolarapi.com/v1/dolares/oficial"</span>);
-  <b>const</b> datos = <b>await</b> respuesta.<span class="t-fun">json</span>();
-  <b>const</b> precio = document.<span class="t-fun">getElementById</span>(<span class="t-str">"precio"</span>);
-  precio.<span class="t-atr">textContent</span> = <span class="t-str">"Dólar "</span> + datos.<span class="t-atr">nombre</span> + <span class="t-str">": $"</span> + datos.<span class="t-atr">venta</span>;
-}
-&lt;/<b>script</b>&gt;</pre>
-      </div>
-      <div class="receta">
-        <ol class="lista-pasos" aria-label="Los pasos de la receta">
-          <li class="grupo"><b>1</b><span><code>async function</code>: la función puede <strong>esperar</strong> (<code>await</code>) a la red.</span></li>
-          <li class="grupo"><b>2</b><span><code>await fetch(url)</code>: <strong>envía</strong> la solicitud (un GET, si no se indica otro verbo) y espera la respuesta. Su código queda en <code>respuesta.status</code>.</span></li>
-          <li class="grupo grupo--naranja"><b>3</b><span><code>await respuesta.json()</code>: <strong>convierte</strong> el JSON que llegó en un objeto, <code>datos</code>.</span></li>
-          <li class="grupo"><b>4</b><span><strong>Mostrar:</strong> <code>datos.venta</code> lee un valor y <code>textContent</code> lo escribe en el párrafo.</span></li>
-        </ol>
-        <div class="salida">
-          <p class="salida__tit">Salida esperada</p>
-          <p>Al tocar <span class="salida__boton">Ver el dólar</span>: <span class="salida__dato">Dólar Oficial: $1535</span> <span class="salida__nota">(cambia cada día)</span></p>
+      <div class="modelo">
+        <div class="ventana-cod" role="group" aria-label="El archivo index.html del modelo">
+          <div class="ventana-cod__barra" aria-hidden="true">index.html</div>
+<pre class="ventana-cod__txt" data-modelo="index.html">&lt;!<b>DOCTYPE</b> html&gt;
+&lt;<b>html</b> <span class="t-atr">lang</span>=<span class="t-str">"es"</span>&gt;
+&lt;<b>head</b>&gt;
+  &lt;<b>meta</b> <span class="t-atr">charset</span>=<span class="t-str">"utf-8"</span>&gt;
+  &lt;<b>title</b>&gt;Dólar oficial&lt;/<b>title</b>&gt;
+&lt;/<b>head</b>&gt;
+&lt;<b>body</b>&gt;
+  &lt;<b>h1</b>&gt;Dólar oficial&lt;/<b>h1</b>&gt;
+  &lt;<b>button</b> <span class="t-atr">id</span>=<span class="t-str">"boton"</span>&gt;Consultar&lt;/<b>button</b>&gt;
+  &lt;<b>p</b> <span class="t-atr">id</span>=<span class="t-str">"resultado"</span>&gt;Tocá el botón para ver la cotización.&lt;/<b>p</b>&gt;
+
+  &lt;<b>script</b> <span class="t-atr">src</span>=<span class="t-str">"app.js"</span>&gt;&lt;/<b>script</b>&gt;
+&lt;/<b>body</b>&gt;
+&lt;/<b>html</b>&gt;</pre>
         </div>
+        <div class="modelo__lado">
+          <p>No lo escribimos desde cero: lo descargamos y le cambiamos de a una cosa. <code class="cod-archivo">index.html</code> es la <strong>página</strong>; <code class="cod-archivo">app.js</code>, el <strong>programa</strong>: sus comentarios, en gris, explican cada paso.</p>
+          <div class="salida">
+            <p class="salida__tit">Salida esperada</p>
+            <p>Al tocar <span class="salida__boton">Consultar</span>:</p>
+            <p class="salida__dato">Compra: $1485 · Venta: $1535</p>
+            <p class="salida__nota">Los números cambian cada día.</p>
+          </div>
+        </div>
+      </div>
+      <div class="ventana-cod" role="group" aria-label="El archivo app.js del modelo">
+        <div class="ventana-cod__barra" aria-hidden="true">app.js</div>
+<pre class="ventana-cod__txt" data-modelo="app.js"><span class="t-com">// Busca en la página el botón y el párrafo, por su id</span>
+<b>const</b> boton = document.<span class="t-fun">getElementById</span>(<span class="t-str">"boton"</span>);
+<b>const</b> resultado = document.<span class="t-fun">getElementById</span>(<span class="t-str">"resultado"</span>);
+
+<span class="t-com">// Función que pide los datos a la API y los muestra</span>
+<b>async function</b> <span class="t-fun">consultarDolar</span>() {
+  <span class="t-com">// Le pide los datos a la API y espera la respuesta</span>
+  <b>const</b> respuesta = <b>await</b> <span class="t-fun">fetch</span>(<span class="t-str">"https://dolarapi.com/v1/dolares/oficial"</span>);
+  <span class="t-com">// Convierte la respuesta (JSON) en datos que JavaScript entiende</span>
+  <b>const</b> datos = <b>await</b> respuesta.<span class="t-fun">json</span>();
+  <span class="t-com">// Escribe en el párrafo la compra y la venta del dólar</span>
+  resultado.<span class="t-atr">textContent</span> = <span class="t-str">"Compra: $"</span> + datos.<span class="t-atr">compra</span> + <span class="t-str">" · Venta: $"</span> + datos.<span class="t-atr">venta</span>;
+}
+
+<span class="t-com">// Cuando se hace clic en el botón, se ejecuta la función</span>
+boton.<span class="t-fun">addEventListener</span>(<span class="t-str">"click"</span>, consultarDolar);</pre>
       </div>
     </section>
 
     <aside class="idea" aria-label="Idea clave">
       <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
-      <p><strong>Idea clave:</strong> la API responde en JSON: <code>fetch</code> pide, <code>respuesta.json()</code> convierte y <code>textContent</code> muestra el dato.</p>
+      <p><strong>Idea clave:</strong> para usar otra API, cambiamos la URL y los campos del modelo.</p>
     </aside>
 
     <footer class="pie">
@@ -560,7 +589,7 @@
           </div>
           <div class="pf__caja">
             <h4>Las API de este TP</h4>
-            <p>DolarAPI, Open-Meteo y PokéAPI responden <code>Access-Control-Allow-Origin: *</code>: dejan leer sus datos desde cualquier página. Si una API no lo permite, sus datos se piden desde un servidor, no desde el navegador.</p>
+            <p>DolarAPI y PokéAPI responden <code>Access-Control-Allow-Origin: *</code>: dejan leer sus datos desde cualquier página. Si una API no lo permite, sus datos se piden desde un servidor, no desde el navegador.</p>
           </div>
         </div>
       </section>
@@ -614,6 +643,62 @@
         </div>
       </section>
     </div>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 9</span>
+    </footer>
+  </article>
+
+  <!-- =================== PARA PROFUNDIZAR · Hoja 2 =================== -->
+  <article class="lamina lamina--pf lamina--arriba" id="profundizar-2" aria-labelledby="tpf2">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°9</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="tpf2"><span class="tit__num">+</span> Para profundizar</h2>
+      <p class="tit__sub">Para la práctica: dónde conseguir una API</p>
+    </div>
+
+    <section class="pf pf--api" aria-labelledby="pf-api">
+      <p class="pf__etiqueta">Láminas 27 y 29</p>
+      <h3 class="pf__titulo" id="pf-api">¿Dónde consigo una API?</h3>
+      <p>La lista <strong>public-apis</strong>, en GitHub (<code>github.com/public-apis/public-apis</code>), junta cientos de API públicas, ordenadas por tema. Para usar una desde una página, como el modelo de la lámina 29, conviene que en sus columnas diga:</p>
+      <ul class="pf__lista">
+        <li><strong>Auth: No.</strong> No pide clave ni registro.</li>
+        <li><strong>HTTPS: Yes.</strong> Viaja cifrada (TP7).</li>
+        <li><strong>CORS: Yes.</strong> Responde a páginas de otro dominio (Para profundizar de la lámina 27). Si dice <em>Unknown</em>, no se sabe: hay que probarla. PokéAPI figura así, y funciona.</li>
+      </ul>
+      <figure class="lista-apis">
+        <figcaption>Tres filas de la lista, tal como están en GitHub (en inglés):</figcaption>
+        <table>
+          <caption class="sr-only">Tres filas de la lista public-apis, con sus columnas API, Description, Auth, HTTPS y CORS</caption>
+          <thead><tr><th scope="col">API</th><th scope="col">Description</th><th scope="col">Auth</th><th scope="col">HTTPS</th><th scope="col">CORS</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Dogs</th><td>Based on the Stanford Dogs Dataset</td><td class="si">No</td><td class="si">Yes</td><td class="si">Yes</td></tr>
+            <tr><th scope="row">Pokéapi</th><td>Pokémon Information</td><td class="si">No</td><td class="si">Yes</td><td class="duda">Unknown</td></tr>
+            <tr><th scope="row">Cats</th><td>Pictures of cats from Tumblr</td><td class="no"><code>apiKey</code></td><td class="si">Yes</td><td class="no">No</td></tr>
+          </tbody>
+        </table>
+        <p class="lista-apis__nota">Dogs sirve para el modelo. Pokéapi hay que probarla. Cats pide clave y no tiene CORS: desde una página, no.</p>
+      </figure>
+      <div class="pf__cols">
+        <div class="pf__caja">
+          <h4>Datos de Argentina</h4>
+          <p><strong>datos.gob.ar</strong> es el portal de datos abiertos del Estado argentino. Algunos datos tienen API, como Georef (<code>apis.datos.gob.ar/georef</code>), con provincias, municipios y calles.</p>
+        </div>
+        <div class="nota nota--importante">
+          <h4><svg class="ico tit-ico" aria-hidden="true" focusable="false"><use href="#i-importante"/></svg>Nunca subas una clave a un repositorio público</h4>
+          <p>Muchas API piden una clave (<em>API key</em>) para saber quién las usa. Si queda en un repositorio público, como uno de GitHub, cualquiera puede verla y usarla a tu nombre.</p>
+        </div>
+      </div>
+    </section>
 
     <footer class="pie">
       <span class="pie__linea"></span>
@@ -689,19 +774,14 @@
 }</pre>
           </div>
           <ol class="act__items">
-            <li><b class="act__letra">a)</b><div>En este JSON, ¿dónde empieza y dónde termina el objeto? Indicá una clave, un valor de texto y un valor de número. ¿Por qué <code>1550</code> va sin comillas?</div></li>
-            <li><b class="act__letra">b)</b><div>Copiá la función de abajo, completá lo que falta y explicá cada paso de la receta.</div></li>
-            <li><b class="act__letra">c)</b><div>¿Qué muestra la página con este JSON?</div></li>
+            <li><b class="act__letra">a)</b><div>En este JSON, ¿qué valor tienen las claves <code>nombre</code> y <code>venta</code>? ¿Cuál es un texto y cuál un número? ¿Cómo te das cuenta?</div></li>
+            <li><b class="act__letra">b)</b><div>En el modelo de la lámina 29, ¿qué palabra va en el hueco de abajo para que la página muestre el dólar blue?</div></li>
+            <li><b class="act__letra">c)</b><div>Con este JSON, ¿qué muestra la página del modelo al tocar «Consultar»?</div></li>
           </ol>
         </div>
-        <div class="ventana-cod ventana-cod--act" role="group" aria-label="Función para completar: faltan cuatro palabras">
-          <div class="ventana-cod__barra" aria-hidden="true">JavaScript</div>
-<pre class="ventana-cod__txt"><span class="hueco"><span aria-hidden="true">______</span><span class="sr-only">(falta)</span></span> <b>function</b> <span class="t-fun">mostrarBlue</span>() {
-  <b>const</b> respuesta = <span class="hueco"><span aria-hidden="true">______</span><span class="sr-only">(falta)</span></span> <span class="t-fun">fetch</span>(<span class="t-str">"https://dolarapi.com/v1/dolares/blue"</span>);
-  <b>const</b> datos = <b>await</b> respuesta.<span class="hueco"><span aria-hidden="true">______</span><span class="sr-only">(falta)</span></span>();
-  <b>const</b> precio = document.<span class="t-fun">getElementById</span>(<span class="t-str">"precio"</span>);
-  precio.<span class="t-atr">textContent</span> = <span class="t-str">"Dólar "</span> + datos.<span class="t-atr">nombre</span> + <span class="t-str">": $"</span> + datos.<span class="hueco"><span aria-hidden="true">______</span><span class="sr-only">(falta)</span></span>;
-}</pre>
+        <div class="ventana-cod ventana-cod--act" role="group" aria-label="Una línea del modelo, con un hueco para completar">
+          <div class="ventana-cod__barra" aria-hidden="true">app.js</div>
+<pre class="ventana-cod__txt"><b>const</b> respuesta = <b>await</b> <span class="t-fun">fetch</span>(<span class="t-str">"https://dolarapi.com/v1/dolares/</span><span class="hueco"><span aria-hidden="true">______</span><span class="sr-only">(falta)</span></span><span class="t-str">"</span>);</pre>
         </div>
       </li>
     </ol>
@@ -787,39 +867,53 @@
       </div>
     </header>
 
-    <p class="consigna"><strong>Consigna:</strong> Armá una página en HTML + JavaScript que consuma al menos una API pública con <code>fetch()</code> y muestre los datos en la página. Seguí los pasos.</p>
+    <p class="consigna"><strong>Consigna:</strong> Vas a usar un modelo armado: una página que le pide el dólar a DolarAPI con <code>fetch</code>. No lo escribís desde cero: lo descargás, lo probás y le cambiás de a una cosa. Seguí los pasos.</p>
 
-    <ol class="acts">
-      <li class="act">
-        <h3 class="act__titulo"><span class="act__num">1-</span> Elegí la API</h3>
-        <ul class="apis" aria-label="Tres API públicas para elegir">
-          <li><strong>DolarAPI</strong><div><code class="cod-bloque">https://dolarapi.com/v1/dolares/oficial</code> También <code>/blue</code>, <code>/tarjeta</code>… Mostrá <code>nombre</code>, <code>compra</code> y <code>venta</code>.</div></li>
-          <li><strong>Open-Meteo</strong><div><code class="cod-bloque">https://api.open-meteo.com/v1/forecast<wbr>?latitude=-54.8<wbr>&amp;longitude=-68.3<wbr>&amp;current=temperature_2m</code> La temperatura actual está en <code>datos.current.temperature_2m</code>.</div></li>
-          <li><strong>PokéAPI</strong><div><code class="cod-bloque">https://pokeapi.co/api/v2/pokemon/pikachu</code> U otro nombre. El JSON es muy largo: mostrá solo algunos campos, como <code>name</code>, <code>height</code> (en decímetros) y <code>weight</code> (en hectogramos).</div></li>
-        </ul>
-        <ol class="act__items">
-          <li><b class="act__letra">a)</b><div>Abrí el endpoint en el navegador y mirá el JSON que llega. Elegí qué datos vas a mostrar.</div></li>
-        </ol>
-      </li>
-    </ol>
+    <p class="ir-sim">
+      <a class="boton boton--grande no-imprimir" href="../assets/descargas/api-dolar/api-dolar.zip" download><svg aria-hidden="true" focusable="false"><use href="#i-descarga"/></svg><span>Descargar el modelo</span><span class="sr-only"> (api-dolar.zip)</span></a>
+      <span class="solo-papel">Modelo para descargar: <b>prof-nkocussi.github.io/App-Web-Redes-1/assets/descargas/api-dolar/api-dolar.zip</b></span>
+    </p>
 
-    <ol class="acts acts--2col" start="2">
+    <ol class="acts acts--2col">
       <li class="act">
-        <h3 class="act__titulo"><span class="act__num">2-</span> Armá la página</h3>
+        <h3 class="act__titulo"><span class="act__num">1-</span> Mirá el JSON</h3>
         <ol class="act__items">
-          <li><b class="act__letra">a)</b><div>Creá una carpeta con un archivo <code class="cod-archivo">index.html</code>.</div></li>
-          <li><b class="act__letra">b)</b><div>Escribí el HTML: un título, un botón y un párrafo con un <code>id</code> para el dato.</div></li>
-          <li><b class="act__letra">c)</b><div>Debajo, en un <code>&lt;script&gt;</code>, escribí la función con la receta de la lámina 29: pedir, convertir y mostrar el dato con <code>textContent</code>.</div></li>
-          <li><b class="act__letra">d)</b><div>Mostrá al menos dos datos del JSON.</div></li>
+          <li><b class="act__letra">a)</b><div>Pegá en el navegador la URL de DolarAPI: <code class="cod-url">https://dolarapi.com/<wbr>v1/dolares/oficial</code></div></li>
+          <li><b class="act__letra">b)</b><div>Mirá el JSON que llega: buscá las claves <code>nombre</code>, <code>compra</code> y <code>venta</code>.</div></li>
         </ol>
       </li>
       <li class="act">
-        <h3 class="act__titulo"><span class="act__num">3-</span> Probala</h3>
+        <h3 class="act__titulo"><span class="act__num">2-</span> Probá el modelo</h3>
         <ol class="act__items">
-          <li><b class="act__letra">a)</b><div>Abrí <code class="cod-archivo">index.html</code> en el navegador, tocá el botón y comprobá que aparece el dato.</div></li>
-          <li><b class="act__letra">b)</b><div>Abrí <kbd>F12</kbd> › Red, tocá otra vez el botón y anotá el método y el código de respuesta.</div></li>
-          <li><b class="act__letra">c)</b><div>Cambiá el endpoint por un recurso que no exista (por ejemplo, <code>/v1/dolares/euro</code>) y anotá qué código llega.</div></li>
-          <li><b class="act__letra">d)</b><div>Si te sobra tiempo, sumá otro botón con otro endpoint o con otra API.</div></li>
+          <li><b class="act__letra">a)</b><div>Descargá la carpeta del modelo y descomprimila. Abrila en VS Code: tiene <code class="cod-archivo">index.html</code> y <code class="cod-archivo">app.js</code>.</div></li>
+          <li><b class="act__letra">b)</b><div>Abrí <code class="cod-archivo">index.html</code> con doble clic y tocá «Consultar»: aparece el dólar.</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">3-</span> Cambiá un campo</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>En <code class="cod-archivo">app.js</code>, cambiá <code>datos.venta</code> por otro campo del JSON; por ejemplo, <code>datos.nombre</code>.</div></li>
+          <li><b class="act__letra">b)</b><div>Guardá (<kbd>Ctrl</kbd> + <kbd>S</kbd>), recargá la página (<kbd>F5</kbd>) y tocá «Consultar»: mirá el cambio.</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">4-</span> Cambiá de API</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Cambiá la URL por la de PokéAPI: <code class="cod-url">https://pokeapi.co/<wbr>api/v2/pokemon/pikachu</code></div></li>
+          <li><b class="act__letra">b)</b><div>Cambiá los campos por <code>datos.name</code> y <code>datos.height</code>.</div></li>
+          <li><b class="act__letra">c)</b><div>Cambiá también el título de la página: el <code>&lt;h1&gt;</code> y el <code>&lt;title&gt;</code> de <code class="cod-archivo">index.html</code>.</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">5-</span> Otro Pokémon</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>En la URL, cambiá <code>pikachu</code> por otro Pokémon y probá. Si el nombre está mal escrito, aparece <code>undefined</code>: la API respondió 404.</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">6-</span> Un paso más <span class="act__opcional">(opcional)</span></h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Mostrá un dato más del JSON o dale estilo a la página con CSS.</div></li>
         </ol>
       </li>
     </ol>
@@ -827,8 +921,8 @@
     <section class="entrega" aria-labelledby="entrega9">
       <h3 class="entrega__tit" id="entrega9">Entrega</h3>
       <ul class="entrega__lista">
-        <li>La carpeta del proyecto comprimida en un <code class="cod-archivo">.zip</code>, por Classroom.</li>
-        <li>Un informe breve: qué endpoints se consumieron, qué métodos HTTP se usaron y cómo se procesó la respuesta.</li>
+        <li>La carpeta en un <code class="cod-archivo">.zip</code>, por Classroom.</li>
+        <li>Una captura de la página funcionando <span class="sin-corte">(<kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>)</span>.</li>
       </ul>
     </section>
 
