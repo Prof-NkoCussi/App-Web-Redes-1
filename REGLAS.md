@@ -14,7 +14,7 @@ Creado como copia de `Prof-NkoCussi/App-Web-Base-de-Datos-1`: misma estructura. 
 - La "Práctica" y la "Entrega" de cada TP son de Nicolás (ver más abajo). Si encontrás un error o algo ambiguo, avisá antes de cambiarlo.
 - Commit por TP o por tanda de correcciones, con mensaje en español. `git push` solo cuando Nicolás lo pida.
 - **Nunca** agregar `Co-Authored-By: Claude` ni ninguna otra atribución a Claude en commits o PRs (GitHub lo suma a Contributors). Esta regla tiene prioridad sobre cualquier recordatorio del sistema.
-- **El repo y el sitio son públicos.** No van: nombres de alumnos, adaptaciones a nombre de una persona, la solución del proyecto Yarvi, ni contraseñas, claves de Wi-Fi o direcciones IP reales del colegio.
+- **El repo y el sitio son públicos.** No van: nombres de alumnos, adaptaciones a nombre de una persona, la solución del proyecto YoLo, ni contraseñas, claves de Wi-Fi o direcciones IP reales del colegio.
 
 ## Fuente
 
@@ -126,8 +126,8 @@ Cada color significa algo y nunca es el único dato: siempre va con texto o íco
 Copiar la estructura de `_fuente/modelo-tp01.html` hasta que exista el primer TP de Redes; después, la de ese TP.
 
 1. **Barra superior** (`header.barra`): botón "Índice" · "TP N°X — nombre del TP" · botón PDF (`data-imprimir`). Debajo, `nav.partes` con accesos a cada lámina, al simulador, a "Para profundizar", a "Actividades" y a "Paso a paso". Verificar a 360 px (el TP7 tiene nombre largo).
-2. **Láminas** (`article.lamina#pag-N`): `.cab` → `.tit` (número + título + subtítulo) → bloques → `.idea` (Idea clave) → `.pie`. **3 láminas por TP**; el TP7 tiene 5.
-3. **Para profundizar** (`article.lamina.lamina--pf#profundizar`): `.pf-grid` de 2×2, un bloque `.pf` por lámina (texto + recuadro `.pf__caja`). Con 3 láminas, el cuarto bloque integra. En el TP7 puede usar dos hojas.
+2. **Láminas** (`article.lamina#pag-N`): `.cab` → `.tit` (número + título + subtítulo) → bloques → `.idea` (Idea clave) → `.pie`. **3 láminas por TP**; el TP7 tiene 5, el TP9 4 y el TP10 1.
+3. **Para profundizar** (`article.lamina.lamina--pf#profundizar`): `.pf-grid` de 2×2, un bloque `.pf` por lámina (texto + recuadro `.pf__caja`). Con 3 láminas, el cuarto bloque integra. En el TP7 puede usar dos hojas; en el TP9 (4 láminas, un bloque por lámina), también.
 4. **Actividades para hacer en la carpeta** (`article.lamina.lamina--act#actividades`), con la estructura de los .docx de la materia:
    - Secciones numeradas `N- Tema`, desde 1 en cada TP.
    - Incisos `a)`, `b)`, `c)` con la letra destacada.
@@ -167,9 +167,10 @@ El repo de origen no tiene nada interactivo. Lo que sigue se crea en el TP donde
   | 6 | Validador de rutas UNC |
   | 7 | Resolución DNS paso a paso |
   | 8 | (11/10) Sin simulador dentro de la página: se sacó el panel genérico porque la práctica se hace en el simulador del panel, una app aparte (ver abajo) |
-  | 9 | Petición real a una API pública, con su código de respuesta y su JSON |
+  | 9 | Petición real: un GET a DolarAPI, con la URL armada, su código de respuesta, su JSON y el dato mostrado en la página |
 
-- **Datos de ejemplo, iguales en todo el cuadernillo:** red `192.168.1.0/24`, puerta de enlace `192.168.1.1`, PC `192.168.1.25`, DNS `8.8.8.8`. IP públicas de ejemplo: rango `203.0.113.0/24`, reservado para documentación. Dominio de ejemplo: uno inventado, siempre el mismo. Los dominios reales van solo en la práctica de laboratorio, donde la salida la ve el alumno en su PC.
+- **Datos de ejemplo, iguales en todo el cuadernillo:** red `192.168.1.0/24`, puerta de enlace `192.168.1.1`, PC `192.168.1.25`, DNS `8.8.8.8`. IP públicas de ejemplo: rango `203.0.113.0/24`, reservado para documentación. Dominio de ejemplo: uno inventado, siempre el mismo (`redesdelaula.com`, que no existe). Los dominios reales van solo en la práctica de laboratorio, donde la salida la ve el alumno en su PC.
+  - **Excepción del TP9 (13/10):** las API públicas van con su dominio real (`dolarapi.com`, `api.open-meteo.com`, `pokeapi.co`). La API inventada de la biblioteca de la escuela usa un dominio inventado: `api.redesdelaula.com` (`/libros`, `/libros/12`).
 - **Captura anotada** (TP7): esquema SVG de una ventana de Wireshark (columnas No., Time, Source, Destination, Protocol, Info) con una consulta DNS y su respuesta, y un GET de HTTP con su `200 OK`, con flechas que explican cada fila. Solo DNS y HTTP; ARP queda afuera.
 - **Pantallas del router** (TP8): esquemas SVG simplificados del panel del TP-Link, no capturas ni fotos. Cada esquema muestra solo lo que hay que tocar, con el nombre exacto de la opción. Modelo: TP-Link TL-WR850N v3, con el panel en inglés: cada menú va en inglés, como en el panel, con la traducción al lado. Los datos salen de la guía oficial que pasó Nicolás y de las capturas del panel real; lo que no esté ahí lleva el marcador visible [VERIFICAR EN EL PANEL].
   - (10/10) El panel tiene tres pestañas: Quick Setup, Basic (lo más usado) y Advanced (todos los menús). Las rutas llevan la pestaña: `Advanced › Network › LAN Settings`. La traducción va sin la pestaña: (Red › Configuración de LAN).
@@ -178,7 +179,7 @@ El repo de origen no tiene nada interactivo. Lo que sigue se crea en el TP donde
   - Los pasos de «Práctica» (`assets/js/practica.js`) llevan las mismas palabras que las actividades en la compu del TP8: si se cambia una, se cambia la otra.
   - La entrega es solo la captura del resumen, que trae un código y muestra cada paso con ✓ (10/10: sin el `config.bin`).
   - Pantallas provisorias, armadas sin captura del router real: Backup & Restore, el formulario Add de Address Reservation, Administration y el formulario Add de Access Control. Se corrigen cuando Nicolás mande las capturas.
-- **Diagramas:** todos en SVG simple, con `role="img"` y texto alternativo: topologías, recorrido de un paquete, handshake, encapsulación, cliente-servidor, capas, arquitectura del Yarvi. Si hace falta una foto real (rack, patch panel), dejar un marcador visible: `[FOTO: qué mostrar]`.
+- **Diagramas:** todos en SVG simple, con `role="img"` y texto alternativo: topologías, recorrido de un paquete, handshake, encapsulación, cliente-servidor, capas, publicar/suscribirse de MQTT, arquitectura del YoLo. Si hace falta una foto real (rack, patch panel), dejar un marcador visible: `[FOTO: qué mostrar]`.
 - **Botón del mini-juego:** enlace a la app ya publicada (`https://prof-nkocussi.github.io/App-redes-games/`, repo `Prof-NkoCussi/App-redes-games`, un juego por carpeta `games/tpN/`). Confirmar la URL de cada juego en ese repo. Hoy hay juego de los TP1 a TP5. El botón va solo en los TPs que tienen juego. El cuadernillo linkea a la app: no se fusionan.
 - **Código JavaScript** (TP9 y TP10): `let` y `const`, `===`, punto y coma, comillas dobles, textos unidos con `+`. Las peticiones se escriben con `async function` y `await fetch()`, como receta fija; `.then()` solo se nombra en "Para profundizar". Al lado de cada ejemplo va escrita la salida esperada.
 
@@ -227,7 +228,7 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 
 ## Plan del cuadernillo
 
-11 TPs · 35 láminas · 2 unidades. El número de TP coincide con el orden de dictado.
+11 TPs · 34 láminas · 2 unidades. El número de TP coincide con el orden de dictado.
 
 | TP | Nombre | Láminas | Temas, una lámina por tema | Simulador |
 |---|---|---|---|---|
@@ -236,14 +237,14 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 | 2 | Clasificación de redes, componentes y diseño de una red escolar | 4–6 | PAN, LAN, MAN, WAN; pública y privada; Half-Duplex y Full-Duplex · componentes (switch, router, access point, patch panel, rack) · diseño de la red de la escuela | — |
 | 3 | Cableado 568A/568B y modelos OSI y TCP/IP | 7–9 | normas 568A y 568B, cable directo y cruzado · modelo OSI · TCP/IP y encapsulación | — |
 | 4 | Direccionamiento IPv4, subnetting e IPv6 | 10–12 | IPv4 (estático y dinámico, público y privado, clases) · subnetting · IPv6 | IP ↔ binario |
-| 5 | A confirmar (ver "Pendientes") | 13–15 | A confirmar | Tabla NAT |
+| 5 | Enrutamiento y NAT, PAT | 13–15 | enrutamiento (función del router, estático y dinámico) · NAT (agotamiento de IPv4 y objetivos) · tipos de NAT (estática, dinámica y PAT) | Tabla NAT |
 | 6 | Recursos compartidos en red | 16–18 | carpetas compartidas y permisos · rutas UNC · impresora compartida | Rutas UNC |
 | **Unidad 2 · Protocolos, seguridad y aplicaciones** | | | | |
 | 7 | Transporte y protocolos de aplicación | 19–23 | TCP y UDP, con el handshake de tres pasos · puertos · DNS y DHCP · HTTP y HTTPS · FTP, SSH y correo | DNS |
 | 8 | Configurando el router | 24–26 | la IP de la PC: `ipconfig` e IP fija en Windows · cómo funciona un router y cómo se entra · configurar el router: Wi-Fi, DHCP e IP fijas | Simulador del panel, app aparte |
-| 9 | APIs REST | 27–29 | cliente-servidor, recursos y endpoints · verbos HTTP y códigos de respuesta · JSON y `fetch` | Petición real |
-| 10 | Proyecto integrador Yarvi | 30–32 | arquitectura del sistema · MQTT · del botón al motor: endpoints y `fetch` | — |
-| 11 | Seguridad en redes (de soporte) | 33–35 | amenazas (sniffing, spoofing, Man-in-the-Middle, DoS) · firewall, DMZ y VPN · HTTPS, certificados y Wi-Fi (WPA2, WPA3, redes públicas) | — |
+| 9 | APIs REST y MQTT | 27–30 | cliente-servidor, recursos y endpoints · verbos HTTP y códigos de respuesta · JSON y `fetch` · MQTT: broker, publisher, subscriber y tópicos | Petición real |
+| 10 | Proyecto integrador YoLo | 31 | mapa del proyecto: navegador → servidor → broker MQTT → ESP32 → motores, el protocolo de cada tramo y el esquema de red. El resto es práctica en la compu (6 clases) | — |
+| 11 | Seguridad en redes (de soporte) | 32–34 | amenazas (sniffing, spoofing, Man-in-the-Middle, DoS) · firewall, DMZ y VPN · HTTPS, certificados y Wi-Fi (WPA2, WPA3, redes públicas) | — |
 
 ### Detalle de los TP7 a TP11 (texto nuevo)
 
@@ -265,26 +266,30 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - "Para profundizar": la IP 169.254 cuando no hay DHCP; `ifconfig` en Linux; la IP pública en el laboratorio y port forwarding; control de acceso; firmware, reiniciar y reset de fábrica.
 - `ping`, `tracert`, `nslookup` y `netstat` quedan para Redes II.
 
-**TP9 · APIs REST**
-- L27 **Cliente-servidor, recursos y endpoints:** qué es una API REST y cómo se arma la URL.
-- L28 **Verbos y códigos:** GET, POST, PUT y DELETE; códigos de respuesta aplicados a una API.
-- L29 **JSON y `fetch`:** sintaxis de JSON; pedir, convertir y mostrar. Por qué reemplazó a XML va en "Para profundizar".
-- Las API públicas solo dejan leer (GET). POST, PUT y DELETE se explican con ejemplos y se practican en el TP10.
+**TP9 · APIs REST y MQTT** (C, 13/10: antes "APIs REST", 3 láminas; MQTT sale del TP10 y entra acá)
+- L27 **Cliente-servidor y API REST:** cliente (acento) y servidor (naranja), como en el TP7; qué es una API REST, qué es un recurso y qué es un endpoint. Esquema de la URL en partes: `https://` + dominio + ruta del recurso + parámetros después del `?`, con la URL de Open-Meteo (clima de Ushuaia).
+- L28 **Verbos y códigos:** GET, POST, PUT y DELETE, cada uno con su acción. Códigos: se retoman 200, 404 y 500 del TP7 y se suman 201 y 400. Las API públicas solo dejan leer (GET): POST, PUT y DELETE se explican con la API inventada de la biblioteca de la escuela (`/libros`, `/libros/12`). No se usa la luz, que es el ejemplo del TP10.
+- L29 **JSON y `fetch`:** sintaxis de JSON (objeto, clave y valor, textos, números, `true`/`false` y listas) y la receta fija: `async function`, `await fetch()`, `await respuesta.json()` y mostrar el dato en la página. Al lado de cada ejemplo, la salida esperada.
+- L30 **MQTT:** qué es y para qué se usa (dispositivos como el ESP32); broker (Mosquitto, el del proyecto), publisher, subscriber y tópicos; puerto 1883. Cuadro HTTP vs MQTT: pedir/responder o publicar/suscribirse, conexión que se abre y se cierra o que queda abierta, mensaje pesado o liviano, cuándo conviene cada uno. Esquema SVG de publicar/suscribirse con el broker en el medio.
+- Simulador "Petición real", en una hoja propia después de las láminas: el alumno elige un endpoint de DolarAPI, toca "Enviar GET" y ve la URL armada, el código (200 en verde, 404 en rojo), el JSON que llegó y el dato mostrado en la página. El 404 de DolarAPI se muestra tal cual: "404, sin JSON". Sin Internet o si la API falla: aviso claro, y queda a la vista el ejemplo resuelto escrito en el HTML.
+- "Para profundizar", un bloque por lámina: CORS (por qué algunas API no responden desde el navegador), ver la petición con F12 › Red, por qué JSON reemplazó a XML y `.then()` solo nombrado, y un bloque de MQTT.
+- Sin mini-juego.
+- **API probadas** (13/10, desde la compu de Nicolás; falta la prueba en el colegio). Antes de escribir un ejemplo, se vuelve a pedir la API y se copia la respuesta real, sin inventar campos.
+  - **DolarAPI** (`https://dolarapi.com/v1/dolares/oficial`): 200, permite CORS, JSON de 6 campos (`moneda`, `casa`, `nombre`, `compra`, `venta`, `fechaActualizacion`). Un recurso inventado da 404 vacío, sin JSON. Va en el simulador y en los ejemplos.
+  - **Open-Meteo** (clima de Ushuaia): 200, sin clave, con parámetros `?latitude=…&longitude=…`. Va en el esquema de las partes de la URL de la lámina 27.
+  - **PokéAPI:** 200, pero el JSON pesa unos 300 KB; un nombre mal escrito da 404 con un JSON corto. Solo como opción de la práctica.
+  - **RestCountries:** contesta 301. No va.
 
-**TP10 · Proyecto integrador Yarvi**
-- L30 **Arquitectura:** navegador → servidor Node/Express → broker MQTT → ESP32 → motores, y el esquema de red con sus IP.
-- L31 **MQTT:** broker, publisher, subscriber y tópicos.
-- L32 **Del botón al motor:** qué hace un endpoint y qué hace el `fetch` de un botón.
-- **No se publica la solución.** Los alumnos completan los endpoints y los `fetch`: el cuadernillo explica la estructura con un ejemplo de otro sistema (por ejemplo, prender una luz), no con los comandos del robot.
-- Nombres de endpoints, tópicos y comandos: los del .docx del Yarvi y la plantilla. No inventar.
-- (C, 9/10) `ping`, explicado brevemente: lo justo para comprobar que el ESP32 y el servidor responden. Ya no se ve en el TP8.
-- El TP10 arranca con cada grupo configurando la red de su router, como lo practicó en el TP8.
+**TP10 · Proyecto integrador YoLo** (C, 13/10)
+- L31 **Mapa del proyecto:** la arquitectura navegador → servidor → broker MQTT → ESP32 → motores, qué protocolo va en cada tramo y el esquema de red.
+- El resto del TP10 es todo práctica: una guía de 6 clases en la computadora. Nicolás les da una app web muy básica, que los alumnos reestructuran y diseñan con CSS a su gusto. Además usan GitHub y README (articula con Software II), configuran en el router una red Wi-Fi fija para el robot y prueban las conexiones con `ping`.
+- **El cuadernillo no publica la solución.**
 
 **TP11 · Seguridad en redes**
-- L33 **Amenazas:** sniffing, spoofing, Man-in-the-Middle y DoS: cómo funciona cada una, qué daño causa y cómo se defiende.
-- L34 **Firewall, DMZ y VPN:** qué hace cada uno y en qué parte de la red se ubica.
-- L35 **HTTPS y Wi-Fi:** HTTP y HTTPS, certificados digitales; WPA2 y WPA3; riesgos de una red Wi-Fi pública.
-- Caso integrador: el propio Yarvi. ¿Qué le falta para ser seguro?
+- L32 **Amenazas:** sniffing, spoofing, Man-in-the-Middle y DoS: cómo funciona cada una, qué daño causa y cómo se defiende.
+- L33 **Firewall, DMZ y VPN:** qué hace cada uno y en qué parte de la red se ubica.
+- L34 **HTTPS y Wi-Fi:** HTTP y HTTPS, certificados digitales; WPA2 y WPA3; riesgos de una red Wi-Fi pública.
+- Caso integrador: el propio YoLo. ¿Qué le falta para ser seguro?
 
 ### TP1 a TP6: migración
 
@@ -301,20 +306,9 @@ El contenido ya está escrito y verificado. Fuente: las diapositivas de Gamma (e
   - HTTP: analizar una solicitud (método, URL, headers) y los códigos de estado 200, 301, 404 y 500.
   - Caso integrador: "Un alumno enciende su notebook, se conecta al Wi-Fi, abre el navegador, escribe una URL, navega, descarga un archivo y envía un email". Identificar qué protocolo de aplicación interviene en cada paso y en qué orden. Tabla con DNS, DHCP, HTTP, HTTPS, FTP, SSH y SMTP: función, puerto, si usa TCP o UDP y un ejemplo de uso. (C) La captura se lee del cuadernillo: identificar los protocolos presentes.
 - **TP8.** (C, 9/10) Carpeta: un punto por lámina, sin caso integrador (10/10: se sacó la planilla de configuración). Computadora, individual: configurar el router en el simulador del panel (10/10), como práctica para el proyecto final. Reset de fábrica si ya se usó; entrar al panel y crear la contraseña de administrador; SSID y clave con WPA/WPA2 Personal; ver el rango DHCP y los dispositivos; reservar una IP para la PC y comprobarla con `ipconfig`; poner una IP fija en Windows; copia de seguridad. Entrega por Classroom: la captura del resumen del simulador, con todos los pasos en ✓.
-- **TP9.** Carpeta: un punto por lámina y el caso integrador. Computadora: desarrollar en HTML + JavaScript una página que consuma al menos una API REST pública (clima, cotización del dólar, RestCountries o PokéAPI), con `fetch()`, procesando la respuesta JSON y mostrando los datos en el DOM. Entrega: carpeta en `.zip` por Classroom + informe breve (qué endpoints consumieron, qué métodos HTTP usaron y cómo procesaron la respuesta).
-- **TP10.** Proyecto grupal de 2 o 3 integrantes. El hardware lo provee el docente. (C) 6 clases, con un entregable por clase:
-
-  | Clase | Contenido | Entregable |
-  |---|---|---|
-  | 1 | Grupos, arquitectura, esquema de red. Entrega del kit y la plantilla | Esquema de red dibujado |
-  | 2 | Montaje y configuración de red (IP, broker, `ping` al ESP32) | ESP32 conectado a la LAN |
-  | 3 | Completar endpoints y `fetch`. Primera prueba de movimiento | Robot respondiendo a 2 comandos |
-  | 4 | Integración completa y corrección de errores | Los 5 comandos funcionando |
-  | 5 | Ajustes y documentación | Documentación lista |
-  | 6 | Defensa oral y entrega | Demo en vivo |
-
-  El docente entrega hecho: kit armado, servidor levantado, HTML y CSS con los botones, conexión MQTT y código del ESP32. (C) Los alumnos completan los endpoints del servidor, el `fetch` de cada botón y la configuración de IP del servidor y del broker. Además analizan MQTT y diagnostican con `ping` y `netstat`. Entrega: repositorio de GitHub con README actualizado (esquema de red, manual de uso, código) y defensa oral con el robot funcionando. (C) "Identificar vulnerabilidades" pasa al TP11.
-- **TP11.** Trabajo grupal: cada grupo toma una amenaza (sniffing, spoofing, Man-in-the-Middle, DoS) y explica cómo funciona, qué daño causa y qué defensas existen. Cuadro general de amenazas y contramedidas. Diagrama con la ubicación de firewall, DMZ y VPN. Diferencia entre HTTP y HTTPS y qué son los certificados digitales. WPA2, WPA3 y riesgos de las redes Wi-Fi públicas. (C) "Investigación" pasa a "explicación con el material". (C) Caso integrador sobre el Yarvi.
+- **TP9.** Carpeta: un punto por lámina (separar las partes de una URL, cuadro de verbos y códigos, leer un JSON y completar un `fetch`, cuadro HTTP vs MQTT) y el caso integrador: el recorrido botón → `fetch` → servidor → código → JSON → página, que cierra con el tramo siguiente: el servidor publica en MQTT y el ESP32 lo recibe. Sin cierre, como el TP8. Computadora: desarrollar en HTML + JavaScript una página que consuma al menos una API pública (C, 13/10: DolarAPI, PokéAPI mostrando solo algunos campos, u Open-Meteo; RestCountries sale porque contesta 301), con `fetch()`, procesando la respuesta JSON y mostrando los datos en la página, en pasos numerados. Entrega, con viñetas y sin casillas: carpeta en `.zip` por Classroom + informe breve (qué endpoints consumieron, qué métodos HTTP usaron y cómo procesaron la respuesta).
+- **TP10.** (C, 13/10) Una sola lámina, el mapa del proyecto. El resto del TP10 es todo práctica: una guía de 6 clases en la computadora. Nicolás les da una app web muy básica, que los alumnos reestructuran y diseñan con CSS a su gusto. Además usan GitHub y README (articula con Software II), configuran en el router una red Wi-Fi fija para el robot y prueban las conexiones con `ping`. El cuadernillo no publica la solución. La tabla de clases se rearma cuando se haga el TP10. (C) "Identificar vulnerabilidades" pasa al TP11.
+- **TP11.** Trabajo grupal: cada grupo toma una amenaza (sniffing, spoofing, Man-in-the-Middle, DoS) y explica cómo funciona, qué daño causa y qué defensas existen. Cuadro general de amenazas y contramedidas. Diagrama con la ubicación de firewall, DMZ y VPN. Diferencia entre HTTP y HTTPS y qué son los certificados digitales. WPA2, WPA3 y riesgos de las redes Wi-Fi públicas. (C) "Investigación" pasa a "explicación con el material". (C) Caso integrador sobre el YoLo.
 
 ## Orden de producción
 
@@ -322,7 +316,7 @@ TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primer
 
 ## Decisiones confirmadas (4/10)
 
-- 11 TPs: TP1 a TP6 sin cambios; TCP/UDP y protocolos de aplicación en un solo TP7 de 5 láminas; después Diagnóstico, APIs REST, Yarvi y, al final, Seguridad como soporte.
+- 11 TPs: TP1 a TP6 sin cambios; TCP/UDP y protocolos de aplicación en un solo TP7 de 5 láminas; después Diagnóstico, APIs REST, YoLo y, al final, Seguridad como soporte.
 - Paleta verde azulada, parecida a la de Base de Datos I y tirando a verde. A prueba hasta que Nicolás vea el index (5/10).
 - Portada con el formato de la de Programación y el nombre de la escuela (5/10).
 - 3 láminas por TP (5 en el TP7). Actividades en una hoja.
@@ -330,7 +324,7 @@ TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primer
 - Wireshark: captura anotada de DNS y HTTP en el TP7.
 - Panel del TP-Link en esquemas SVG.
 - Versión paso a paso por TP, abierta a todos y sin nombres.
-- Yarvi: los alumnos completan endpoints y `fetch`.
+- YoLo: los alumnos completan endpoints y `fetch` (13/10: reemplazado, ver abajo).
 
 ## Decisiones confirmadas (9/10)
 
@@ -339,12 +333,21 @@ TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primer
 - `ping`, `tracert`, `nslookup` y `netstat` quedan para Redes II; `ping` se explica brevemente en el TP10.
 - Las actividades no llevan cierre ("REALIZAR EN LA CARPETA." ni "Fecha límite").
 
+## Decisiones confirmadas (13/10)
+
+- TP9 pasa a "APIs REST y MQTT", con 4 láminas (27 a 30): MQTT sale del TP10 y entra acá.
+- TP10 · Proyecto integrador YoLo: 1 lámina (31), el mapa del proyecto. El resto es práctica en la compu, en 6 clases.
+- TP11 · Seguridad pasa a las láminas 32 a 34. Total: 34 láminas.
+- El robot del proyecto se llama **YoLo** (antes "Yarvi").
+- TP5: "Enrutamiento y NAT, PAT".
+- `netstat` sale del TP10: pasó a Redes II.
+- TP9: las API públicas van con su dominio real; la API inventada de la biblioteca, con un dominio inventado.
+
 ## Pendientes a consultar con Nicolás
 
-- **TP5:** el detalle dice "Subnetting VLSM/CIDR + NAT" y el contexto "Enrutamiento y NAT". Falta definir título y láminas.
-- **TP10:** la práctica dice "diagnostican con `ping` y `netstat`", pero `netstat` pasó a Redes II. ¿Se saca o se explica en el TP10?
-- **TP9:** qué API va en el simulador y en los ejemplos (dólar o PokéAPI). Hay que probarla desde el laboratorio y revisar la respuesta real antes de escribir el ejemplo.
-- **TP10:** copiar el .docx del Yarvi y el código de la plantilla en `_fuente/tp10/`.
+- **TP9:** probar desde el colegio DolarAPI (simulador y ejemplos), Open-Meteo y PokéAPI.
+- **TP9:** versión paso a paso (`tp09-pasos.html`), después de que Nicolás apruebe el texto. Solo conceptos, sin programar.
+- **TP10:** copiar el .docx del YoLo y el código de la plantilla en `_fuente/tp10/`.
 - **Paso a paso:** link del cuestionario de Google Forms de cada TP.
 - **Simulador del router:** capturas de Backup & Restore y del formulario Add de Address Reservation (y, si se puede, de Administration) para cambiar las pantallas provisorias.
 
