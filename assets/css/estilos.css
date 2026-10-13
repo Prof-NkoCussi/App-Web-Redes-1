@@ -1115,7 +1115,7 @@ a.tp:hover { border-color: var(--acento); }
 }
 
 /* ==========================================================
-   TP8: terminal, IP fija en Windows, router y simulador del router
+   TP9: terminal, IP fija en Windows, router y simulador del router
    ========================================================== */
 /* Teclas (Win + R) */
 kbd {
@@ -1332,7 +1332,7 @@ kbd {
 }
 
 /* ==========================================================
-   TP9: API REST, JSON, fetch y MQTT
+   TP8: API REST, JSON, fetch y MQTT
    ========================================================== */
 /* Código en su propio renglón (una URL larga dentro de un texto) */
 code.cod-bloque { display: block; width: fit-content; max-width: 100%; margin: 3px 0; }
@@ -1405,7 +1405,7 @@ code.cod-bloque { display: block; width: fit-content; max-width: 100%; margin: 3
 .salida .salida__dato { font-size: 17px; font-weight: 700; color: var(--tinta); white-space: nowrap; }
 .salida .salida__nota { font-size: 13.5px; color: var(--gris); }
 
-/* El modelo armado (lámina 29): index.html con su explicación al lado, y app.js abajo */
+/* El modelo armado (lámina 26): index.html con su explicación al lado, y app.js abajo */
 .modelo { display: grid; gap: 10px; align-items: start; margin: 8px 0; }
 .modelo .ventana-cod { min-width: 0; }
 .modelo__lado { display: grid; gap: 6px; align-content: start; }
@@ -1507,7 +1507,7 @@ code.cod-url { overflow-wrap: normal; }
   .tabla-verbos th, .tabla-verbos td { padding: 3px 8px; }
   .json-ej .ventana-cod__txt, .http-par .ventana-cod__txt { font-size: 12.5px; line-height: 1.45; padding: 6px 12px 8px; }
   .lamina--compacta .json-ej .ventana-cod__txt { font-size: 11.5px; line-height: 1.4; }
-  /* Láminas con mucho texto (TP9): letra un poco más chica que en .lamina--densa */
+  /* Láminas con mucho texto (TP8): letra un poco más chica que en .lamina--densa */
   .lamina--compacta .intro { padding: 10px 16px; }
   .lamina--compacta .intro p { font-size: 16px; line-height: 1.38; }
   .lamina--compacta .intro .ico--xl { width: 58px; height: 58px; }
@@ -1535,7 +1535,7 @@ code.cod-url { overflow-wrap: normal; }
   .lamina--sim, .lamina--arriba { justify-content: flex-start; }
   .lamina--sim > .pie, .lamina--arriba > .pie { margin-top: auto; }
   .lamina--compacta .texto { font-size: 15px; line-height: 1.4; }
-  /* Lámina con el modelo completo (TP9, lámina 29): todavía menos aire entre bloques */
+  /* Lámina con el modelo completo (TP8, lámina 26): todavía menos aire entre bloques */
   .lamina--apretada { gap: 2.5mm; }
   .lamina--apretada .panel { padding: 8px 12px 10px; }
   .lamina--apretada .panel__cab { margin-bottom: 6px; }

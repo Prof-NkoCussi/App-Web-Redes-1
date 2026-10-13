@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TP N°8 — Configurando el router · Redes I</title>
-  <meta name="description" content="TP N°8 de Redes I: la IP de la PC con ipconfig y la IP fija en Windows, cómo funciona un router y cómo configurarlo (Wi-Fi, DHCP e IP fijas), con un simulador del panel del router. Prof. Nicolás A. Cussi.">
+  <title>TP N°8 — APIs REST y MQTT · Redes I</title>
+  <meta name="description" content="TP N°8 de Redes I: cliente-servidor, recursos y endpoints de una API REST, verbos HTTP y códigos de respuesta, JSON y fetch, y MQTT, con una petición real a una API pública. Prof. Nicolás A. Cussi.">
   <meta name="theme-color" content="#26C9A1">
   <link rel="preload" href="../assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../assets/fonts/barlow-semi-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -33,11 +33,22 @@
       <path d="M24 12a10 10 0 0 0-6.2 17.8c1.4 1.2 2.2 2.6 2.2 4.2v1h8v-1c0-1.6.8-3 2.2-4.2A10 10 0 0 0 24 12z" style="fill:var(--ac)"/>
       <path d="M20 39h8M21.5 43h5"/>
     </symbol>
-    <!-- Ventana del Símbolo del sistema -->
-    <symbol id="i-terminal" viewBox="0 0 48 48">
-      <rect x="4" y="7" width="40" height="34" rx="4" style="fill:var(--blanco)"/>
-      <path d="M8 7h32a4 4 0 0 1 4 4v5H4v-5a4 4 0 0 1 4-4z" style="fill:var(--ac)"/>
-      <path d="M12 23l6 5-6 5M22 34h12"/>
+    <symbol id="i-servidor" viewBox="0 0 48 48">
+      <rect x="8" y="5" width="32" height="11" rx="2" style="fill:var(--blanco)"/>
+      <rect x="8" y="18.5" width="32" height="11" rx="2" style="fill:var(--blanco)"/>
+      <rect x="8" y="32" width="32" height="11" rx="2" style="fill:var(--blanco)"/>
+      <g style="fill:var(--ac);stroke:none"><circle cx="14" cy="10.5" r="2.2"/><circle cx="14" cy="24" r="2.2"/><circle cx="14" cy="37.5" r="2.2"/></g>
+      <path d="M22 10.5h12M22 24h12M22 37.5h12"/>
+    </symbol>
+    <!-- Placa: un microcontrolador como el ESP32 -->
+    <symbol id="i-chip" viewBox="0 0 48 48">
+      <rect x="11" y="11" width="26" height="26" rx="3" style="fill:var(--blanco)"/>
+      <rect x="17" y="17" width="14" height="14" rx="1.5" style="fill:var(--ac);stroke:none"/>
+      <path d="M18 4v7M24 4v7M30 4v7M18 37v7M24 37v7M30 37v7M4 18h7M4 24h7M4 30h7M37 18h7M37 24h7M37 30h7"/>
+    </symbol>
+    <symbol id="i-importante" viewBox="0 0 48 48">
+      <path d="M24 5 3 42h42z" style="fill:var(--ac)"/>
+      <path d="M24 18v12M24 35.5v.5" style="stroke:var(--blanco)"/>
     </symbol>
     <symbol id="i-pc" viewBox="0 0 48 48">
       <rect x="4" y="7" width="40" height="27" rx="3"/>
@@ -55,9 +66,6 @@
     <symbol id="i-atras" viewBox="0 0 24 24">
       <path d="M20 12H5M11 6l-6 6 6 6"/>
     </symbol>
-    <symbol id="i-afuera" viewBox="0 0 24 24">
-      <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>
-    </symbol>
   </defs>
 </svg>
 
@@ -66,15 +74,17 @@
 <header class="barra">
   <div class="barra__fila">
     <a class="boton barra__volver" href="../indice.html"><svg aria-hidden="true" focusable="false"><use href="#i-atras"/></svg><span>Índice</span></a>
-    <span class="barra__titulo">TP N°8 — Configurando el router</span>
+    <span class="barra__titulo">TP N°8 — APIs REST y MQTT</span>
     <button class="boton" type="button" data-imprimir aria-label="Guardar en PDF">
       <svg aria-hidden="true" focusable="false"><use href="#i-descarga"/></svg><span><span class="boton__largo">Guardar </span>PDF</span>
     </button>
   </div>
   <nav class="partes" aria-label="Partes del TP N°8">
-    <a href="#pag-24">24 · La IP de la PC</a>
-    <a href="#pag-25">25 · Cómo funciona un router</a>
-    <a href="#pag-26">26 · Configurar el router</a>
+    <a href="#pag-24">24 · Cliente-servidor y API REST</a>
+    <a href="#pag-25">25 · Verbos y códigos</a>
+    <a href="#pag-26">26 · JSON y fetch</a>
+    <a href="#pag-27">27 · MQTT</a>
+    <a href="#simulador">Petición real</a>
     <a href="#profundizar">Para profundizar</a>
     <a href="#actividades">Actividades</a>
     <a href="#actividades-2">En la compu</a>
@@ -82,10 +92,10 @@
 </header>
 
 <main id="contenido" class="laminas">
-  <h1 class="sr-only">TP N°8 — Configurando el router</h1>
+  <h1 class="sr-only">TP N°8 — APIs REST y MQTT</h1>
 
   <!-- =================== LÁMINA 24 =================== -->
-  <article class="lamina lamina--densa" id="pag-24" aria-labelledby="t24">
+  <article class="lamina lamina--densa lamina--compacta" id="pag-24" aria-labelledby="t24">
     <div class="cab" aria-hidden="true">
       <svg class="cab__logo"><use href="#i-red-solido"/></svg>
       <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
@@ -94,103 +104,75 @@
     </div>
 
     <div class="tit">
-      <h2 class="tit__h" id="t24"><span class="tit__num">24.</span> La IP de la PC</h2>
-      <p class="tit__sub">Verla con ipconfig y fijarla en Windows</p>
+      <h2 class="tit__h" id="t24"><span class="tit__num">24.</span> Cliente-servidor y API REST</h2>
+      <p class="tit__sub">Recursos, endpoints y las partes de una URL</p>
     </div>
 
-    <p class="texto texto--cmd"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-terminal"/></svg><span>Los comandos se escriben en el <strong>Símbolo del sistema</strong>: <kbd>Win</kbd> + <kbd>R</kbd>, <code class="cod-cmd">cmd</code> y <kbd>Enter</kbd>.</span></p>
+    <div class="intro">
+      <svg class="ico ico--xl" aria-hidden="true" focusable="false"><use href="#i-servidor"/></svg>
+      <p>Una <strong>API</strong> (interfaz de programación de aplicaciones) es la forma en que un programa le pide datos a otro: dice qué se puede pedir y cómo. Una <strong>API REST</strong> funciona sobre HTTP, como la web (TP7, lámina 22): el <strong>cliente</strong>, nuestra página en el navegador, envía una <strong>solicitud</strong> a una URL, y el <strong>servidor</strong> de la API devuelve una <strong>respuesta</strong> con un código y los datos.</p>
+    </div>
 
-    <section class="cmd" aria-labelledby="ipc24">
-      <div class="ventana-cod ventana-cod--terminal" role="group" aria-label="Salida del comando ipconfig">
-        <div class="ventana-cod__barra" aria-hidden="true">Símbolo del sistema</div>
-<pre class="ventana-cod__txt" tabindex="0"><span class="t-prompt">C:\Users\Alumno&gt;</span><span class="t-cmd">ipconfig</span>
-
-Configuración IP de Windows
-
-
-Adaptador de Ethernet Ethernet:
-
-   Sufijo DNS específico para la conexión. . :
-   Vínculo: dirección IPv6 local. . . : fe80::a1c:2b7e:91d3:6f5%7
-   Dirección IPv4. . . . . . . . . . . . . . : <span class="t-str">192.168.1.25</span>
-   Máscara de subred . . . . . . . . . . . . : <span class="t-str">255.255.255.0</span>
-   Puerta de enlace predeterminada . . . . . : <span class="t-str">192.168.1.1</span></pre>
-      </div>
-      <div class="cmd__texto">
-        <h3 class="subtitulo" id="ipc24">ipconfig: la configuración</h3>
-        <ul class="lista-txt pf__lista">
-          <li><strong>Dirección IPv4:</strong> la IP de la PC.</li>
-          <li><strong>Máscara de subred:</strong> qué parte de la IP es la red (TP4).</li>
-          <li><strong>Puerta de enlace predeterminada</strong> (<em>gateway</em>): la IP del router, la salida a otras redes e Internet.</li>
-        </ul>
-        <p><code class="cod-cmd">ipconfig /all</code> suma <strong>DHCP habilitado</strong> («sí» si la IP es dinámica) y la <strong>Dirección física</strong> o <strong>MAC</strong>: el número de fábrica de la placa de red.</p>
-      </div>
-    </section>
-
-    <ul class="comparar comparar--compacto">
-      <li class="grupo"><div><h3>IP dinámica</h3><p>La da el servidor DHCP del router al conectarse (TP7) y puede cambiar. Es lo común en celulares, notebooks y PC.</p></div></li>
-      <li class="grupo grupo--naranja"><div><h3>IP fija</h3><p>Es siempre la misma: se pone en el equipo o se reserva en el router (lámina 26). La necesita, por ejemplo, la impresora compartida del TP6.</p></div></li>
-    </ul>
-
-    <section class="panel" aria-labelledby="fija24">
-      <div class="panel__cab">
-        <h3 class="subtitulo" id="fija24">Poner una IP fija en Windows</h3>
-        <p class="panel__nota">Hace falta ser<br>administrador de la PC</p>
-      </div>
-      <div class="fija">
-        <div class="fija__pasos">
-          <ol class="lista-pasos" aria-label="Pasos para poner una IP fija">
-            <li class="grupo"><b>1</b><span><kbd>Win</kbd> + <kbd>R</kbd>, <code class="cod-cmd">ncpa.cpl</code> y <kbd>Enter</kbd>: se abre <strong>Conexiones de red</strong>.</span></li>
-            <li class="grupo"><b>2</b><span>Clic derecho en el adaptador (Ethernet o Wi-Fi) › <strong>Propiedades</strong>.</span></li>
-            <li class="grupo"><b>3</b><span>Doble clic en <strong>Protocolo de Internet versión 4 (TCP/IPv4)</strong>.</span></li>
-            <li class="grupo"><b>4</b><span><strong>Usar la siguiente dirección IP</strong>: la IP, la máscara, la puerta de enlace y el DNS. <strong>Aceptar</strong>.</span></li>
-          </ol>
-          <p class="fija__vuelta">Para volver a la dinámica: <strong>Obtener una dirección IP automáticamente</strong>.</p>
-        </div>
-        <figure class="esquema esquema--ventana">
-          <svg viewBox="0 0 300 268" role="img" aria-labelledby="dlg-t dlg-d">
-            <title id="dlg-t">Esquema de la ventana de propiedades de TCP/IPv4 con una IP fija</title>
-            <desc id="dlg-d">Ventana Propiedades de Protocolo de Internet versión 4 (TCP/IPv4), pestaña General. Está marcado Usar la siguiente dirección IP, con Dirección IP 192.168.1.5, Máscara de subred 255.255.255.0 y Puerta de enlace predeterminada 192.168.1.1. También está marcado Usar las siguientes direcciones de servidor DNS, con Servidor DNS preferido 8.8.8.8. Abajo, los botones Aceptar y Cancelar.</desc>
-            <rect class="dlg-ventana" x="1" y="1" width="298" height="266" rx="6"/>
-            <path class="dlg-barra" d="M7 1h286a6 6 0 0 1 6 6v15H1V7a6 6 0 0 1 6-6z"/>
-            <text class="dlg-titulo" x="9" y="15">Propiedades de Protocolo de Internet versión 4 (TCP/IPv4)</text>
-            <rect class="dlg-pestana" x="9" y="27" width="50" height="16" rx="2"/>
-            <text class="dlg-txt" x="18" y="39">General</text>
-            <rect class="dlg-marco" x="9" y="43" width="282" height="190"/>
-            <circle class="dlg-radio" cx="21" cy="58" r="4.5"/>
-            <text class="dlg-txt" x="31" y="61.5">Obtener una dirección IP automáticamente</text>
-            <circle class="dlg-radio dlg-radio--si" cx="21" cy="76" r="4.5"/><circle class="dlg-punto" cx="21" cy="76" r="2"/>
-            <text class="dlg-txt dlg-txt--si" x="31" y="79.5">Usar la siguiente dirección IP:</text>
-            <text class="dlg-txt" x="31" y="97.5">Dirección IP:</text>
-            <rect class="dlg-campo dlg-campo--si" x="190" y="87" width="94" height="15"/>
-            <text class="dlg-valor" x="195" y="98">192.168.1.5</text>
-            <text class="dlg-txt" x="31" y="115.5">Máscara de subred:</text>
-            <rect class="dlg-campo dlg-campo--si" x="190" y="105" width="94" height="15"/>
-            <text class="dlg-valor" x="195" y="116">255.255.255.0</text>
-            <text class="dlg-txt" x="31" y="133.5">Puerta de enlace predeterminada:</text>
-            <rect class="dlg-campo dlg-campo--si" x="190" y="123" width="94" height="15"/>
-            <text class="dlg-valor" x="195" y="134">192.168.1.1</text>
-            <circle class="dlg-radio" cx="21" cy="155" r="4.5"/>
-            <text class="dlg-txt" x="31" y="158.5">Obtener la dirección del servidor DNS automáticamente</text>
-            <circle class="dlg-radio dlg-radio--si" cx="21" cy="173" r="4.5"/><circle class="dlg-punto" cx="21" cy="173" r="2"/>
-            <text class="dlg-txt dlg-txt--si" x="31" y="176.5">Usar las siguientes direcciones de servidor DNS:</text>
-            <text class="dlg-txt" x="31" y="194.5">Servidor DNS preferido:</text>
-            <rect class="dlg-campo dlg-campo--si" x="190" y="184" width="94" height="15"/>
-            <text class="dlg-valor" x="195" y="195">8.8.8.8</text>
-            <text class="dlg-txt" x="31" y="212.5">Servidor DNS alternativo:</text>
-            <rect class="dlg-campo" x="190" y="202" width="94" height="15"/>
-            <rect class="dlg-boton" x="172" y="243" width="56" height="17" rx="2"/>
-            <text class="dlg-txt" x="200" y="255" text-anchor="middle">Aceptar</text>
-            <rect class="dlg-boton" x="234" y="243" width="56" height="17" rx="2"/>
-            <text class="dlg-txt" x="262" y="255" text-anchor="middle">Cancelar</text>
+    <div class="columnas columnas--api">
+        <figure class="esquema esquema--api">
+          <svg viewBox="0 0 420 186" role="img" aria-labelledby="cs-t cs-d">
+            <title id="cs-t">Cliente y servidor de una API REST</title>
+            <desc id="cs-d">A la izquierda, el cliente: nuestra página, en el navegador. A la derecha, el servidor dolarapi.com, con los endpoints de su API: /v1/dolares, /v1/dolares/oficial, /v1/dolares/blue y /v1/dolares/tarjeta. 1, el cliente envía la solicitud GET /v1/dolares/oficial. 2, el servidor devuelve la respuesta: 200 OK y los datos en JSON.</desc>
+            <rect class="esq-caja-pide" x="2" y="50" width="104" height="86" rx="8"/>
+            <text class="esq-rot" x="54" y="81" text-anchor="middle">Cliente</text>
+            <text class="esq-txt" x="54" y="101" text-anchor="middle">nuestra página,</text>
+            <text class="esq-txt" x="54" y="117" text-anchor="middle">en el navegador</text>
+            <rect class="esq-caja-responde" x="276" y="2" width="142" height="182" rx="8"/>
+            <text class="esq-rot" x="347" y="24" text-anchor="middle">Servidor</text>
+            <text class="esq-mono" x="347" y="41" text-anchor="middle">dolarapi.com</text>
+            <text class="esq-txt" x="347" y="62" text-anchor="middle">Endpoints de la API</text>
+            <rect class="esq-endpoint" x="284" y="70" width="126" height="22" rx="4"/>
+            <text class="esq-mono" x="291" y="85">/v1/dolares</text>
+            <rect class="esq-endpoint esq-endpoint--si" x="284" y="96" width="126" height="22" rx="4"/>
+            <text class="esq-mono" x="291" y="111">/v1/dolares/oficial</text>
+            <rect class="esq-endpoint" x="284" y="122" width="126" height="22" rx="4"/>
+            <text class="esq-mono" x="291" y="137">/v1/dolares/blue</text>
+            <rect class="esq-endpoint" x="284" y="148" width="126" height="22" rx="4"/>
+            <text class="esq-mono" x="291" y="163">/v1/dolares/tarjeta</text>
+            <path class="esq-pide" d="M108 80H262" style="stroke-width:3"/>
+            <path class="esq-pide" d="M273 80l-12-6.5v13z" style="stroke:none"/>
+            <text class="esq-rot" x="190" y="71" text-anchor="middle">1. Solicitud</text>
+            <text class="esq-mono" x="190" y="97" text-anchor="middle">GET /v1/dolares/oficial</text>
+            <path class="esq-responde" d="M274 128H119" style="stroke-width:3"/>
+            <path class="esq-responde" d="M108 128l12-6.5v13z" style="stroke:none"/>
+            <text class="esq-rot" x="190" y="119" text-anchor="middle">2. Respuesta</text>
+            <text class="esq-txt" x="190" y="146" text-anchor="middle">200 OK + datos en JSON</text>
           </svg>
         </figure>
+
+      <section class="panel" aria-labelledby="re24">
+        <div class="panel__cab"><h3 class="subtitulo" id="re24">Recurso y endpoint</h3></div>
+        <ul class="lista-txt pf__lista">
+          <li><strong>Recurso:</strong> cada cosa que ofrece la API: el dólar oficial, el clima de una ciudad, un libro de la biblioteca.</li>
+          <li><strong>Endpoint:</strong> la URL donde se pide un recurso, sin los parámetros. Cada recurso tiene la suya: el del dólar oficial es <code class="cod-bloque">https://dolarapi.com/v1/dolares/oficial</code></li>
+          <li><strong>Consumir una API:</strong> usarla desde un programa: pedirle un recurso y usar los datos que llegan.</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="panel" aria-labelledby="url24">
+      <div class="panel__cab">
+        <h3 class="subtitulo" id="url24">Las partes de una URL</h3>
+        <p class="panel__nota">Ejemplo: el clima de<br>Ushuaia, con Open-Meteo</p>
       </div>
+      <p class="url-completa"><code>https://api.open-meteo.com/v1/forecast?latitude=-54.8&amp;longitude=-68.3&amp;current=temperature_2m</code></p>
+      <ol class="url-partes" aria-label="Las partes de la URL">
+        <li><code>https://</code><h4>Protocolo</h4><p>HTTPS: viaja cifrado (TP7).</p></li>
+        <li><code>api.open-meteo.com</code><h4>Dominio</h4><p>El servidor de la API. DNS lo traduce en una IP (TP7).</p></li>
+        <li><code>/v1/forecast</code><h4>Ruta del recurso</h4><p>Qué pedimos: el pronóstico (<em>forecast</em>), en la versión 1 (<em>v1</em>) de la API.</p></li>
+        <li><code><span>?latitude=-54.8</span><span>&amp;longitude=-68.3</span><span>&amp;current=temperature_2m</span></code><h4>Parámetros</h4><p>Datos extra, después del <code>?</code>: cada uno es <code>clave=valor</code>, y se separan con <code>&amp;</code>. Acá: dónde queda Ushuaia y que mande la temperatura actual.</p></li>
+      </ol>
+      <p class="url-endpoint">El endpoint es la URL sin los parámetros: <code>https://api.open-meteo.com/v1/forecast</code>. Con otros parámetros, da el clima de otra ciudad.</p>
     </section>
 
     <aside class="idea" aria-label="Idea clave">
       <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
-      <p><strong>Idea clave:</strong> ipconfig muestra la IP de la PC. La IP fija la ponemos nosotros: de la misma red que el router, fuera del rango DHCP y sin repetir.</p>
+      <p><strong>Idea clave:</strong> una API REST ofrece recursos. Cada recurso se pide en su endpoint, con una URL: protocolo, dominio, ruta y, si hacen falta, parámetros.</p>
     </aside>
 
     <footer class="pie">
@@ -202,7 +184,7 @@ Adaptador de Ethernet Ethernet:
   </article>
 
   <!-- =================== LÁMINA 25 =================== -->
-  <article class="lamina lamina--densa" id="pag-25" aria-labelledby="t25">
+  <article class="lamina lamina--densa lamina--compacta lamina--apretada" id="pag-25" aria-labelledby="t25">
     <div class="cab" aria-hidden="true">
       <svg class="cab__logo"><use href="#i-red-solido"/></svg>
       <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
@@ -211,78 +193,68 @@ Adaptador de Ethernet Ethernet:
     </div>
 
     <div class="tit">
-      <h2 class="tit__h" id="t25"><span class="tit__num">25.</span> Cómo funciona un router</h2>
-      <p class="tit__sub">Qué hace y cómo se entra</p>
+      <h2 class="tit__h" id="t25"><span class="tit__num">25.</span> Verbos HTTP y códigos</h2>
+      <p class="tit__sub">Qué hacer con el recurso y cómo salió</p>
     </div>
 
-    <p class="texto">El router tiene dos lados: el de <strong>Internet</strong> (WAN), con la IP pública que le da el proveedor, y el de la <strong>red</strong> (LAN), con una IP privada, que es la puerta de enlace de todos los equipos.</p>
+    <p class="texto">En el TP7 (lámina 22) vimos que cada solicitud HTTP lleva un <strong>método</strong>, como GET. En una API REST, el método, también llamado <strong>verbo</strong>, dice qué hacer con el recurso; la URL dice cuál.</p>
 
-    <div class="router-funciones">
-      <figure class="esquema esquema--router">
-        <svg viewBox="0 0 400 236" role="img" aria-labelledby="rt-t rt-d">
-          <title id="rt-t">Los dos lados de un router</title>
-          <desc id="rt-d">A la izquierda, el lado Internet (WAN): la nube de Internet se une al router, que del lado Internet tiene la IP pública 203.0.113.45. A la derecha, el lado de la red (LAN): el router tiene la IP privada 192.168.1.1, que es la puerta de enlace. Con cable se conectan la PC, 192.168.1.25, y la impresora, 192.168.1.10. Por Wi-Fi se conectan la notebook, 192.168.1.26, y el celular, 192.168.1.27.</desc>
-          <text class="rd-lado rd-lado--wan" x="62" y="16" text-anchor="middle">Lado Internet (WAN)</text>
-          <text class="rd-lado rd-lado--lan" x="330" y="16" text-anchor="middle">Lado de la red (LAN)</text>
-          <path class="rd-nube" d="M14 132a20 20 0 0 1 6-39 26 26 0 0 1 49-9 19 19 0 0 1 29 17 16 16 0 0 1-3 31z"/>
-          <text class="esq-rot" x="55" y="120" text-anchor="middle">Internet</text>
-          <path class="rd-cable rd-cable--wan" d="M96 116h81"/>
-          <path class="rd-guia" d="M140 68v48"/>
-          <rect class="rd-etiqueta" x="96" y="34" width="88" height="34" rx="5"/>
-          <text class="rd-nombre" x="140" y="48" text-anchor="middle">IP pública</text>
-          <text class="rd-ip rd-ip--wan" x="140" y="62" text-anchor="middle">203.0.113.45</text>
-          <path class="rd-antena" d="M190 98V74M236 98V74"/>
-          <rect class="rd-caja" x="177" y="98" width="72" height="36" rx="6"/>
-          <text class="esq-rot" x="213" y="121" text-anchor="middle">Router</text>
-          <text class="rd-ip rd-ip--lan" x="213" y="160" text-anchor="middle">192.168.1.1</text>
-          <text class="esq-txt" x="213" y="173" text-anchor="middle">puerta de enlace</text>
-          <path class="rd-cable rd-cable--lan" d="M249 110c22 0 22-64 43-64M249 116c22 0 22-14 43-14"/>
-          <path class="rd-wifi" d="M258 128a14 14 0 0 1 0 14M264 123a22 22 0 0 1 0 24M270 118a30 30 0 0 1 0 34"/>
-          <rect class="rd-equipo" x="292" y="30" width="106" height="34" rx="5"/>
-          <text class="rd-nombre" x="300" y="44">PC · cable</text>
-          <text class="rd-ip rd-ip--lan" x="300" y="58">192.168.1.25</text>
-          <rect class="rd-equipo" x="292" y="86" width="106" height="34" rx="5"/>
-          <text class="rd-nombre" x="300" y="100">Impresora · cable</text>
-          <text class="rd-ip rd-ip--lan" x="300" y="114">192.168.1.10</text>
-          <rect class="rd-equipo" x="292" y="142" width="106" height="34" rx="5"/>
-          <text class="rd-nombre" x="300" y="156">Notebook · Wi-Fi</text>
-          <text class="rd-ip rd-ip--lan" x="300" y="170">192.168.1.26</text>
-          <rect class="rd-equipo" x="292" y="194" width="106" height="34" rx="5"/>
-          <text class="rd-nombre" x="300" y="208">Celular · Wi-Fi</text>
-          <text class="rd-ip rd-ip--lan" x="300" y="222">192.168.1.27</text>
-        </svg>
-      </figure>
+    <section class="panel" aria-labelledby="vb25">
+      <div class="panel__cab">
+        <h3 class="subtitulo" id="vb25">Los cuatro verbos</h3>
+        <p class="panel__nota">Ejemplo: la API de la biblioteca<br>de la escuela (inventada)</p>
+      </div>
+      <p class="texto">Las API públicas, como DolarAPI, <strong>solo dejan leer</strong> (<code>GET</code>): nadie de afuera puede crear, cambiar ni borrar sus datos. Para ver los cuatro verbos usamos una API inventada, la de la biblioteca de la escuela, en <code>https://api.redesdelaula.com</code>.</p>
+      <table class="tabla-puertos tabla-verbos">
+        <caption class="sr-only">Los cuatro verbos HTTP, su acción, un ejemplo con la API de la biblioteca y el código si sale bien</caption>
+        <thead><tr><th scope="col">Verbo</th><th scope="col">Acción</th><th scope="col">En la API de la biblioteca</th><th scope="col">Si sale bien</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">GET</th><td><strong>Leer</strong></td><td><code>GET /libros/12</code> trae el libro 12</td><td>200</td></tr>
+          <tr><th scope="row">POST</th><td><strong>Crear</strong></td><td><code>POST /libros</code> crea un libro con los datos enviados</td><td>201</td></tr>
+          <tr><th scope="row">PUT</th><td><strong>Modificar</strong></td><td><code>PUT /libros/12</code> cambia el libro 12 por los datos enviados</td><td>200</td></tr>
+          <tr><th scope="row">DELETE</th><td><strong>Borrar</strong></td><td><code>DELETE /libros/12</code> borra el libro 12</td><td>200</td></tr>
+        </tbody>
+      </table>
+      <p class="tabla-verbos__nota">En JavaScript, <code>fetch</code> (lámina 26) envía un GET si no se le indica otro verbo.</p>
+    </section>
 
-      <section class="panel" aria-labelledby="fn25">
-        <div class="panel__cab"><h3 class="subtitulo" id="fn25">Qué hace</h3></div>
-        <ul class="lista-pasos" aria-label="Funciones del router">
-          <li class="grupo"><b>1</b><span><strong>Enruta:</strong> une la red con Internet. Por eso es la puerta de enlace.</span></li>
-          <li class="grupo grupo--naranja"><b>2</b><span><strong>NAT</strong> (TP5): todos salen a Internet con la IP pública del router.</span></li>
-          <li class="grupo"><b>3</b><span><strong>DHCP</strong> (TP7): reparte las IP de la red.</span></li>
-          <li class="grupo"><b>4</b><span><strong>Wi-Fi:</strong> es el access point de la red inalámbrica (TP2).</span></li>
-          <li class="grupo"><b>5</b><span><strong>Switch:</strong> sus puertos LAN conectan equipos con cable (TP2).</span></li>
-        </ul>
-      </section>
-    </div>
+    <section class="http-par" aria-labelledby="hp25">
+      <h3 class="http__tit" id="hp25">Un POST, por dentro <span>· crear un libro</span></h3>
+      <div class="columnas">
+        <div class="ventana-cod" role="group" aria-label="La solicitud">
+          <div class="ventana-cod__barra" aria-hidden="true">HTTP · la solicitud</div>
+<pre class="ventana-cod__txt"><b>POST</b> <span class="t-str">/libros</span> HTTP/1.1
+<span class="t-atr">Host:</span> api.redesdelaula.com
+<span class="t-atr">Content-Type:</span> application/json
 
-    <ol class="ajustes" aria-label="Entrar al router">
-      <li class="ajuste-fila">
-        <div class="ajuste-fila__gen"><h3>Entrar al panel.</h3> <p>El router se configura desde el navegador: en la barra de direcciones escribimos su IP del lado de la red, que es la <strong>puerta de enlace</strong> que muestra <code class="cod-cmd">ipconfig</code>. Cada router tiene la suya; muchos usan <code class="cod-ip">192.168.1.1</code>.</p></div>
-        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><strong>TP-Link TL-WR850N v3:</strong> <code>http://tplinkwifi.net</code> o <code class="cod-ip">192.168.0.1</code>. Los menús están en inglés; al lado va su traducción.</p></div>
-      </li>
-      <li class="ajuste-fila">
-        <div class="ajuste-fila__gen"><h3>Contraseña de administrador.</h3> <p>Protege el panel: quien la sabe puede cambiar todo. Muchos routers traen una de fábrica (por ejemplo, <em>admin</em>), igual en todo el modelo y publicada en Internet: es lo primero que hay que cambiar. No es la clave del Wi-Fi.</p></div>
-        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p>El primer ingreso pide crearla. Después se cambia en <span class="menu">Advanced</span> › <span class="menu">System Tools</span> › <span class="menu">Administration</span> <span class="menu-trad">(Herramientas del sistema › Administración)</span>.</p></div>
-      </li>
-      <li class="ajuste-fila">
-        <div class="ajuste-fila__gen"><h3>La IP pública.</h3> <p>El panel muestra las dos IP del router: la del lado de la red, con la que entramos, y la del lado Internet.</p></div>
-        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Advanced</span> › <span class="menu">Status</span> <span class="menu-trad">(Estado)</span>: la IP del lado Internet.</p></div>
-      </li>
-    </ol>
+{"titulo": "Internet"}</pre>
+        </div>
+        <div class="ventana-cod" role="group" aria-label="La respuesta">
+          <div class="ventana-cod__barra" aria-hidden="true">HTTP · la respuesta</div>
+<pre class="ventana-cod__txt">HTTP/1.1 <span class="t-num">201</span> Created
+<span class="t-atr">Content-Type:</span> application/json
+
+{"id": 13, "titulo": "Internet"}</pre>
+        </div>
+      </div>
+      <p class="http__nota">Los datos van en el <strong>cuerpo</strong>, en JSON (lámina 26). Respuesta: <code>201</code>, creado con el número 13.</p>
+    </section>
+
+    <section aria-labelledby="cod25">
+      <h3 class="subtitulo" id="cod25">Códigos de respuesta</h3>
+      <p class="texto codigos__intro">Del TP7 retomamos 200, 404 y 500, y sumamos 201 y 400. El primer número dice cómo salió: <strong>2</strong>, bien; <strong>4</strong>, error en el pedido (del cliente); <strong>5</strong>, error del servidor.</p>
+      <ul class="codigos" aria-labelledby="cod25">
+        <li class="grupo grupo--ok"><b>200</b><strong>OK</strong><span>Salió bien.</span></li>
+        <li class="grupo grupo--ok"><b>201</b><strong>Created</strong><span>Se creó el recurso nuevo (POST).</span></li>
+        <li class="grupo grupo--error"><b>400</b><strong>Bad Request</strong><span>Pedido mal armado: un POST sin título.</span></li>
+        <li class="grupo grupo--error"><b>404</b><strong>Not Found</strong><span>No existe ese recurso: <code>/libros/999</code>.</span></li>
+        <li class="grupo grupo--error"><b>500</b><strong>Internal Server Error</strong><span>Falló el servidor.</span></li>
+      </ul>
+    </section>
 
     <aside class="idea" aria-label="Idea clave">
       <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
-      <p><strong>Idea clave:</strong> el router une la red con Internet y la organiza. Se configura desde el navegador, con la IP de la puerta de enlace; lo primero es cambiar la contraseña de administrador.</p>
+      <p><strong>Idea clave:</strong> la URL dice qué recurso; el verbo, qué hacer: GET lee, POST crea, PUT modifica y DELETE borra. El código de respuesta dice cómo salió.</p>
     </aside>
 
     <footer class="pie">
@@ -294,7 +266,7 @@ Adaptador de Ethernet Ethernet:
   </article>
 
   <!-- =================== LÁMINA 26 =================== -->
-  <article class="lamina lamina--densa" id="pag-26" aria-labelledby="t26">
+  <article class="lamina lamina--densa lamina--compacta lamina--apretada" id="pag-26" aria-labelledby="t26">
     <div class="cab" aria-hidden="true">
       <svg class="cab__logo"><use href="#i-red-solido"/></svg>
       <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
@@ -302,116 +274,97 @@ Adaptador de Ethernet Ethernet:
       <span class="cab__raya"></span>
     </div>
 
-    <div class="router-cab">
-      <div class="tit">
-        <h2 class="tit__h tit__h--largo" id="t26"><span class="tit__num">26.</span> Configurar el router</h2>
-        <p class="tit__sub">Wi-Fi, DHCP e IP fijas</p>
-      </div>
-      <div class="router-plan">
-        <p>En el panel del laboratorio, <span class="menu">Advanced</span> › <span class="menu">Wireless</span> quiere decir: abrir la pestaña Advanced <span class="menu-trad">(avanzado)</span>, que tiene todos los menús, y elegir Wireless. La pestaña <span class="menu">Basic</span> <span class="menu-trad">(básico)</span> trae solo los más usados.</p>
-        <figure class="esquema esquema--plan">
-          <svg viewBox="0 0 380 74" role="img" aria-labelledby="plan-t plan-d">
-            <title id="plan-t">Plan de ejemplo para repartir las IP de la red 192.168.1.0</title>
-            <desc id="plan-d">La IP terminada en 1 es del router. De la 2 a la 24, IP fijas. De la 25 a la 199, el rango DHCP. De la 200 a la 254, libres.</desc>
-            <text class="plan-rot" x="17" y="12" text-anchor="middle">Router</text>
-            <text class="plan-rot" x="67" y="12" text-anchor="middle">IP fijas</text>
-            <text class="plan-rot" x="211" y="12" text-anchor="middle">Rango DHCP</text>
-            <text class="plan-rot" x="345" y="12" text-anchor="middle">Libres</text>
-            <rect class="plan-router" x="1" y="18" width="32" height="26" rx="4"/>
-            <rect class="plan-fijas" x="36" y="18" width="62" height="26" rx="4"/>
-            <rect class="plan-dhcp" x="101" y="18" width="220" height="26" rx="4"/>
-            <rect class="plan-libres" x="324" y="18" width="55" height="26" rx="4"/>
-            <text class="plan-num" x="17" y="62" text-anchor="middle">.1</text>
-            <text class="plan-num" x="67" y="62" text-anchor="middle">.2 a .24</text>
-            <text class="plan-num" x="211" y="62" text-anchor="middle">.25 a .199</text>
-            <text class="plan-num" x="379" y="62" text-anchor="end">.200 a .254</text>
-          </svg>
-          <figcaption>Un plan de ejemplo para la red 192.168.1.0: cada equipo con IP fija va fuera del rango DHCP.</figcaption>
-        </figure>
-      </div>
-
-      <figure class="mapa-panel">
-        <svg viewBox="0 0 344 356" role="img" aria-labelledby="mp-t mp-d">
-          <title id="mp-t">Esquema del panel del TP-Link TL-WR850N v3</title>
-          <desc id="mp-d">Ventana del navegador con la dirección tplinkwifi.net. Arriba, las pestañas Quick Setup, Basic y Advanced. En Basic: Network Map (Mapa de red), opción 2. En Advanced: Network (Red), con LAN Settings (Configuración de LAN), opción 2, y dentro Address Reservation (Reserva de direcciones), opción 3; Wireless (Inalámbrico), con Wireless Settings (Configuración inalámbrica), opción 1; System Tools (Herramientas del sistema), con Backup &amp; Restore (Copia de seguridad y restauración), opción 4. Con un signo más, las que están en la lámina 25 o en Para profundizar: Status (Estado), NAT Forwarding › Virtual Servers (Servidores virtuales), Security › Access Control (Control de acceso), y en System Tools: Administration, Firmware Upgrade y Reboot.</desc>
-          <rect class="mp-ventana" x="1" y="1" width="342" height="354" rx="8"/>
-          <path class="mp-barra" d="M9 1h326a8 8 0 0 1 8 8v19H1V9a8 8 0 0 1 8-8z"/>
-          <circle class="mp-punto mp-punto--1" cx="13" cy="14.5" r="3.5"/>
-          <circle class="mp-punto mp-punto--2" cx="24" cy="14.5" r="3.5"/>
-          <circle class="mp-punto mp-punto--3" cx="35" cy="14.5" r="3.5"/>
-          <rect class="mp-dir" x="48" y="6" width="200" height="17" rx="8.5"/>
-          <text class="mp-url" x="58" y="18.5">tplinkwifi.net</text>
-          <path class="mp-pestanas" d="M1 28h342v22H1z"/>
-          <text class="mp-pestana" x="40" y="43" text-anchor="middle">Quick Setup</text>
-          <rect class="mp-pestana-activa" x="86" y="31" width="70" height="19" rx="3"/>
-          <text class="mp-pestana mp-pestana--activa" x="121" y="43" text-anchor="middle">Basic</text>
-          <rect class="mp-pestana-activa" x="160" y="31" width="80" height="19" rx="3"/>
-          <text class="mp-pestana mp-pestana--activa" x="200" y="43" text-anchor="middle">Advanced</text>
-          <text class="mp-grupo" x="28" y="66">Basic <tspan class="mp-es">· Básico</tspan></text>
-          <circle class="mp-n" cx="15" cy="76" r="6.5"/><text class="mp-n-txt" x="15" y="79.5">2</text>
-          <text x="28" y="80"><tspan class="mp-en">Network Map</tspan><tspan class="mp-es" dx="6">Mapa de red</tspan></text>
-          <text class="mp-grupo" x="28" y="100">Advanced <tspan class="mp-es">· Avanzado</tspan></text>
-          <circle class="mp-n mp-n--otra" cx="15" cy="110" r="6.5"/><text class="mp-n-txt" x="15" y="113.5">+</text>
-          <text x="28" y="114"><tspan class="mp-en">Status</tspan><tspan class="mp-es" dx="6">Estado</tspan></text>
-          <text x="28" y="130"><tspan class="mp-en">Network</tspan><tspan class="mp-es" dx="6">Red</tspan></text>
-          <circle class="mp-n" cx="15" cy="142" r="6.5"/><text class="mp-n-txt" x="15" y="145.5">2</text>
-          <path class="mp-rama" d="M32 134V142h8"/>
-          <text x="44" y="146"><tspan class="mp-sub">LAN Settings</tspan><tspan class="mp-es" dx="6">Configuración de LAN</tspan></text>
-          <circle class="mp-n" cx="15" cy="158" r="6.5"/><text class="mp-n-txt" x="15" y="161.5">3</text>
-          <path class="mp-rama" d="M48 150V158h8"/>
-          <text x="60" y="162"><tspan class="mp-sub">Address Reservation</tspan><tspan class="mp-es" dx="6">Reserva de direcciones</tspan></text>
-          <text x="28" y="178"><tspan class="mp-en">Wireless</tspan><tspan class="mp-es" dx="6">Inalámbrico</tspan></text>
-          <circle class="mp-n" cx="15" cy="190" r="6.5"/><text class="mp-n-txt" x="15" y="193.5">1</text>
-          <path class="mp-rama" d="M32 182V190h8"/>
-          <text x="44" y="194"><tspan class="mp-sub">Wireless Settings</tspan><tspan class="mp-es" dx="6">Configuración inalámbrica</tspan></text>
-          <text x="28" y="210"><tspan class="mp-en">NAT Forwarding</tspan><tspan class="mp-es" dx="6">Reenvío NAT</tspan></text>
-          <circle class="mp-n mp-n--otra" cx="15" cy="222" r="6.5"/><text class="mp-n-txt" x="15" y="225.5">+</text>
-          <path class="mp-rama" d="M32 214V222h8"/>
-          <text x="44" y="226"><tspan class="mp-sub">Virtual Servers</tspan><tspan class="mp-es" dx="6">Servidores virtuales</tspan></text>
-          <text x="28" y="242"><tspan class="mp-en">Security</tspan><tspan class="mp-es" dx="6">Seguridad</tspan></text>
-          <circle class="mp-n mp-n--otra" cx="15" cy="254" r="6.5"/><text class="mp-n-txt" x="15" y="257.5">+</text>
-          <path class="mp-rama" d="M32 246V254h8"/>
-          <text x="44" y="258"><tspan class="mp-sub">Access Control</tspan><tspan class="mp-es" dx="6">Control de acceso</tspan></text>
-          <text x="28" y="274"><tspan class="mp-en">System Tools</tspan><tspan class="mp-es" dx="6">Herramientas del sistema</tspan></text>
-          <circle class="mp-n mp-n--otra" cx="15" cy="286" r="6.5"/><text class="mp-n-txt" x="15" y="289.5">+</text>
-          <path class="mp-rama" d="M32 278V286h8"/>
-          <text x="44" y="290"><tspan class="mp-sub">Administration</tspan><tspan class="mp-es" dx="6">Administración</tspan></text>
-          <circle class="mp-n mp-n--otra" cx="15" cy="302" r="6.5"/><text class="mp-n-txt" x="15" y="305.5">+</text>
-          <path class="mp-rama" d="M32 294V302h8"/>
-          <text x="44" y="306"><tspan class="mp-sub">Firmware Upgrade</tspan><tspan class="mp-es" dx="6">Actualización de firmware</tspan></text>
-          <circle class="mp-n" cx="15" cy="318" r="6.5"/><text class="mp-n-txt" x="15" y="321.5">4</text>
-          <path class="mp-rama" d="M32 310V318h8"/>
-          <text x="44" y="322"><tspan class="mp-sub">Backup &amp; Restore</tspan><tspan class="mp-es" dx="6">Copia de seguridad y restauración</tspan></text>
-          <circle class="mp-n mp-n--otra" cx="15" cy="334" r="6.5"/><text class="mp-n-txt" x="15" y="337.5">+</text>
-          <path class="mp-rama" d="M32 326V334h8"/>
-          <text x="44" y="338"><tspan class="mp-sub">Reboot</tspan><tspan class="mp-es" dx="6">Reiniciar</tspan></text>
-        </svg>
-        <figcaption>Esquema simplificado del panel. Del 1 al 4: las opciones de esta lámina; +: en la lámina 25 o en «Para profundizar».</figcaption>
-      </figure>
+    <div class="tit">
+      <h2 class="tit__h" id="t26"><span class="tit__num">26.</span> JSON y fetch</h2>
+      <p class="tit__sub">Pedir los datos, convertirlos y mostrarlos</p>
     </div>
 
-    <ol class="ajustes" aria-label="Opciones del router">
-      <li class="ajuste-fila">
-        <div class="ajuste-fila__gen"><h3><b class="ajuste__n" aria-hidden="true">1</b>Nombre y clave del Wi-Fi.</h3> <p>El <strong>SSID</strong> es el nombre de la red (hasta 32 caracteres). La clave la protege y cifra lo que viaja; con WPA2 lleva de 8 a 63 caracteres. <strong>WPA2</strong> es lo mínimo; <strong>WPA3</strong>, la versión más nueva, hace mucho más difícil adivinar la clave.</p></div>
-        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Advanced</span> › <span class="menu">Wireless</span> › <span class="menu">Wireless Settings</span> <span class="menu-trad">(Inalámbrico › Configuración inalámbrica)</span>. Seguridad: <span class="menu">WPA/WPA2 Personal</span>, la recomendada. Este modelo no tiene WPA3.</p></div>
-      </li>
-      <li class="ajuste-fila">
-        <div class="ajuste-fila__gen"><h3><b class="ajuste__n" aria-hidden="true">2</b>DHCP y dispositivos.</h3> <p>El <strong>rango DHCP</strong> dice desde qué IP hasta qué IP reparte el router. La lista de dispositivos conectados (tabla DHCP) muestra quién está en la red y con qué IP.</p></div>
-        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Advanced</span> › <span class="menu">Network</span> › <span class="menu">LAN Settings</span> <span class="menu-trad">(Red › Configuración de LAN)</span>: de <code class="cod-ip">192.168.0.100</code> a <code class="cod-ip">192.168.0.199</code>. Dispositivos: <span class="menu">Client List</span> <span class="menu-trad">(lista de clientes)</span>, en la misma página, o <span class="menu">Basic</span> › <span class="menu">Network Map</span> <span class="menu-trad">(Mapa de red)</span>.</p></div>
-      </li>
-      <li class="ajuste-fila">
-        <div class="ajuste-fila__gen"><h3><b class="ajuste__n" aria-hidden="true">3</b>IP fijas: la reserva.</h3> <p>La <strong>reserva de IP</strong> le da siempre la misma IP a un equipo, según su MAC (la Dirección física de <code class="cod-cmd">ipconfig /all</code>), que no cambia aunque cambie la IP. Para comprobarla en la PC: <code class="cod-cmd">ipconfig /release</code> suelta la IP e <code class="cod-cmd">ipconfig /renew</code> pide otra.</p></div>
-        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p>En <span class="menu">LAN Settings</span>, más abajo: <span class="menu">Address Reservation</span> <span class="menu-trad">(Reserva de direcciones)</span>.</p></div>
-      </li>
-      <li class="ajuste-fila">
-        <div class="ajuste-fila__gen"><h3><b class="ajuste__n" aria-hidden="true">4</b>Copia de seguridad.</h3> <p>Guarda toda la configuración en un archivo; <strong>restaurar</strong> la vuelve a cargar. Conviene hacerla al terminar de configurar.</p></div>
-        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Advanced</span> › <span class="menu">System Tools</span> › <span class="menu">Backup &amp; Restore</span> <span class="menu-trad">(Herramientas del sistema › Copia de seguridad y restauración)</span>.</p></div>
-      </li>
-    </ol>
+    <section class="panel" aria-labelledby="js26">
+      <div class="panel__cab"><h3 class="subtitulo" id="js26">Leer un JSON, el formato de las API</h3></div>
+      <div class="json-ej">
+        <div class="json-ej__izq">
+        <div class="ventana-cod" role="group" aria-label="JSON de ejemplo: el libro 12">
+          <div class="ventana-cod__barra" aria-hidden="true">JSON · GET /libros/12</div>
+<pre class="ventana-cod__txt">{
+  <span class="t-atr">"id"</span>: <span class="t-num">12</span>,
+  <span class="t-atr">"titulo"</span>: <span class="t-str">"Manual de redes"</span>,
+  <span class="t-atr">"paginas"</span>: <span class="t-num">120</span>,
+  <span class="t-atr">"prestado"</span>: <b>true</b>,
+  <span class="t-atr">"temas"</span>: [<span class="t-str">"cables"</span>, <span class="t-str">"wifi"</span>]
+}</pre>
+        </div>
+        </div>
+        <div class="lectura">
+          <p class="lectura__tit">Un <strong>objeto</strong> va entre llaves <code>{ }</code>, con pares <strong>clave: valor</strong> separados por comas; la <strong>clave</strong> es el nombre del dato. Se lee así:</p>
+          <ul>
+            <li><code>datos.titulo</code><span class="lectura__flecha" aria-hidden="true">→</span><span class="sr-only">: </span><samp>Manual de redes</samp><span class="lectura__tipo"><strong>texto</strong>, entre comillas</span></li>
+            <li><code>datos.paginas</code><span class="lectura__flecha" aria-hidden="true">→</span><span class="sr-only">: </span><samp>120</samp><span class="lectura__tipo"><strong>número</strong>, sin comillas</span></li>
+            <li><code>datos.prestado</code><span class="lectura__flecha" aria-hidden="true">→</span><span class="sr-only">: </span><samp>true</samp><span class="lectura__tipo"><strong>true</strong> o <strong>false</strong>, sin comillas</span></li>
+            <li><code>datos.temas[0]</code><span class="lectura__flecha" aria-hidden="true">→</span><span class="sr-only">: </span><samp>cables</samp><span class="lectura__tipo"><strong>lista</strong>, entre <code>[ ]</code>; se cuenta desde 0</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="fe26">
+      <div class="panel__cab">
+        <h3 class="subtitulo" id="fe26">La receta: un modelo armado</h3>
+        <a class="boton no-imprimir" href="../assets/descargas/api-dolar/api-dolar.zip" download><svg aria-hidden="true" focusable="false"><use href="#i-descarga"/></svg><span>Descargar el modelo</span><span class="sr-only"> (api-dolar.zip)</span></a>
+        <p class="panel__nota panel__nota--papel">Se descarga desde<br>el cuadernillo web</p>
+      </div>
+      <div class="modelo">
+        <div class="ventana-cod" role="group" aria-label="El archivo index.html del modelo">
+          <div class="ventana-cod__barra" aria-hidden="true">index.html</div>
+<pre class="ventana-cod__txt" data-modelo="index.html">&lt;!<b>DOCTYPE</b> html&gt;
+&lt;<b>html</b> <span class="t-atr">lang</span>=<span class="t-str">"es"</span>&gt;
+&lt;<b>head</b>&gt;
+  &lt;<b>meta</b> <span class="t-atr">charset</span>=<span class="t-str">"utf-8"</span>&gt;
+  &lt;<b>title</b>&gt;Dólar oficial&lt;/<b>title</b>&gt;
+&lt;/<b>head</b>&gt;
+&lt;<b>body</b>&gt;
+  &lt;<b>h1</b>&gt;Dólar oficial&lt;/<b>h1</b>&gt;
+  &lt;<b>button</b> <span class="t-atr">id</span>=<span class="t-str">"boton"</span>&gt;Consultar&lt;/<b>button</b>&gt;
+  &lt;<b>p</b> <span class="t-atr">id</span>=<span class="t-str">"resultado"</span>&gt;Tocá el botón para ver la cotización.&lt;/<b>p</b>&gt;
+
+  &lt;<b>script</b> <span class="t-atr">src</span>=<span class="t-str">"app.js"</span>&gt;&lt;/<b>script</b>&gt;
+&lt;/<b>body</b>&gt;
+&lt;/<b>html</b>&gt;</pre>
+        </div>
+        <div class="modelo__lado">
+          <p class="modelo__def"><strong><code>fetch()</code></strong> solicita y recupera datos: hace una petición HTTP a un servidor y obtiene un recurso, como un JSON.</p>
+          <p><code class="cod-archivo">index.html</code> es la <strong>página</strong>; <code class="cod-archivo">app.js</code>, el <strong>programa</strong>: sus comentarios, en gris, explican cada paso.</p>
+          <div class="salida">
+            <p class="salida__tit">Salida esperada</p>
+            <p>Al tocar <span class="salida__boton">Consultar</span>:</p>
+            <p class="salida__dato">Compra: $1485 · Venta: $1535</p>
+            <p class="salida__nota">Los números cambian cada día.</p>
+          </div>
+        </div>
+      </div>
+      <div class="ventana-cod" role="group" aria-label="El archivo app.js del modelo">
+        <div class="ventana-cod__barra" aria-hidden="true">app.js</div>
+<pre class="ventana-cod__txt" data-modelo="app.js"><span class="t-com">// Busca en la página el botón y el párrafo, por su id</span>
+<b>const</b> boton = document.<span class="t-fun">getElementById</span>(<span class="t-str">"boton"</span>);
+<b>const</b> resultado = document.<span class="t-fun">getElementById</span>(<span class="t-str">"resultado"</span>);
+
+<span class="t-com">// Función que pide los datos a la API y los muestra</span>
+<b>async function</b> <span class="t-fun">consultarDolar</span>() {
+  <span class="t-com">// Le pide los datos a la API y espera la respuesta</span>
+  <b>const</b> respuesta = <b>await</b> <span class="t-fun">fetch</span>(<span class="t-str">"https://dolarapi.com/v1/dolares/oficial"</span>);
+  <span class="t-com">// Convierte la respuesta (JSON) en datos que JavaScript entiende</span>
+  <b>const</b> datos = <b>await</b> respuesta.<span class="t-fun">json</span>();
+  <span class="t-com">// Escribe en el párrafo la compra y la venta del dólar</span>
+  resultado.<span class="t-atr">textContent</span> = <span class="t-str">"Compra: $"</span> + datos.<span class="t-atr">compra</span> + <span class="t-str">" · Venta: $"</span> + datos.<span class="t-atr">venta</span>;
+}
+
+<span class="t-com">// Cuando se hace clic en el botón, se ejecuta la función</span>
+boton.<span class="t-fun">addEventListener</span>(<span class="t-str">"click"</span>, consultarDolar);</pre>
+      </div>
+    </section>
 
     <aside class="idea" aria-label="Idea clave">
       <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
-      <p><strong>Idea clave:</strong> en el router configuramos el Wi-Fi, el rango DHCP y las IP fijas. Antes, un plan de la red; al terminar, una copia de seguridad.</p>
+      <p><strong>Idea clave:</strong> para usar otra API, cambiamos la URL y los campos del modelo.</p>
     </aside>
 
     <footer class="pie">
@@ -419,6 +372,196 @@ Adaptador de Ethernet Ethernet:
       <span>Redes I — Prof. Nicolás A. Cussi</span>
       <span class="pie__linea"></span>
       <span class="pie__num" aria-label="Lámina 26">26</span>
+    </footer>
+  </article>
+
+  <!-- =================== LÁMINA 27 =================== -->
+  <article class="lamina lamina--densa lamina--compacta" id="pag-27" aria-labelledby="t27">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°8</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t27"><span class="tit__num">27.</span> MQTT</h2>
+      <p class="tit__sub">Publicar y suscribirse: mensajes entre dispositivos</p>
+    </div>
+
+    <div class="intro">
+      <svg class="ico ico--xl" aria-hidden="true" focusable="false"><use href="#i-chip"/></svg>
+      <p><strong>MQTT</strong> es un protocolo para enviar mensajes cortos entre dispositivos: sensores, placas como el <strong>ESP32</strong> (una placa chica con Wi-Fi que se programa) y servidores. Gasta poca memoria, poca batería y poca red; por eso se usa mucho en el Internet de las cosas (IoT).</p>
+    </div>
+
+    <div class="columnas">
+      <figure class="esquema esquema--mqtt">
+        <svg viewBox="0 0 440 196" role="img" aria-labelledby="mq-t mq-d">
+          <title id="mq-t">Publicar y suscribirse con MQTT</title>
+          <desc id="mq-d">En el medio, el broker Mosquitto, en el puerto 1883. 1, la pantalla de preceptoría y la app del celular se suscriben al tópico escuela/laboratorio/temperatura. 2, un sensor con un ESP32 publica 21.5 en ese tópico. 3, el broker entrega 21.5 a los dos suscriptos.</desc>
+          <defs>
+            <marker id="mq-fp" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path class="esq-pide" d="M0 0 10 5 0 10z" style="stroke:none"/></marker>
+            <marker id="mq-fr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path class="esq-responde" d="M0 0 10 5 0 10z" style="stroke:none"/></marker>
+          </defs>
+          <text class="esq-txt" x="220" y="13" text-anchor="middle">Tópico: <tspan class="esq-mono">escuela/laboratorio/temperatura</tspan></text>
+          <rect class="esq-caja-pide" x="2" y="72" width="104" height="66" rx="8"/>
+          <text class="esq-rot" x="54" y="95" text-anchor="middle">Publisher</text>
+          <text class="esq-txt" x="54" y="113" text-anchor="middle">sensor con</text>
+          <text class="esq-txt" x="54" y="128" text-anchor="middle">un ESP32</text>
+          <rect class="esq-caja-responde" x="168" y="60" width="104" height="90" rx="8"/>
+          <text class="esq-rot" x="220" y="88" text-anchor="middle">Broker</text>
+          <text class="esq-txt" x="220" y="107" text-anchor="middle">Mosquitto</text>
+          <text class="esq-mono" x="220" y="125" text-anchor="middle">puerto 1883</text>
+          <rect class="esq-caja-pide" x="334" y="28" width="104" height="62" rx="8"/>
+          <text class="esq-rot" x="386" y="50" text-anchor="middle">Subscriber</text>
+          <text class="esq-txt" x="386" y="67" text-anchor="middle">pantalla de</text>
+          <text class="esq-txt" x="386" y="82" text-anchor="middle">preceptoría</text>
+          <rect class="esq-caja-pide" x="334" y="124" width="104" height="62" rx="8"/>
+          <text class="esq-rot" x="386" y="146" text-anchor="middle">Subscriber</text>
+          <text class="esq-txt" x="386" y="163" text-anchor="middle">app del</text>
+          <text class="esq-txt" x="386" y="178" text-anchor="middle">celular</text>
+          <path class="esq-pide esq-sub" d="M332 50 278 77" marker-end="url(#mq-fp)"/>
+          <path class="esq-pide esq-sub" d="M332 164 278 137" marker-end="url(#mq-fp)"/>
+          <path class="esq-pide" d="M108 105H162" style="stroke-width:3" marker-end="url(#mq-fp)"/>
+          <path class="esq-responde" d="M274 93 328 66" style="stroke-width:3" marker-end="url(#mq-fr)"/>
+          <path class="esq-responde" d="M274 121 328 148" style="stroke-width:3" marker-end="url(#mq-fr)"/>
+          <circle class="esq-num" cx="296" cy="50" r="8"/><text class="esq-num-txt" x="296" y="54" text-anchor="middle">1</text>
+          <circle class="esq-num" cx="296" cy="164" r="8"/><text class="esq-num-txt" x="296" y="168" text-anchor="middle">1</text>
+          <circle class="esq-num" cx="135" cy="91" r="8"/><text class="esq-num-txt" x="135" y="95" text-anchor="middle">2</text>
+          <text class="esq-mono" x="135" y="124" text-anchor="middle">21.5</text>
+          <circle class="esq-num" cx="309" cy="92" r="8"/><text class="esq-num-txt" x="309" y="96" text-anchor="middle">3</text>
+          <circle class="esq-num" cx="309" cy="122" r="8"/><text class="esq-num-txt" x="309" y="126" text-anchor="middle">3</text>
+        </svg>
+        <figcaption>
+          <ol class="lista-pasos" aria-label="Los pasos del esquema">
+            <li class="grupo"><b>1</b><span>La pantalla y la app <strong>se suscriben</strong> al tópico.</span></li>
+            <li class="grupo"><b>2</b><span>El sensor <strong>publica</strong> <code>21.5</code> en ese tópico.</span></li>
+            <li class="grupo grupo--naranja"><b>3</b><span>El broker <strong>entrega</strong> <code>21.5</code> a todos los suscriptos, al instante.</span></li>
+          </ol>
+        </figcaption>
+      </figure>
+
+      <section class="panel" aria-labelledby="pt27">
+        <div class="panel__cab">
+          <h3 class="subtitulo" id="pt27">Las partes</h3>
+          <p class="puerto"><span class="puerto__rot">Puerto</span><b class="puerto__num">1883</b><span class="etq etq--tcp">TCP</span></p>
+        </div>
+        <ul class="lista-txt pf__lista">
+          <li><strong>Broker:</strong> el servidor del medio. Recibe cada mensaje y lo entrega a los suscriptos a su tópico. En el proyecto usamos <strong>Mosquitto</strong>.</li>
+          <li><strong>Publisher</strong> (publicador): <strong>publica</strong> un mensaje en un tópico.</li>
+          <li><strong>Subscriber</strong> (suscriptor): se <strong>suscribe</strong> a un tópico y recibe sus mensajes.</li>
+          <li><strong>Tópico:</strong> el tema del mensaje, con niveles separados por <code>/</code>.</li>
+        </ul>
+        <p>Publisher y subscriber no se hablan entre sí: cada uno se conecta solo al broker.</p>
+      </section>
+    </div>
+
+    <table class="tabla-comp tabla-comp--http">
+      <caption class="sr-only">Comparación entre HTTP y MQTT</caption>
+      <thead>
+        <tr><th scope="col">Aspecto</th><th scope="col" class="grupo">HTTP (API REST)</th><th scope="col" class="grupo grupo--naranja">MQTT</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Cómo se comunican</th><td><strong>Pedir y responder:</strong> el cliente pide y el servidor responde.</td><td><strong>Publicar y suscribirse:</strong> el broker reparte los mensajes.</td></tr>
+        <tr><th scope="row">La conexión</th><td>Se abre para cada pedido y se cierra.</td><td>Queda abierta: el mensaje llega al instante.</td></tr>
+        <tr><th scope="row">El mensaje</th><td>Pesado: lleva muchos headers.</td><td>Liviano: el encabezado ocupa desde 2 bytes.</td></tr>
+        <tr><th scope="row">Cuándo conviene</th><td>Una página o una app que pide datos cuando los necesita: el dólar, el clima.</td><td>Dispositivos que mandan o reciben datos todo el tiempo o al instante: sensores, el ESP32.</td></tr>
+      </tbody>
+    </table>
+
+    <p class="texto">Se usan juntos: la página le pide al servidor con HTTP, y el servidor publica en MQTT para el ESP32, que está suscripto. Así funciona el proyecto del TP10.</p>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> en HTTP, el cliente pide y el servidor responde. En MQTT se publica y se suscribe a tópicos: el broker reparte los mensajes por una conexión abierta.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 27">27</span>
+    </footer>
+  </article>
+
+  <!-- =================== PETICIÓN REAL (hoja propia, sin número de lámina) =================== -->
+  <article class="lamina lamina--sim" id="simulador" aria-labelledby="tsim">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°8</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="tsim">Petición real</h2>
+      <p class="tit__sub">Un GET a DolarAPI, en el momento</p>
+    </div>
+
+    <section class="simulador" data-sim="api" aria-labelledby="tsim">
+      <div class="sim__cab">
+        <span class="etq etq--sim">Simulador</span>
+        <p class="sim__aviso">Petición real: los datos llegan de DolarAPI en el momento. Hace falta Internet.</p>
+      </div>
+      <p class="sim__intro">Elegí un endpoint y tocá «Enviar GET». Vas a ver la URL que se arma, el código de respuesta, el JSON que llega y el dato ya mostrado en la página, como con la receta de la lámina 26. Probá también con <code>/v1/dolares/euro</code>, un recurso que no existe.</p>
+
+      <div class="sim__controles no-imprimir" data-sim-js hidden>
+        <form class="sim__form" novalidate>
+          <div class="sim__campo">
+            <label for="sim-endpoint">Endpoint de DolarAPI</label>
+            <select id="sim-endpoint">
+              <option value="/v1/dolares/oficial">/v1/dolares/oficial · el dólar oficial</option>
+              <option value="/v1/dolares/blue">/v1/dolares/blue · el dólar blue</option>
+              <option value="/v1/dolares/tarjeta">/v1/dolares/tarjeta · el dólar tarjeta</option>
+              <option value="/v1/dolares/mayorista">/v1/dolares/mayorista · el dólar mayorista</option>
+              <option value="/v1/dolares">/v1/dolares · todos, en una lista</option>
+              <option value="/v1/dolares/euro">/v1/dolares/euro · no existe</option>
+            </select>
+          </div>
+          <button class="boton" type="submit">Enviar GET</button>
+        </form>
+      </div>
+
+      <p class="sim__estado" role="status" aria-live="polite">Ejemplo resuelto: un GET al dólar oficial.</p>
+
+      <div class="api">
+        <p class="api__ejemplo" data-api="ejemplo">Escrito en el cuadernillo: los valores son de un día cualquiera y la fecha va recortada.</p>
+        <section class="api__bloque api__bloque--url" aria-labelledby="api-url">
+          <h3 id="api-url">1. La URL armada</h3>
+          <p class="api__url" data-api="url"><b>GET</b> https://dolarapi.com<span class="api__ruta">/v1/dolares/oficial</span></p>
+          <p class="api__nota">Dominio + ruta del recurso: el endpoint.</p>
+        </section>
+        <section class="api__bloque api__bloque--cod" aria-labelledby="api-cod">
+          <h3 id="api-cod">2. El código de respuesta</h3>
+          <p class="api__codigo grupo grupo--ok" data-api="codigo"><b>200</b><span>OK</span></p>
+        </section>
+        <section class="api__bloque api__bloque--json" aria-labelledby="api-json">
+          <h3 id="api-json">3. El JSON que llegó</h3>
+          <div class="ventana-cod">
+            <div class="ventana-cod__barra" aria-hidden="true">JSON</div>
+<pre class="ventana-cod__txt" data-api="json" tabindex="0">{
+  <span class="t-atr">"moneda"</span>: <span class="t-str">"USD"</span>,
+  <span class="t-atr">"casa"</span>: <span class="t-str">"oficial"</span>,
+  <span class="t-atr">"nombre"</span>: <span class="t-str">"Oficial"</span>,
+  <span class="t-atr">"compra"</span>: <span class="t-num">1485</span>,
+  <span class="t-atr">"venta"</span>: <span class="t-num">1535</span>,
+  <span class="t-atr">"fechaActualizacion"</span>: <span class="t-str">"…"</span>
+}</pre>
+          </div>
+        </section>
+        <section class="api__bloque api__bloque--pag" aria-labelledby="api-pag">
+          <h3 id="api-pag">4. En la página</h3>
+          <div class="api__pagina" data-api="pagina"><p>Dólar Oficial: compra $1485 · venta $1535</p></div>
+          <p class="api__nota" data-api="con">Con <code>datos.nombre</code>, <code>datos.compra</code> y <code>datos.venta</code>.</p>
+        </section>
+      </div>
+    </section>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 8</span>
     </footer>
   </article>
 
@@ -433,60 +576,71 @@ Adaptador de Ethernet Ethernet:
 
     <div class="tit">
       <h2 class="tit__h" id="tpf"><span class="tit__num">+</span> Para profundizar</h2>
-      <p class="tit__sub">Más opciones de la PC y del router</p>
+      <p class="tit__sub">Las API desde el navegador, y más de JSON y MQTT</p>
     </div>
 
     <div class="pf-grid">
       <section class="pf" aria-labelledby="pf24">
         <p class="pf__etiqueta">Lámina 24</p>
-        <h3 class="pf__titulo" id="pf24">Cuando la PC no recibe IP</h3>
+        <h3 class="pf__titulo" id="pf24">Por qué algunas API no responden desde el navegador</h3>
         <div class="pf__cols">
           <div class="pf__texto">
-            <p>Si el servidor DHCP no responde, Windows se pone una IP que empieza con <code class="cod-ip">169.254</code>. <code class="cod-cmd">ipconfig</code> la muestra como «Dirección IPv4 de configuración automática».</p>
-            <p>Con esa IP no hay red: hay que revisar el cable o el Wi-Fi y el router, y después pedir otra con <code class="cod-cmd">ipconfig /renew</code>.</p>
+            <p>Cuando una página le pide datos con <code>fetch</code> a otro dominio, el navegador revisa la respuesta antes de dársela a JavaScript. Si el servidor no la autoriza con el header <code>Access-Control-Allow-Origin</code>, el navegador la bloquea y <code>fetch</code> da error, aunque la misma URL se vea bien en la barra de direcciones.</p>
+            <p>Esta regla se llama <strong>CORS</strong> (en inglés, <em>Cross-Origin Resource Sharing</em>: compartir recursos entre orígenes distintos).</p>
           </div>
           <div class="pf__caja">
-            <h4>En Linux</h4>
-            <p>El comando equivalente a <code class="cod-cmd">ipconfig</code> se llama <code class="cod-cmd">ifconfig</code>.</p>
+            <h4>Las API de este TP</h4>
+            <p>DolarAPI y PokéAPI responden <code>Access-Control-Allow-Origin: *</code>: dejan leer sus datos desde cualquier página. Si una API no lo permite, sus datos se piden desde un servidor, no desde el navegador.</p>
           </div>
         </div>
       </section>
 
       <section class="pf" aria-labelledby="pf25">
         <p class="pf__etiqueta">Lámina 25</p>
-        <h3 class="pf__titulo" id="pf25">La IP pública en el laboratorio</h3>
+        <h3 class="pf__titulo" id="pf25">Ver la petición: F12 › Red</h3>
         <div class="pf__cols">
           <div class="pf__texto">
-            <p>El router recibe la IP del lado Internet de quien le da la conexión. Si lo conectamos a la red de la escuela, y no directo al proveedor, esa IP también es privada: el router de la escuela hace otro NAT.</p>
+            <p>Las herramientas para desarrolladores del navegador (Chrome o Edge) muestran cada petición. Con la página abierta: <kbd>F12</kbd>, la pestaña <strong>Red</strong> (<em>Network</em>) y, después, tocar el botón o recargar la página.</p>
+            <p>Cada fila es una petición: el nombre del recurso, el <strong>Estado</strong> (el código de respuesta) y el <strong>Tipo</strong> (<em>fetch</em>, si la hizo JavaScript).</p>
           </div>
           <div class="pf__caja">
-            <h4>Port forwarding</h4>
-            <p>La redirección de puertos pasa lo que llega a la IP pública por un puerto a un equipo de la red; por ejemplo, para publicar un servidor.</p>
-            <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Advanced</span> › <span class="menu">NAT Forwarding</span> › <span class="menu">Virtual Servers</span> <span class="menu-trad">(Reenvío NAT › Servidores virtuales)</span>.</p></div>
+            <h4>Una petición, por dentro</h4>
+            <p>Con un clic en la fila, <strong>Encabezados</strong> muestra la URL, el método y el código; <strong>Respuesta</strong>, el JSON tal como llegó. Si algo falla, el error aparece en rojo en la pestaña <strong>Consola</strong>.</p>
           </div>
         </div>
       </section>
 
       <section class="pf" aria-labelledby="pf26">
         <p class="pf__etiqueta">Lámina 26</p>
-        <h3 class="pf__titulo" id="pf26">Control de acceso</h3>
+        <h3 class="pf__titulo" id="pf26">Por qué JSON reemplazó a XML</h3>
         <div class="pf__cols">
           <div class="pf__texto">
-            <p>Elige qué dispositivos pueden usar la red. Con una <strong>lista negra</strong> se bloquean los de la lista; con una <strong>lista blanca</strong>, solo se conectan los de la lista.</p>
+            <p>Antes, muchas API respondían en <strong>XML</strong>, un formato con etiquetas, parecido al HTML. El mismo dato, en los dos formatos:</p>
+            <ul class="pf__lista">
+              <li>XML: <code>&lt;venta&gt;1535&lt;/venta&gt;</code></li>
+              <li>JSON: <code>"venta": 1535</code></li>
+            </ul>
+            <p>JSON usa menos texto, es más fácil de leer y JavaScript lo convierte directo en un objeto, con <code>respuesta.json()</code>. Por eso hoy casi todas las API REST responden en JSON.</p>
           </div>
-          <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Advanced</span> › <span class="menu">Security</span> › <span class="menu">Access Control</span> <span class="menu-trad">(Seguridad › Control de acceso)</span>: <span class="menu">Blacklist</span> <span class="menu-trad">(lista negra)</span> o <span class="menu">Whitelist</span> <span class="menu-trad">(lista blanca)</span>.</p></div>
+          <div class="pf__caja">
+            <h4>Otra forma de escribir fetch</h4>
+            <p>En ejemplos de Internet vas a encontrar <code>fetch</code> con <code>.then()</code> en lugar de <code>await</code>. Hace lo mismo; en este cuadernillo usamos siempre <code>async</code> y <code>await</code>.</p>
+          </div>
         </div>
       </section>
 
-      <section class="pf" aria-labelledby="pf-mant">
-        <p class="pf__etiqueta">Láminas 25 y 26</p>
-        <h3 class="pf__titulo" id="pf-mant">Mantenimiento del router</h3>
+      <section class="pf" aria-labelledby="pf27">
+        <p class="pf__etiqueta">Lámina 27</p>
+        <h3 class="pf__titulo" id="pf27">Tópicos con comodines</h3>
         <div class="pf__cols">
           <div class="pf__texto">
-            <p>Actualizar el <strong>firmware</strong> (el programa interno del router) corrige fallas. Se baja de la página del fabricante, para el mismo modelo y versión, y no hay que apagar el router mientras se actualiza.</p>
-            <p><strong>Reiniciar</strong> no borra nada. El <strong>reset de fábrica</strong> borra toda la configuración, también la contraseña de administrador: sirve si nadie la recuerda.</p>
+            <p>Al suscribirse se pueden usar comodines. El <code>+</code> reemplaza un nivel: <code>escuela/+/temperatura</code> recibe la temperatura de todas las aulas. El <code>#</code> reemplaza todos los niveles que siguen: <code>escuela/#</code> recibe todo lo de la escuela.</p>
+            <p>Al publicar no se usan: cada mensaje va a un tópico exacto.</p>
           </div>
-          <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><span class="menu">Advanced</span> › <span class="menu">System Tools</span> › <span class="menu">Firmware Upgrade</span> y <span class="menu">Reboot</span> <span class="menu-trad">(Herramientas del sistema › Actualización de firmware y Reiniciar)</span>. Reset de fábrica: mantener apretado el botón WPS/RESET más de 5 segundos.</p></div>
+          <div class="pf__caja">
+            <h4>MQTT cifrado</h4>
+            <p>El puerto 1883 no cifra: lo que viaja se puede leer. Como HTTPS con HTTP, MQTT cifrado usa otro puerto: el 8883.</p>
+          </div>
         </div>
       </section>
     </div>
@@ -499,7 +653,63 @@ Adaptador de Ethernet Ethernet:
     </footer>
   </article>
 
-  <!-- =================== ACTIVIDADES EN LA CARPETA =================== -->
+  <!-- =================== PARA PROFUNDIZAR · Hoja 2 =================== -->
+  <article class="lamina lamina--pf lamina--arriba" id="profundizar-2" aria-labelledby="tpf2">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°8</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="tpf2"><span class="tit__num">+</span> Para profundizar</h2>
+      <p class="tit__sub">Para la práctica: dónde conseguir una API</p>
+    </div>
+
+    <section class="pf pf--api" aria-labelledby="pf-api">
+      <p class="pf__etiqueta">Láminas 24 y 26</p>
+      <h3 class="pf__titulo" id="pf-api">¿Dónde consigo una API?</h3>
+      <p>La lista <strong>public-apis</strong>, en GitHub (<code>github.com/public-apis/public-apis</code>), junta cientos de API públicas, ordenadas por tema. Para usar una desde una página, como el modelo de la lámina 26, conviene que en sus columnas diga:</p>
+      <ul class="pf__lista">
+        <li><strong>Auth: No.</strong> No pide clave ni registro.</li>
+        <li><strong>HTTPS: Yes.</strong> Viaja cifrada (TP7).</li>
+        <li><strong>CORS: Yes.</strong> Responde a páginas de otro dominio (Para profundizar de la lámina 24). Si dice <em>Unknown</em>, no se sabe: hay que probarla. PokéAPI figura así, y funciona.</li>
+      </ul>
+      <figure class="lista-apis">
+        <figcaption>Tres filas de la lista, tal como están en GitHub (en inglés):</figcaption>
+        <table>
+          <caption class="sr-only">Tres filas de la lista public-apis, con sus columnas API, Description, Auth, HTTPS y CORS</caption>
+          <thead><tr><th scope="col">API</th><th scope="col">Description</th><th scope="col">Auth</th><th scope="col">HTTPS</th><th scope="col">CORS</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Dogs</th><td>Based on the Stanford Dogs Dataset</td><td class="si">No</td><td class="si">Yes</td><td class="si">Yes</td></tr>
+            <tr><th scope="row">Pokéapi</th><td>Pokémon Information</td><td class="si">No</td><td class="si">Yes</td><td class="duda">Unknown</td></tr>
+            <tr><th scope="row">Cats</th><td>Pictures of cats from Tumblr</td><td class="no"><code>apiKey</code></td><td class="si">Yes</td><td class="no">No</td></tr>
+          </tbody>
+        </table>
+        <p class="lista-apis__nota">Dogs sirve para el modelo. Pokéapi hay que probarla. Cats pide clave y no tiene CORS: desde una página, no.</p>
+      </figure>
+      <div class="pf__cols">
+        <div class="pf__caja">
+          <h4>Datos de Argentina</h4>
+          <p><strong>datos.gob.ar</strong> es el portal de datos abiertos del Estado argentino. Algunos datos tienen API, como Georef (<code>apis.datos.gob.ar/georef</code>), con provincias, municipios y calles.</p>
+        </div>
+        <div class="nota nota--importante">
+          <h4><svg class="ico tit-ico" aria-hidden="true" focusable="false"><use href="#i-importante"/></svg>Nunca subas una clave a un repositorio público</h4>
+          <p>Muchas API piden una clave (<em>API key</em>) para saber quién las usa. Si queda en un repositorio público, como uno de GitHub, cualquiera puede verla y usarla a tu nombre.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 8</span>
+    </footer>
+  </article>
+
+  <!-- =================== ACTIVIDADES · Parte 1 =================== -->
   <article class="lamina lamina--act lamina--densa" id="actividades" aria-labelledby="act-1">
     <div class="cab" aria-hidden="true">
       <svg class="cab__logo"><use href="#i-red-solido"/></svg>
@@ -512,38 +722,124 @@ Adaptador de Ethernet Ethernet:
       <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-lapiz"/></svg>
       <div>
         <h2 id="act-1">Actividades para hacer en la carpeta</h2>
-        <p>TP N°8 — Configurando el router</p>
+        <p>TP N°8 — APIs REST y MQTT</p>
       </div>
+      <span class="act-banda__parte">Parte<br>1 de 2</span>
     </header>
 
     <p class="consigna"><strong>Consigna:</strong> Respondé cada punto de forma completa, usando tus propias palabras. Podés apoyarte en las láminas, en el simulador y en “Para profundizar” del TP N°8.</p>
 
     <ol class="acts acts--2col">
       <li class="act">
-        <h3 class="act__titulo"><span class="act__num">1-</span> La IP de la PC</h3>
+        <h3 class="act__titulo"><span class="act__num">1-</span> Cliente-servidor y API REST</h3>
         <ol class="act__items">
-          <li><b class="act__letra">a)</b><div>En la salida de <code class="cod-cmd">ipconfig</code> de la lámina 24, indicá la IP de la PC, la máscara de subred y la puerta de enlace.</div></li>
-          <li><b class="act__letra">b)</b><div>¿Qué diferencia hay entre una IP dinámica y una IP fija? Dá un ejemplo de equipo para cada una.</div></li>
-          <li><b class="act__letra">c)</b><div>Escribí los pasos para poner una IP fija en Windows. ¿Qué condiciones cumple esa IP?</div></li>
+          <li><b class="act__letra">a)</b><div>Separá en partes estas dos URL: protocolo, dominio, ruta del recurso y parámetros. ¿Cuál no tiene parámetros?
+            <code class="cod-bloque cod-url">https://dolarapi.com/v1/<wbr>dolares/tarjeta</code>
+            <code class="cod-bloque cod-url">https://api.open-meteo.com/v1/<wbr>forecast?latitude=-53.8&amp;<wbr>longitude=-67.7&amp;<wbr>current=wind_speed_10m</code></div></li>
+          <li><b class="act__letra">b)</b><div>¿Qué es una API REST? ¿Qué diferencia hay entre un recurso y un endpoint? Escribí el endpoint de cada URL del inciso a).</div></li>
         </ol>
       </li>
       <li class="act">
-        <h3 class="act__titulo"><span class="act__num">2-</span> Cómo funciona un router</h3>
+        <h3 class="act__titulo"><span class="act__num">2-</span> Verbos HTTP y códigos</h3>
         <ol class="act__items">
-          <li><b class="act__letra">a)</b><div>Nombrá y explicá las cinco cosas que hace un router.</div></li>
-          <li><b class="act__letra">b)</b><div>En el esquema de la lámina 25, ¿qué IP tiene el router de cada lado? ¿Cuál es la puerta de enlace?</div></li>
-          <li><b class="act__letra">c)</b><div>¿Cómo se entra al panel? ¿Por qué lo primero es cambiar la contraseña de administrador?</div></li>
+          <li><b class="act__letra">a)</b><div>Copiá y completá el cuadro con la API de la biblioteca.
+            <table class="act-tabla act-tabla--compacta">
+              <caption class="sr-only">Cuadro para completar con la acción y un ejemplo de cada verbo</caption>
+              <thead><tr><th scope="col">Verbo</th><th scope="col">Acción</th><th scope="col">Ejemplo</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">GET</th><td></td><td></td></tr>
+                <tr><th scope="row">POST</th><td></td><td></td></tr>
+                <tr><th scope="row">PUT</th><td></td><td></td></tr>
+                <tr><th scope="row">DELETE</th><td></td><td></td></tr>
+              </tbody>
+            </table></div></li>
+          <li><b class="act__letra">b)</b><div>¿Qué código llega en cada caso y qué significa? Pedir el libro 12 / crear un libro / crear uno sin título / pedir el libro 999 / el servidor falla.</div></li>
+          <li><b class="act__letra">c)</b><div>¿Por qué DolarAPI solo deja leer (GET)?</div></li>
         </ol>
       </li>
     </ol>
 
     <ol class="acts" start="3">
       <li class="act">
-        <h3 class="act__titulo"><span class="act__num">3-</span> Configurar el router</h3>
+        <h3 class="act__titulo"><span class="act__num">3-</span> JSON y fetch</h3>
+        <div class="act__cuerpo act__cuerpo--json">
+          <div class="ventana-cod" role="group" aria-label="JSON que respondió DolarAPI al pedir el dólar blue">
+            <div class="ventana-cod__barra" aria-hidden="true">JSON · /v1/dolares/blue</div>
+<pre class="ventana-cod__txt">{
+  <span class="t-atr">"moneda"</span>: <span class="t-str">"USD"</span>,
+  <span class="t-atr">"casa"</span>: <span class="t-str">"blue"</span>,
+  <span class="t-atr">"nombre"</span>: <span class="t-str">"Blue"</span>,
+  <span class="t-atr">"compra"</span>: <span class="t-num">1530</span>,
+  <span class="t-atr">"venta"</span>: <span class="t-num">1550</span>,
+  <span class="t-atr">"fechaActualizacion"</span>: <span class="t-str">"…"</span>
+}</pre>
+          </div>
+          <ol class="act__items">
+            <li><b class="act__letra">a)</b><div>En este JSON, ¿qué valor tienen las claves <code>nombre</code> y <code>venta</code>? ¿Cuál es un texto y cuál un número? ¿Cómo te das cuenta?</div></li>
+            <li><b class="act__letra">b)</b><div>¿Qué es <code>fetch()</code> y qué hace? ¿A quién le hace la petición y qué obtiene?</div></li>
+            <li><b class="act__letra">c)</b><div>En el modelo de la lámina 26, ¿qué palabra va en el hueco de abajo para que la página muestre el dólar blue?</div></li>
+            <li><b class="act__letra">d)</b><div>Con este JSON, ¿qué muestra la página del modelo al tocar «Consultar»?</div></li>
+          </ol>
+        </div>
+        <div class="ventana-cod ventana-cod--act" role="group" aria-label="Una línea del modelo, con un hueco para completar">
+          <div class="ventana-cod__barra" aria-hidden="true">app.js</div>
+<pre class="ventana-cod__txt"><b>const</b> respuesta = <b>await</b> <span class="t-fun">fetch</span>(<span class="t-str">"https://dolarapi.com/v1/dolares/</span><span class="hueco"><span aria-hidden="true">______</span><span class="sr-only">(falta)</span></span><span class="t-str">"</span>);</pre>
+        </div>
+      </li>
+    </ol>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 8</span>
+    </footer>
+  </article>
+
+  <!-- =================== ACTIVIDADES · Parte 2 =================== -->
+  <article class="lamina lamina--act lamina--densa" id="actividades-parte-2" aria-labelledby="act-1b">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°8</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <header class="act-banda">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-lapiz"/></svg>
+      <div>
+        <h2 id="act-1b">Actividades para hacer en la carpeta</h2>
+        <p>TP N°8 — APIs REST y MQTT</p>
+      </div>
+      <span class="act-banda__parte">Parte<br>2 de 2</span>
+    </header>
+
+    <ol class="acts" start="4">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">4-</span> MQTT</h3>
         <ol class="act__items">
-          <li><b class="act__letra">a)</b><div>¿Qué es el SSID? ¿Cuántos caracteres lleva la clave con WPA2? ¿Qué seguridad usás en el router del laboratorio y por qué?</div></li>
-          <li><b class="act__letra">b)</b><div>¿Qué es la reserva de IP? ¿Con qué dato del equipo se hace y cómo se comprueba en la PC?</div></li>
-          <li><b class="act__letra">c)</b><div>En el router del laboratorio, escribí la ruta del menú para: cambiar el SSID / ver el rango DHCP / reservar una IP / hacer una copia de seguridad.</div></li>
+          <li><b class="act__letra">a)</b><div>Copiá el cuadro y completalo para comparar HTTP y MQTT.
+            <table class="act-tabla act-tabla--compacta">
+              <caption class="sr-only">Cuadro para comparar HTTP y MQTT</caption>
+              <thead><tr><th scope="col">Aspecto</th><th scope="col">HTTP (API REST)</th><th scope="col">MQTT</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Cómo se comunican</th><td></td><td></td></tr>
+                <tr><th scope="row">La conexión</th><td></td><td></td></tr>
+                <tr><th scope="row">El mensaje</th><td></td><td></td></tr>
+                <tr><th scope="row">Cuándo conviene</th><td></td><td></td></tr>
+              </tbody>
+            </table></div></li>
+          <li><b class="act__letra">b)</b><div>En la huerta de la escuela, un ESP32 mide la humedad de la tierra y la publica en el tópico <code>huerta/humedad</code>. Una pantalla del aula está suscripta a ese tópico. ¿Quién es el publisher y quién el subscriber? ¿Qué hace el broker y en qué puerto escucha?</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">5-</span> Caso integrador</h3>
+        <p class="act__caso">La biblioteca suma un cartel en el pasillo, manejado por un ESP32, que muestra los libros nuevos. La bibliotecaria escribe el título de un libro en una página y toca el botón «Agregar». La página hace un <code>fetch</code> a <code>https://api.redesdelaula.com/libros</code>; el servidor guarda el libro y la página muestra «Libro agregado». Después, el servidor publica el título en el tópico <code>biblioteca/novedades</code>.</p>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Escribí el recorrido en orden y explicá qué pasa en cada paso: botón → fetch → servidor → código → JSON → página.</div></li>
+          <li><b class="act__letra">b)</b><div>¿Qué verbo usa el fetch? ¿Qué código responde el servidor si el libro se creó? ¿Y si la bibliotecaria tocó «Agregar» sin escribir el título?</div></li>
+          <li><b class="act__letra">c)</b><div>Seguí el recorrido con MQTT: ¿quién publica y quién tiene que estar suscripto para que el cartel muestre el título? ¿Qué hace el broker?</div></li>
+          <li><b class="act__letra">d)</b><div>¿Por qué para el cartel conviene MQTT y no HTTP?</div></li>
         </ol>
       </li>
     </ol>
@@ -569,52 +865,64 @@ Adaptador de Ethernet Ethernet:
       <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pc"/></svg>
       <div>
         <h2 id="act-2">Actividades para hacer en la computadora</h2>
-        <p>TP N°8 — Configurando el router · Práctica individual</p>
+        <p>TP N°8 — APIs REST y MQTT</p>
       </div>
     </header>
 
-    <p class="consigna"><strong>Consigna:</strong> Hacé la práctica en el simulador del router, desde una computadora. Tiene el mismo panel que la mayoría de los routers del laboratorio. Además, te va a servir como práctica para el proyecto final.</p>
+    <p class="consigna"><strong>Consigna:</strong> Vas a usar un modelo armado: una página que le pide el dólar a DolarAPI con <code>fetch</code>. No lo escribís desde cero: lo descargás, lo probás y le cambiás de a una cosa. Seguí los pasos.</p>
 
     <p class="ir-sim">
-      <a class="boton boton--grande no-imprimir" href="https://prof-nkocussi.github.io/App-Router-Simulador/" target="_blank" rel="noopener"><svg aria-hidden="true" focusable="false"><use href="#i-afuera"/></svg><span>Entrá al simulador del router</span><span class="sr-only"> (se abre en otra pestaña)</span></a>
-      <span class="solo-papel">Simulador del router: <b>prof-nkocussi.github.io/App-Router-Simulador</b></span>
+      <a class="boton boton--grande no-imprimir" href="../assets/descargas/api-dolar/api-dolar.zip" download><svg aria-hidden="true" focusable="false"><use href="#i-descarga"/></svg><span>Descargar el modelo</span><span class="sr-only"> (api-dolar.zip)</span></a>
+      <span class="solo-papel">Modelo para descargar: <b>prof-nkocussi.github.io/App-Web-Redes-1/assets/descargas/api-dolar/api-dolar.zip</b></span>
     </p>
 
     <ol class="acts acts--2col">
       <li class="act">
-        <h3 class="act__titulo"><span class="act__num">1-</span> Entrar al router</h3>
+        <h3 class="act__titulo"><span class="act__num">1-</span> Mirá el JSON</h3>
         <ol class="act__items">
-          <li><b class="act__letra">a)</b><div>Si el router ya se usó, reset de fábrica: en «Router», botón WPS/RESET apretado más de 5 segundos.</div></li>
-          <li><b class="act__letra">b)</b><div>En «Tu PC», buscá la puerta de enlace con <code class="cod-cmd">ipconfig</code>.</div></li>
-          <li><b class="act__letra">c)</b><div>Entrá a <code>http://tplinkwifi.net</code> o a <code class="cod-ip">192.168.0.1</code> y creá la contraseña de administrador.</div></li>
+          <li><b class="act__letra">a)</b><div>Pegá en el navegador la URL de DolarAPI: <code class="cod-url">https://dolarapi.com/<wbr>v1/dolares/oficial</code></div></li>
+          <li><b class="act__letra">b)</b><div>Mirá el JSON que llega: buscá las claves <code>nombre</code>, <code>compra</code> y <code>venta</code>.</div></li>
         </ol>
       </li>
       <li class="act">
-        <h3 class="act__titulo"><span class="act__num">2-</span> Wi-Fi</h3>
+        <h3 class="act__titulo"><span class="act__num">2-</span> Probá el modelo</h3>
         <ol class="act__items">
-          <li><b class="act__letra">a)</b><div>En <span class="menu">Advanced</span> › <span class="menu">Wireless</span> › <span class="menu">Wireless Settings</span>: tu SSID y una clave de 8 caracteres o más, con <span class="menu">WPA/WPA2 Personal</span>.</div></li>
-          <li><b class="act__letra">b)</b><div>En «Celular», conectate a la red nueva.</div></li>
+          <li><b class="act__letra">a)</b><div>Descargá la carpeta del modelo y descomprimila. Abrila en VS Code: tiene <code class="cod-archivo">index.html</code> y <code class="cod-archivo">app.js</code>.</div></li>
+          <li><b class="act__letra">b)</b><div>Abrí <code class="cod-archivo">index.html</code> con doble clic y tocá «Consultar»: aparece el dólar.</div></li>
         </ol>
       </li>
       <li class="act">
-        <h3 class="act__titulo"><span class="act__num">3-</span> DHCP e IP fijas</h3>
+        <h3 class="act__titulo"><span class="act__num">3-</span> Cambiá un campo</h3>
         <ol class="act__items">
-          <li><b class="act__letra">a)</b><div>En <span class="menu">Advanced</span> › <span class="menu">Network</span> › <span class="menu">LAN Settings</span>, anotá el rango DHCP. Mirá los dispositivos conectados en <span class="menu">Client List</span> o en <span class="menu">Basic</span> › <span class="menu">Network Map</span>.</div></li>
-          <li><b class="act__letra">b)</b><div>Buscá la MAC de «Tu PC» con <code class="cod-cmd">ipconfig /all</code> y reservale una IP en <span class="menu">Address Reservation</span>. Comprobala con <code class="cod-cmd">ipconfig /release</code> e <code class="cod-cmd">ipconfig /renew</code>.</div></li>
+          <li><b class="act__letra">a)</b><div>En <code class="cod-archivo">app.js</code>, cambiá <code>datos.venta</code> por otro campo del JSON; por ejemplo, <code>datos.nombre</code>.</div></li>
+          <li><b class="act__letra">b)</b><div>Guardá (<kbd>Ctrl</kbd> + <kbd>S</kbd>), recargá la página (<kbd>F5</kbd>) y tocá «Consultar»: mirá el cambio.</div></li>
         </ol>
       </li>
       <li class="act">
-        <h3 class="act__titulo"><span class="act__num">4-</span> IP fija y copia de seguridad</h3>
+        <h3 class="act__titulo"><span class="act__num">4-</span> Cambiá de API</h3>
         <ol class="act__items">
-          <li><b class="act__letra">a)</b><div>En «Otra PC», poné una IP fija en Windows, fuera del rango DHCP, y comprobala con <code class="cod-cmd">ipconfig</code>.</div></li>
-          <li><b class="act__letra">b)</b><div>En <span class="menu">Advanced</span> › <span class="menu">System Tools</span> › <span class="menu">Backup &amp; Restore</span>, guardá la configuración en un archivo.</div></li>
+          <li><b class="act__letra">a)</b><div>Cambiá la URL por la de PokéAPI: <code class="cod-url">https://pokeapi.co/<wbr>api/v2/pokemon/pikachu</code></div></li>
+          <li><b class="act__letra">b)</b><div>Cambiá los campos por <code>datos.name</code> y <code>datos.height</code>.</div></li>
+          <li><b class="act__letra">c)</b><div>Cambiá también el título de la página: el <code>&lt;h1&gt;</code> y el <code>&lt;title&gt;</code> de <code class="cod-archivo">index.html</code>.</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">5-</span> Otro Pokémon</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>En la URL, cambiá <code>pikachu</code> por otro Pokémon y probá. Si el nombre está mal escrito, aparece <code>undefined</code>: la API respondió 404.</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">6-</span> Un paso más <span class="act__opcional">(opcional)</span></h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Mostrá un dato más del JSON o dale estilo a la página con CSS.</div></li>
         </ol>
       </li>
     </ol>
 
     <section class="entrega" aria-labelledby="entrega8">
       <h3 class="entrega__tit" id="entrega8">Entrega</h3>
-      <p>Cuando tengas todos los pasos con ✓, en la pestaña «Práctica» apretá «Ver el resumen para la entrega». Sacale una captura <span class="sin-corte">(<kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>)</span> y subila a Classroom.</p>
+      <p>Una captura de cada ejercicio <span class="sin-corte">(<kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>)</span>, en el documento ya creado en Classroom.</p>
     </section>
 
     <footer class="pie">
@@ -627,5 +935,6 @@ Adaptador de Ethernet Ethernet:
 </main>
 
 <script src="../assets/js/actividades.js"></script>
+<script src="../assets/js/simuladores.js"></script>
 </body>
 </html>

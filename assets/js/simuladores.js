@@ -252,7 +252,7 @@
   }
 
   /* ==========================================================
-     TP9 · Petición real: un GET a DolarAPI
+     TP8 · Petición real: un GET a DolarAPI
      ========================================================== */
   function simuladorApi(sim) {
     var BASE = "https://dolarapi.com";
@@ -344,7 +344,7 @@
 
     function esDolar(d) { return !!d && typeof d === "object" && "nombre" in d && "compra" in d && "venta" in d; }
 
-    /* Muestra el dato en "la página", como la receta de la lámina 29. Devuelve si pudo. */
+    /* Muestra el dato en "la página", como la receta de la lámina 26. Devuelve si pudo. */
     function ponerPagina(status, datos) {
       var caja = parte("pagina");
       var p = document.createElement("p");

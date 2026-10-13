@@ -33,7 +33,7 @@ assets/js/actividades.js    botón PDF, resaltado de la barra, "✓ Visto" (loca
 assets/js/simuladores.js    simuladores (se crea con el primero)
 assets/fonts/               Barlow, Barlow Semi Condensed, Barlow Condensed (locales)
 assets/img/
-assets/descargas/          carpetas para descargar (TP9: api-dolar/ con index.html, app.js y api-dolar.zip)
+assets/descargas/          carpetas para descargar (TP8: api-dolar/ con index.html, app.js y api-dolar.zip)
 README.md                   presentación del sitio + tabla de TPs con su estado
 REGLAS.md                   este archivo
 ```
@@ -129,22 +129,22 @@ Cada color significa algo y nunca es el único dato: siempre va con texto o íco
 Copiar la estructura de `_fuente/modelo-tp01.html` hasta que exista el primer TP de Redes; después, la de ese TP.
 
 1. **Barra superior** (`header.barra`): botón "Índice" · "TP N°X — nombre del TP" · botón PDF (`data-imprimir`). Debajo, `nav.partes` con accesos a cada lámina, al simulador, a "Para profundizar", a "Actividades" y a "Paso a paso". Verificar a 360 px (el TP7 tiene nombre largo).
-2. **Láminas** (`article.lamina#pag-N`): `.cab` → `.tit` (número + título + subtítulo) → bloques → `.idea` (Idea clave) → `.pie`. **3 láminas por TP**; el TP7 tiene 5, el TP9 4 y el TP10 1.
-3. **Para profundizar** (`article.lamina.lamina--pf#profundizar`): `.pf-grid` de 2×2, un bloque `.pf` por lámina (texto + recuadro `.pf__caja`). Con 3 láminas, el cuarto bloque integra. En el TP7 puede usar dos hojas; en el TP9 (4 láminas, un bloque por lámina), también.
+2. **Láminas** (`article.lamina#pag-N`): `.cab` → `.tit` (número + título + subtítulo) → bloques → `.idea` (Idea clave) → `.pie`. **3 láminas por TP**; el TP7 tiene 5, el TP8 4 y el TP10 1.
+3. **Para profundizar** (`article.lamina.lamina--pf#profundizar`): `.pf-grid` de 2×2, un bloque `.pf` por lámina (texto + recuadro `.pf__caja`). Con 3 láminas, el cuarto bloque integra. En el TP7 puede usar dos hojas; en el TP8 (4 láminas, un bloque por lámina), también.
 4. **Actividades para hacer en la carpeta** (`article.lamina.lamina--act#actividades`), con la estructura de los .docx de la materia:
    - Secciones numeradas `N- Tema`, desde 1 en cada TP.
    - Incisos `a)`, `b)`, `c)` con la letra destacada.
    - Cuadros comparativos para completar (`.act-tabla`).
-   - **Un punto por lámina + un caso integrador.** En una sola hoja (dos en el TP7 y en el TP9). Más cortas que en Base de Datos: no se suman 2 o 3 puntos extra.
+   - **Un punto por lámina + un caso integrador.** En una sola hoja (dos en el TP7 y en el TP8). Más cortas que en Base de Datos: no se suman 2 o 3 puntos extra.
    - Sin cierre: no llevan `REALIZAR EN LA CARPETA.` ni `Fecha límite`.
    - Sin corrección automática.
-5. **Actividades para hacer en la computadora** (`article.lamina--compu#actividades-2`), solo en los TP8, TP9 y TP10: pasos numerados y un recuadro "Entrega" con la lista de lo que se entrega, con viñetas (10/10: sin casillas; en el TP8, una sola línea, sin lista).
+5. **Actividades para hacer en la computadora** (`article.lamina--compu#actividades-2`), solo en los TP8, TP9 y TP10: pasos numerados y un recuadro "Entrega" con la lista de lo que se entrega, con viñetas (10/10: sin casillas; en el TP9, una sola línea, sin lista).
 6. **Mini-juego:** si el TP tiene juego en la app Redes I Games, cierra con el botón "Jugar el mini-juego de este TP". Ver "Componentes nuevos".
 
 Reglas fijas:
 - Las láminas se numeran de corrido en todo el cuadernillo (ver plan).
 - Al terminar un TP: activarlo en `index.html` (de `div.tp.tp--pronto` a `a.tp` con `href` y su `tp__visto`) y pasar su estado a "✅ Disponible" en el README.
-- Objetivo de tiempo: 4 encuentros por TP. El TP8 se da en 2 y el TP10 en 6.
+- Objetivo de tiempo: 4 encuentros por TP. El TP9 se da en 2 y el TP10 en 6.
 
 ## Regla de las actividades (innegociable)
 
@@ -159,7 +159,7 @@ El repo de origen no tiene nada interactivo. Lo que sigue se crea en el TP donde
 - **Terminal:** una `ventana-cod` con el rótulo "Símbolo del sistema", el comando y su salida en texto real y en español, como la muestra Windows. Máximo unas 14 líneas dentro de una lámina.
 - **Simulador** (`section.simulador`): una parte interactiva por TP, que hace visible algo que en papel no se ve.
   - En el HTML siempre va escrito **un ejemplo resuelto**: es lo que se ve sin JavaScript y en la impresión.
-  - Lleva la aclaración "Simulación: los valores son de ejemplo", salvo el del TP9, que hace una petición real.
+  - Lleva la aclaración "Simulación: los valores son de ejemplo", salvo el del TP8, que hace una petición real.
   - Usable con teclado; los cambios se avisan con `aria-live="polite"`; respeta `prefers-reduced-motion`.
   - Va dentro de la lámina de su tema si la hoja entra en A4. Si no, en una hoja propia después de las láminas, sin número de lámina.
 
@@ -169,24 +169,24 @@ El repo de origen no tiene nada interactivo. Lo que sigue se crea en el TP donde
   | 5 | Tabla NAT que se completa al "mandar" paquetes |
   | 6 | Validador de rutas UNC |
   | 7 | Resolución DNS paso a paso |
-  | 8 | (11/10) Sin simulador dentro de la página: se sacó el panel genérico porque la práctica se hace en el simulador del panel, una app aparte (ver abajo) |
-  | 9 | Petición real: un GET a DolarAPI, con la URL armada, su código de respuesta, su JSON y el dato mostrado en la página |
+  | 8 | Petición real: un GET a DolarAPI, con la URL armada, su código de respuesta, su JSON y el dato mostrado en la página |
+  | 9 | (11/10) Sin simulador dentro de la página: se sacó el panel genérico porque la práctica se hace en el simulador del panel, una app aparte (ver abajo) |
 
 - **Datos de ejemplo, iguales en todo el cuadernillo:** red `192.168.1.0/24`, puerta de enlace `192.168.1.1`, PC `192.168.1.25`, DNS `8.8.8.8`. IP públicas de ejemplo: rango `203.0.113.0/24`, reservado para documentación. Dominio de ejemplo: uno inventado, siempre el mismo (`redesdelaula.com`, que no existe). Los dominios reales van solo en la práctica de laboratorio, donde la salida la ve el alumno en su PC.
-  - **Excepción del TP9 (13/10):** las API públicas van con su dominio real (`dolarapi.com`, `api.open-meteo.com`, `pokeapi.co`). La API inventada de la biblioteca de la escuela usa un dominio inventado: `api.redesdelaula.com` (`/libros`, `/libros/12`).
+  - **Excepción del TP8 (13/10):** las API públicas van con su dominio real (`dolarapi.com`, `api.open-meteo.com`, `pokeapi.co`). La API inventada de la biblioteca de la escuela usa un dominio inventado: `api.redesdelaula.com` (`/libros`, `/libros/12`).
 - **Captura anotada** (TP7): esquema SVG de una ventana de Wireshark (columnas No., Time, Source, Destination, Protocol, Info) con una consulta DNS y su respuesta, y un GET de HTTP con su `200 OK`, con flechas que explican cada fila. Solo DNS y HTTP; ARP queda afuera.
-- **Pantallas del router** (TP8): esquemas SVG simplificados del panel del TP-Link, no capturas ni fotos. Cada esquema muestra solo lo que hay que tocar, con el nombre exacto de la opción. Modelo: TP-Link TL-WR850N v3, con el panel en inglés: cada menú va en inglés, como en el panel, con la traducción al lado. Los datos salen de la guía oficial que pasó Nicolás y de las capturas del panel real; lo que no esté ahí lleva el marcador visible [VERIFICAR EN EL PANEL].
+- **Pantallas del router** (TP9): esquemas SVG simplificados del panel del TP-Link, no capturas ni fotos. Cada esquema muestra solo lo que hay que tocar, con el nombre exacto de la opción. Modelo: TP-Link TL-WR850N v3, con el panel en inglés: cada menú va en inglés, como en el panel, con la traducción al lado. Los datos salen de la guía oficial que pasó Nicolás y de las capturas del panel real; lo que no esté ahí lleva el marcador visible [VERIFICAR EN EL PANEL].
   - (10/10) El panel tiene tres pestañas: Quick Setup, Basic (lo más usado) y Advanced (todos los menús). Las rutas llevan la pestaña: `Advanced › Network › LAN Settings`. La traducción va sin la pestaña: (Red › Configuración de LAN).
   - Los dispositivos conectados se ven en `Basic › Network Map` y en `Advanced › Network › LAN Settings` › Client List, no en Status. Status muestra la IP del lado Internet.
-- **Simulador del panel del router** (TP8, 10/10): app aparte, en el repo `Prof-NkoCussi/App-Router-Simulador`, publicada en https://prof-nkocussi.github.io/App-Router-Simulador/. Solo para computadora. Reproduce el panel del TL-WR850N v3 con diseño propio, sin logo ni marca, y al lado tiene «Práctica», «Tu PC», «Otra PC», «Celular» y «Router». La práctica en la compu del TP8 se hace ahí, para no pasar con el router real PC por PC.
-  - Los pasos de «Práctica» (`assets/js/practica.js`) llevan las mismas palabras que las actividades en la compu del TP8: si se cambia una, se cambia la otra.
+- **Simulador del panel del router** (TP9, 10/10): app aparte, en el repo `Prof-NkoCussi/App-Router-Simulador`, publicada en https://prof-nkocussi.github.io/App-Router-Simulador/. Solo para computadora. Reproduce el panel del TL-WR850N v3 con diseño propio, sin logo ni marca, y al lado tiene «Práctica», «Tu PC», «Otra PC», «Celular» y «Router». La práctica en la compu del TP9 se hace ahí, para no pasar con el router real PC por PC.
+  - Los pasos de «Práctica» (`assets/js/practica.js`) llevan las mismas palabras que las actividades en la compu del TP9: si se cambia una, se cambia la otra.
   - La entrega es solo la captura del resumen, que trae un código y muestra cada paso con ✓ (10/10: sin el `config.bin`).
   - Pantallas provisorias, armadas sin captura del router real: Backup & Restore, el formulario Add de Address Reservation, Administration y el formulario Add de Access Control. Se corrigen cuando Nicolás mande las capturas.
 - **Diagramas:** todos en SVG simple, con `role="img"` y texto alternativo: topologías, recorrido de un paquete, handshake, encapsulación, cliente-servidor, capas, publicar/suscribirse de MQTT, arquitectura del YoLo. Si hace falta una foto real (rack, patch panel), dejar un marcador visible: `[FOTO: qué mostrar]`.
 - **Botón del mini-juego:** enlace a la app ya publicada (`https://prof-nkocussi.github.io/App-redes-games/`, repo `Prof-NkoCussi/App-redes-games`, un juego por carpeta `games/tpN/`). Confirmar la URL de cada juego en ese repo. Hoy hay juego de los TP1 a TP5. El botón va solo en los TPs que tienen juego. El cuadernillo linkea a la app: no se fusionan.
-- **Código JavaScript** (TP9 y TP10): `let` y `const`, `===`, punto y coma, comillas dobles, textos unidos con `+`. Las peticiones se escriben con `async function` y `await fetch()`, como receta fija; `.then()` solo se nombra en "Para profundizar". Al lado de cada ejemplo va escrita la salida esperada.
+- **Código JavaScript** (TP8 y TP10): `let` y `const`, `===`, punto y coma, comillas dobles, textos unidos con `+`. Las peticiones se escriben con `async function` y `await fetch()`, como receta fija; `.then()` solo se nombra en "Para profundizar". Al lado de cada ejemplo va escrita la salida esperada.
   - **(13/10) Los alumnos recién empiezan a programar.** El `fetch` se queda, pero no lo escriben desde cero: usan un **modelo armado** y lo modifican de a una cosa (la URL o un campo). En las actividades no se pide escribir código desde cero: a lo sumo, completar una sola cosa del modelo.
-  - El modelo del TP9 está en `assets/descargas/api-dolar/` (`index.html` + `app.js` con comentarios, y `api-dolar.zip`), y se muestra **tal cual** en la lámina 29, con los comentarios en `.t-com`. Si se cambia el modelo, se cambian los tres archivos y la lámina, y se vuelve a probar con doble clic, con DolarAPI y con PokéAPI. El `.zip` se arma con `tar -a` de Windows, para que las rutas vayan con `/`.
+  - El modelo del TP8 está en `assets/descargas/api-dolar/` (`index.html` + `app.js` con comentarios, y `api-dolar.zip`), y se muestra **tal cual** en la lámina 26, con los comentarios en `.t-com`. Si se cambia el modelo, se cambian los tres archivos y la lámina, y se vuelve a probar con doble clic, con DolarAPI y con PokéAPI. El `.zip` se arma con `tar -a` de Windows, para que las rutas vayan con `/`.
 
 ## Versión paso a paso
 
@@ -226,9 +226,9 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - **A quién va:** chicos de 16–17 años. Frases cortas, un concepto por bloque, ejemplos de la escuela y la vida cotidiana (el Wi-Fi de la casa, el laboratorio, el celular).
 - Teoría en tono neutro ("podemos…"); consignas en voseo ("Indicá", "Escribí", "Completá").
 - **No adelantar temas de TPs posteriores.** Sí retomar los anteriores, nombrando el TP.
-- **Windows:** `ipconfig` en el TP8 y `ping`, explicado brevemente, en el TP10. `tracert`, `nslookup` y `netstat` quedan para Redes II. El equivalente de Linux (`ifconfig`) se nombra solo en "Para profundizar".
+- **Windows:** `ipconfig` en el TP9 y `ping`, explicado brevemente, en el TP10. `tracert`, `nslookup` y `netstat` quedan para Redes II. El equivalente de Linux (`ifconfig`) se nombra solo en "Para profundizar".
 - **Simplificaciones acordadas:** DNS y DHCP usan UDP; HTTP, HTTPS, FTP, SSH, SMTP, POP3 e IMAP usan TCP. No entrar en excepciones (DNS sobre TCP, HTTP/3).
-- **Seguridad:** el TP11 es de soporte y puede no darse. Lo mínimo va antes: HTTPS en el TP7; credenciales por defecto y WPA2/WPA3 en el TP8.
+- **Seguridad:** el TP11 es de soporte y puede no darse. Lo mínimo va antes: HTTPS en el TP7; credenciales por defecto y WPA2/WPA3 en el TP9.
 - Palabras: "celular", "notebook", "puerta de enlace" (y `gateway` entre paréntesis la primera vez), "contraseña".
 
 ## Plan del cuadernillo
@@ -246,8 +246,8 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 | 6 | Recursos compartidos en red | 16–18 | carpetas compartidas y permisos · rutas UNC · impresora compartida | Rutas UNC |
 | **Unidad 2 · Protocolos, seguridad y aplicaciones** | | | | |
 | 7 | Transporte y protocolos de aplicación | 19–23 | TCP y UDP, con el handshake de tres pasos · puertos · DNS y DHCP · HTTP y HTTPS · FTP, SSH y correo | DNS |
-| 8 | Configurando el router | 24–26 | la IP de la PC: `ipconfig` e IP fija en Windows · cómo funciona un router y cómo se entra · configurar el router: Wi-Fi, DHCP e IP fijas | Simulador del panel, app aparte |
-| 9 | APIs REST y MQTT | 27–30 | cliente-servidor, recursos y endpoints · verbos HTTP y códigos de respuesta · JSON y `fetch` · MQTT: broker, publisher, subscriber y tópicos | Petición real |
+| 8 | APIs REST y MQTT | 24–27 | cliente-servidor, recursos y endpoints · verbos HTTP y códigos de respuesta · JSON y `fetch` · MQTT: broker, publisher, subscriber y tópicos | Petición real |
+| 9 | Configurando el router | 28–30 | la IP de la PC: `ipconfig` e IP fija en Windows · cómo funciona un router y cómo se entra · configurar el router: Wi-Fi, DHCP e IP fijas | Simulador del panel, app aparte |
 | 10 | Proyecto integrador YoLo | 31 | mapa del proyecto: navegador → servidor → broker MQTT → ESP32 → motores, el protocolo de cada tramo y el esquema de red. El resto es práctica en la compu (6 clases) | — |
 | 11 | Seguridad en redes (de soporte) | 32–34 | amenazas (sniffing, spoofing, Man-in-the-Middle, DoS) · firewall, DMZ y VPN · HTTPS, certificados y Wi-Fi (WPA2, WPA3, redes públicas) | — |
 
@@ -262,28 +262,28 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - Cada lámina dice el puerto y si usa TCP o UDP.
 - "Para profundizar": tabla resumen de puertos (20/21, 22, 25, 53, 67/68, 80, 110, 143, 443 y 3306 de MySQL) y la captura anotada.
 
-**TP8 · Configurando el router** (C, 9/10: antes "Diagnóstico de red")
-- Enfoque: que entiendan cómo funciona un router, entren al panel y lo configuren. Es individual y sirve de práctica para el proyecto final, donde cada grupo configura su router.
-- L24 **La IP de la PC:** `ipconfig` y `ipconfig /all` (IP, máscara, puerta de enlace, MAC, DHCP habilitado); IP dinámica y fija; cómo poner una IP fija en Windows (`ncpa.cpl` › Propiedades › TCP/IPv4), con el esquema SVG de esa ventana.
-- L25 **Cómo funciona un router:** los dos lados (WAN con la IP pública, LAN con la puerta de enlace) en SVG; qué hace (enruta, NAT, DHCP, Wi-Fi, switch); entrar al panel; contraseña de administrador y credenciales por defecto; dónde se ve la IP pública.
-- L26 **Configurar el router:** plan de la red (router, IP fijas, rango DHCP); SSID, clave, WPA2 y WPA3; rango DHCP y dispositivos conectados; reserva de IP por MAC (retoma la impresora del TP6), comprobada con `ipconfig /release` e `ipconfig /renew`; copia de seguridad. Esquema SVG del panel del TL-WR850N v3.
-- Cada opción lleva al lado el recuadro "En el router del laboratorio", con la ruta en el TL-WR850N v3.
-- "Para profundizar": la IP 169.254 cuando no hay DHCP; `ifconfig` en Linux; la IP pública en el laboratorio y port forwarding; control de acceso; firmware, reiniciar y reset de fábrica.
-- `ping`, `tracert`, `nslookup` y `netstat` quedan para Redes II.
-
-**TP9 · APIs REST y MQTT** (C, 13/10: antes "APIs REST", 3 láminas; MQTT sale del TP10 y entra acá)
-- L27 **Cliente-servidor y API REST:** cliente (acento) y servidor (naranja), como en el TP7; qué es una API REST, qué es un recurso y qué es un endpoint. Esquema de la URL en partes: `https://` + dominio + ruta del recurso + parámetros después del `?`, con la URL de Open-Meteo (clima de Ushuaia).
-- L28 **Verbos y códigos:** GET, POST, PUT y DELETE, cada uno con su acción. Códigos: se retoman 200, 404 y 500 del TP7 y se suman 201 y 400. Las API públicas solo dejan leer (GET): POST, PUT y DELETE se explican con la API inventada de la biblioteca de la escuela (`/libros`, `/libros/12`). No se usa la luz, que es el ejemplo del TP10.
-- L29 **JSON y `fetch`** (C, 13/10): JSON para leer (objeto, clave y valor, textos, números, `true`/`false` y listas) y el modelo completo como receta fija: `index.html` y `app.js` tal cual, con sus comentarios, y el botón para descargar la carpeta. Al lado del modelo, resaltado, qué es `fetch()`: solicita y recupera datos, con una petición HTTP a un servidor, y obtiene un recurso, como un JSON. Al lado de cada ejemplo, la salida esperada.
-- L30 **MQTT:** qué es y para qué se usa (dispositivos como el ESP32); broker (Mosquitto, el del proyecto), publisher, subscriber y tópicos; puerto 1883. Cuadro HTTP vs MQTT: pedir/responder o publicar/suscribirse, conexión que se abre y se cierra o que queda abierta, mensaje pesado o liviano, cuándo conviene cada uno. Esquema SVG de publicar/suscribirse con el broker en el medio.
+**TP8 · APIs REST y MQTT** (C, 13/10: antes "APIs REST", 3 láminas; MQTT sale del TP10 y entra acá)
+- L24 **Cliente-servidor y API REST:** cliente (acento) y servidor (naranja), como en el TP7; qué es una API REST, qué es un recurso y qué es un endpoint. Esquema de la URL en partes: `https://` + dominio + ruta del recurso + parámetros después del `?`, con la URL de Open-Meteo (clima de Ushuaia).
+- L25 **Verbos y códigos:** GET, POST, PUT y DELETE, cada uno con su acción. Códigos: se retoman 200, 404 y 500 del TP7 y se suman 201 y 400. Las API públicas solo dejan leer (GET): POST, PUT y DELETE se explican con la API inventada de la biblioteca de la escuela (`/libros`, `/libros/12`). No se usa la luz, que es el ejemplo del TP10.
+- L26 **JSON y `fetch`** (C, 13/10): JSON para leer (objeto, clave y valor, textos, números, `true`/`false` y listas) y el modelo completo como receta fija: `index.html` y `app.js` tal cual, con sus comentarios, y el botón para descargar la carpeta. Al lado del modelo, resaltado, qué es `fetch()`: solicita y recupera datos, con una petición HTTP a un servidor, y obtiene un recurso, como un JSON. Al lado de cada ejemplo, la salida esperada.
+- L27 **MQTT:** qué es y para qué se usa (dispositivos como el ESP32); broker (Mosquitto, el del proyecto), publisher, subscriber y tópicos; puerto 1883. Cuadro HTTP vs MQTT: pedir/responder o publicar/suscribirse, conexión que se abre y se cierra o que queda abierta, mensaje pesado o liviano, cuándo conviene cada uno. Esquema SVG de publicar/suscribirse con el broker en el medio.
 - Simulador "Petición real", en una hoja propia después de las láminas: el alumno elige un endpoint de DolarAPI, toca "Enviar GET" y ve la URL armada, el código (200 en verde, 404 en rojo), el JSON que llegó y el dato mostrado en la página. El 404 de DolarAPI se muestra tal cual: "404, sin JSON". Sin Internet o si la API falla: aviso claro, y queda a la vista el ejemplo resuelto escrito en el HTML.
 - "Para profundizar", un bloque por lámina: CORS (por qué algunas API no responden desde el navegador), ver la petición con F12 › Red, por qué JSON reemplazó a XML y `.then()` solo nombrado, y un bloque de MQTT. (13/10) En una segunda hoja, "¿Dónde consigo una API?": la lista public-apis de GitHub (`github.com/public-apis/public-apis`) con las columnas Auth (No), HTTPS (Yes) y CORS (Yes); datos.gob.ar; y el aviso de no subir nunca una clave de API a un repositorio público.
 - Sin mini-juego.
 - **API probadas** (13/10, desde la compu de Nicolás; falta la prueba en el colegio). Antes de escribir un ejemplo, se vuelve a pedir la API y se copia la respuesta real, sin inventar campos.
   - **DolarAPI** (`https://dolarapi.com/v1/dolares/oficial`): 200, permite CORS, JSON de 6 campos (`moneda`, `casa`, `nombre`, `compra`, `venta`, `fechaActualizacion`). Un recurso inventado da 404 vacío, sin JSON. Va en el simulador y en los ejemplos.
-  - **Open-Meteo** (clima de Ushuaia): 200, sin clave, con parámetros `?latitude=…&longitude=…`. (13/10) Solo en el esquema de las partes de la URL de la lámina 27 y para mirar en el navegador: sus datos vienen anidados.
+  - **Open-Meteo** (clima de Ushuaia): 200, sin clave, con parámetros `?latitude=…&longitude=…`. (13/10) Solo en el esquema de las partes de la URL de la lámina 24 y para mirar en el navegador: sus datos vienen anidados.
   - **PokéAPI:** 200, pero el JSON pesa unos 300 KB; un nombre mal escrito da 404 con un JSON corto. (13/10) En la práctica, al cambiar el modelo de API: `https://pokeapi.co/api/v2/pokemon/pikachu`, con `datos.name` y `datos.height`.
   - **RestCountries:** contesta 301. No va.
+
+**TP9 · Configurando el router** (C, 9/10: antes "Diagnóstico de red")
+- Enfoque: que entiendan cómo funciona un router, entren al panel y lo configuren. Es individual y sirve de práctica para el proyecto final, donde cada grupo configura su router.
+- L28 **La IP de la PC:** `ipconfig` y `ipconfig /all` (IP, máscara, puerta de enlace, MAC, DHCP habilitado); IP dinámica y fija; cómo poner una IP fija en Windows (`ncpa.cpl` › Propiedades › TCP/IPv4), con el esquema SVG de esa ventana.
+- L29 **Cómo funciona un router:** los dos lados (WAN con la IP pública, LAN con la puerta de enlace) en SVG; qué hace (enruta, NAT, DHCP, Wi-Fi, switch); entrar al panel; contraseña de administrador y credenciales por defecto; dónde se ve la IP pública.
+- L30 **Configurar el router:** plan de la red (router, IP fijas, rango DHCP); SSID, clave, WPA2 y WPA3; rango DHCP y dispositivos conectados; reserva de IP por MAC (retoma la impresora del TP6), comprobada con `ipconfig /release` e `ipconfig /renew`; copia de seguridad. Esquema SVG del panel del TL-WR850N v3.
+- Cada opción lleva al lado el recuadro "En el router del laboratorio", con la ruta en el TL-WR850N v3.
+- "Para profundizar": la IP 169.254 cuando no hay DHCP; `ifconfig` en Linux; la IP pública en el laboratorio y port forwarding; control de acceso; firmware, reiniciar y reset de fábrica.
+- `ping`, `tracert`, `nslookup` y `netstat` quedan para Redes II.
 
 **TP10 · Proyecto integrador YoLo** (C, 13/10)
 - L31 **Mapa del proyecto:** la arquitectura navegador → servidor → broker MQTT → ESP32 → motores, qué protocolo va en cada tramo y el esquema de red.
@@ -310,12 +310,12 @@ El contenido ya está escrito y verificado. Fuente: las diapositivas de Gamma (e
   - Puertos: tabla con los puertos 80, 443, 21, 22, 25, 53 y 3306 y su protocolo o servicio.
   - HTTP: analizar una solicitud (método, URL, headers) y los códigos de estado 200, 301, 404 y 500.
   - Caso integrador: "Un alumno enciende su notebook, se conecta al Wi-Fi, abre el navegador, escribe una URL, navega, descarga un archivo y envía un email". Identificar qué protocolo de aplicación interviene en cada paso y en qué orden. Tabla con DNS, DHCP, HTTP, HTTPS, FTP, SSH y SMTP: función, puerto, si usa TCP o UDP y un ejemplo de uso. (C) La captura se lee del cuadernillo: identificar los protocolos presentes.
-- **TP8.** (C, 9/10) Carpeta: un punto por lámina, sin caso integrador (10/10: se sacó la planilla de configuración). Computadora, individual: configurar el router en el simulador del panel (10/10), como práctica para el proyecto final. Reset de fábrica si ya se usó; entrar al panel y crear la contraseña de administrador; SSID y clave con WPA/WPA2 Personal; ver el rango DHCP y los dispositivos; reservar una IP para la PC y comprobarla con `ipconfig`; poner una IP fija en Windows; copia de seguridad. Entrega por Classroom: la captura del resumen del simulador, con todos los pasos en ✓.
-- **TP9.** (C, 13/10: reemplaza el texto anterior; los alumnos recién empiezan a programar: el `fetch` se queda, pero usan un modelo armado y lo modifican).
-  - Carpeta: leer un JSON y sacar datos, separar las partes de una URL, verbos y códigos, HTTP vs MQTT, y en el modelo completar UNA cosa (el campo o la URL), nada más. Sin escribir código desde cero. Sin cierre, como el TP8. (Se mantiene el caso integrador, que no pide código: el recorrido botón → `fetch` → servidor → código → JSON → página, y el tramo siguiente: el servidor publica en MQTT y el ESP32 lo recibe.)
+- **TP8.** (C, 13/10: reemplaza el texto anterior; los alumnos recién empiezan a programar: el `fetch` se queda, pero usan un modelo armado y lo modifican).
+  - Carpeta: leer un JSON y sacar datos, separar las partes de una URL, verbos y códigos, HTTP vs MQTT, y en el modelo completar UNA cosa (el campo o la URL), nada más. Sin escribir código desde cero. Sin cierre, como el TP9. (Se mantiene el caso integrador, que no pide código: el recorrido botón → `fetch` → servidor → código → JSON → página, y el tramo siguiente: el servidor publica en MQTT y el ESP32 lo recibe.)
   - Computadora, en pasos chicos: 1. Pegar en el navegador la URL de DolarAPI y mirar el JSON. 2. Descargar la carpeta, abrirla en VS Code, abrir `index.html` con doble clic y tocar "Consultar": aparece el dólar. 3. Cambiar `datos.venta` por otro campo del JSON (por ejemplo `datos.nombre`) y ver el cambio. 4. Cambiar la URL por la de PokéAPI (`https://pokeapi.co/api/v2/pokemon/pikachu`) y los campos por `datos.name` y `datos.height`; cambiar también el título de la página. 5. Probar con otro Pokémon cambiando el nombre en la URL. 6. (Opcional) Mostrar un dato más o darle estilo con CSS.
-  - Entrega (C, 13/10): una captura de pantalla de cada ejercicio, en el documento que ya está creado en Classroom. Sin el `.zip`. Una sola línea, sin lista, como en el TP8.
+  - Entrega (C, 13/10): una captura de pantalla de cada ejercicio, en el documento que ya está creado en Classroom. Sin el `.zip`. Una sola línea, sin lista, como en el TP9.
   - (13/10) En la carpeta, una pregunta sobre `fetch()`: qué es y qué hace.
+- **TP9.** (C, 9/10) Carpeta: un punto por lámina, sin caso integrador (10/10: se sacó la planilla de configuración). Computadora, individual: configurar el router en el simulador del panel (10/10), como práctica para el proyecto final. Reset de fábrica si ya se usó; entrar al panel y crear la contraseña de administrador; SSID y clave con WPA/WPA2 Personal; ver el rango DHCP y los dispositivos; reservar una IP para la PC y comprobarla con `ipconfig`; poner una IP fija en Windows; copia de seguridad. Entrega por Classroom: la captura del resumen del simulador, con todos los pasos en ✓.
 - **TP10.** (C, 13/10) Una sola lámina, el mapa del proyecto. El resto del TP10 es todo práctica: una guía de 6 clases en la computadora. Nicolás les da una app web muy básica, que los alumnos reestructuran y diseñan con CSS a su gusto. Además usan GitHub y README (articula con Software II), configuran en el router una red Wi-Fi fija para el robot y prueban las conexiones con `ping`. El cuadernillo no publica la solución. La tabla de clases se rearma cuando se haga el TP10. (C) "Identificar vulnerabilidades" pasa al TP11.
 - **TP11.** Trabajo grupal: cada grupo toma una amenaza (sniffing, spoofing, Man-in-the-Middle, DoS) y explica cómo funciona, qué daño causa y qué defensas existen. Cuadro general de amenazas y contramedidas. Diagrama con la ubicación de firewall, DMZ y VPN. Diferencia entre HTTP y HTTPS y qué son los certificados digitales. WPA2, WPA3 y riesgos de las redes Wi-Fi públicas. (C) "Investigación" pasa a "explicación con el material". (C) Caso integrador sobre el YoLo.
 
@@ -325,7 +325,7 @@ TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primer
 
 ## Decisiones confirmadas (4/10)
 
-- 11 TPs: TP1 a TP6 sin cambios; TCP/UDP y protocolos de aplicación en un solo TP7 de 5 láminas; después Diagnóstico, APIs REST, YoLo y, al final, Seguridad como soporte.
+- 11 TPs: TP1 a TP6 sin cambios; TCP/UDP y protocolos de aplicación en un solo TP7 de 5 láminas; después Diagnóstico, APIs REST, YoLo y, al final, Seguridad como soporte. (13/10: APIs REST pasa antes que el router, ver abajo.)
 - Paleta verde azulada, parecida a la de Base de Datos I y tirando a verde. A prueba hasta que Nicolás vea el index (5/10).
 - Portada con el formato de la de Programación y el nombre de la escuela (5/10).
 - 3 láminas por TP (5 en el TP7). Actividades en una hoja.
@@ -337,26 +337,27 @@ TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primer
 
 ## Decisiones confirmadas (9/10)
 
-- TP8 pasa a "Configurando el router": la IP de la PC, cómo funciona un router y cómo configurarlo. Es individual y sirve de práctica para el proyecto final, donde cada grupo configura su router.
+- TP8 pasa a "Configurando el router": la IP de la PC, cómo funciona un router y cómo configurarlo. Es individual y sirve de práctica para el proyecto final, donde cada grupo configura su router. (13/10: ahora es el TP9, ver abajo.)
 - Router del laboratorio: TP-Link TL-WR850N v3, panel en inglés (cada menú con su traducción al lado).
 - `ping`, `tracert`, `nslookup` y `netstat` quedan para Redes II; `ping` se explica brevemente en el TP10.
 - Las actividades no llevan cierre ("REALIZAR EN LA CARPETA." ni "Fecha límite").
 
 ## Decisiones confirmadas (13/10)
 
-- TP9 pasa a "APIs REST y MQTT", con 4 láminas (27 a 30): MQTT sale del TP10 y entra acá.
+- TP8 pasa a "APIs REST y MQTT", con 4 láminas (24 a 27): MQTT sale del TP10 y entra acá.
 - TP10 · Proyecto integrador YoLo: 1 lámina (31), el mapa del proyecto. El resto es práctica en la compu, en 6 clases.
 - TP11 · Seguridad pasa a las láminas 32 a 34. Total: 34 láminas.
 - El robot del proyecto se llama **YoLo** (antes "Yarvi").
 - TP5: "Enrutamiento y NAT, PAT".
 - `netstat` sale del TP10: pasó a Redes II.
-- TP9: las API públicas van con su dominio real; la API inventada de la biblioteca, con un dominio inventado.
-- TP9 (ajuste): los alumnos recién empiezan a programar. El `fetch` se queda, pero no lo escriben desde cero: usan un modelo armado (`assets/descargas/api-dolar/`) y lo modifican. La práctica en la compu es la del modelo, en 6 pasos chicos.
+- TP8: las API públicas van con su dominio real; la API inventada de la biblioteca, con un dominio inventado.
+- TP8 (ajuste): los alumnos recién empiezan a programar. El `fetch` se queda, pero no lo escriben desde cero: usan un modelo armado (`assets/descargas/api-dolar/`) y lo modifican. La práctica en la compu es la del modelo, en 6 pasos chicos.
+- **Se invierten el TP8 y el TP9.** TP8 · APIs REST y MQTT, láminas 24 a 27 (antes TP9, 27 a 30); TP9 · Configurando el router, láminas 28 a 30 (antes TP8, 24 a 26). Solo cambian el orden y los números: el contenido es el mismo. TP10 (31) y TP11 (32 a 34) no cambian. Los archivos también se intercambian: `tp08.html` es el de APIs y `tp09.html`, el del router.
 
 ## Pendientes a consultar con Nicolás
 
-- **TP9:** probar desde el colegio DolarAPI (simulador y ejemplos), Open-Meteo y PokéAPI, y el modelo: descargar el `.zip`, descomprimirlo y abrir `index.html` con doble clic.
-- **TP9:** versión paso a paso (`tp09-pasos.html`), después de que Nicolás apruebe el texto. Solo conceptos, sin programar.
+- **TP8:** probar desde el colegio DolarAPI (simulador y ejemplos), Open-Meteo y PokéAPI, y el modelo: descargar el `.zip`, descomprimirlo y abrir `index.html` con doble clic.
+- **TP8:** versión paso a paso (`tp08-pasos.html`), después de que Nicolás apruebe el texto. Solo conceptos, sin programar.
 - **TP10:** copiar el .docx del YoLo y el código de la plantilla en `_fuente/tp10/`.
 - **Paso a paso:** link del cuestionario de Google Forms de cada TP.
 - **Simulador del router:** capturas de Backup & Restore y del formulario Add de Address Reservation (y, si se puede, de Administration) para cambiar las pantallas provisorias.

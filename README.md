@@ -38,8 +38,8 @@ Una versión web del cuadernillo de Redes I, pensada para leer desde la computad
 | 6 | Recursos compartidos en red | Material en Classroom |
 | **Unidad 2 · Protocolos, seguridad y aplicaciones** | | |
 | 7 | Transporte y protocolos de aplicación | ✅ Disponible |
-| 8 | Configurando el router | ✅ Disponible |
-| 9 | APIs REST y MQTT | ✅ Disponible |
+| 8 | APIs REST y MQTT | ✅ Disponible |
+| 9 | Configurando el router | ✅ Disponible |
 | 10 | Proyecto integrador YoLo | Próximamente |
 | 11 | Seguridad en redes | Próximamente |
 
