@@ -1409,9 +1409,11 @@ code.cod-bloque { display: block; width: fit-content; max-width: 100%; margin: 3
 /* El modelo armado (lámina 29): index.html con su explicación al lado, y app.js abajo */
 .modelo { display: grid; gap: 10px; align-items: start; margin: 8px 0; }
 .modelo .ventana-cod { min-width: 0; }
-.modelo__lado { display: grid; gap: 7px; align-content: start; }
+.modelo__lado { display: grid; gap: 6px; align-content: start; }
 .modelo__lado > p { font-size: 14.5px; line-height: 1.38; }
 .modelo__lado .salida { display: grid; gap: 2px; }
+/* Qué es fetch(): definición resaltada, con el fondo de "Idea clave" */
+.modelo__lado > .modelo__def { background: var(--acento-suave); border-radius: 8px; padding: 4px 8px 5px 11px; box-shadow: inset 4px 0 0 var(--acento); font-size: 14px; line-height: 1.35; }
 .panel__cab .boton { align-self: center; }
 .panel__nota--papel { display: none; }
 @media print { .panel__nota--papel { display: block; } }
