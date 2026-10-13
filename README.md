@@ -39,7 +39,7 @@ Una versión web del cuadernillo de Redes I, pensada para leer desde la computad
 | **Unidad 2 · Protocolos, seguridad y aplicaciones** | | |
 | 7 | Transporte y protocolos de aplicación | ✅ Disponible |
 | 8 | Configurando el router | ✅ Disponible |
-| 9 | APIs REST y MQTT | Próximamente |
+| 9 | APIs REST y MQTT | ✅ Disponible |
 | 10 | Proyecto integrador YoLo | Próximamente |
 | 11 | Seguridad en redes | Próximamente |
 

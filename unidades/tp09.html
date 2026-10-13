@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TP N°9 — APIs REST y MQTT · Redes I</title>
+  <meta name="description" content="TP N°9 de Redes I: cliente-servidor, recursos y endpoints de una API REST, verbos HTTP y códigos de respuesta, JSON y fetch, y MQTT, con una petición real a una API pública. Prof. Nicolás A. Cussi.">
+  <meta name="theme-color" content="#26C9A1">
+  <link rel="preload" href="../assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/barlow-semi-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/estilos.css">
+</head>
+<body data-tp="9">
+
+<!-- ====== Íconos (SVG simples) ====== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Red en estrella: tres equipos conectados a un nodo central -->
+    <symbol id="i-red-solido" viewBox="0 0 48 48">
+      <path d="M24 24V15M24 24L9 36M24 24l15 12" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round"/>
+      <g style="fill:currentColor;stroke:none">
+        <circle cx="24" cy="24" r="5"/>
+        <rect x="17" y="1" width="14" height="10" rx="2"/>
+        <path d="M22.5 10.5h3V13h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+        <rect x="2" y="31" width="14" height="10" rx="2"/>
+        <path d="M7.5 40.5h3V43h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+        <rect x="32" y="31" width="14" height="10" rx="2"/>
+        <path d="M37.5 40.5h3V43h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+      </g>
+    </symbol>
+    <symbol id="i-foco" viewBox="0 0 48 48">
+      <path d="M24 2.5v4M10 8.5l2.8 2.8M38 8.5l-2.8 2.8M4 22h4M40 22h4"/>
+      <path d="M24 12a10 10 0 0 0-6.2 17.8c1.4 1.2 2.2 2.6 2.2 4.2v1h8v-1c0-1.6.8-3 2.2-4.2A10 10 0 0 0 24 12z" style="fill:var(--ac)"/>
+      <path d="M20 39h8M21.5 43h5"/>
+    </symbol>
+    <symbol id="i-servidor" viewBox="0 0 48 48">
+      <rect x="8" y="5" width="32" height="11" rx="2" style="fill:var(--blanco)"/>
+      <rect x="8" y="18.5" width="32" height="11" rx="2" style="fill:var(--blanco)"/>
+      <rect x="8" y="32" width="32" height="11" rx="2" style="fill:var(--blanco)"/>
+      <g style="fill:var(--ac);stroke:none"><circle cx="14" cy="10.5" r="2.2"/><circle cx="14" cy="24" r="2.2"/><circle cx="14" cy="37.5" r="2.2"/></g>
+      <path d="M22 10.5h12M22 24h12M22 37.5h12"/>
+    </symbol>
+    <!-- Placa: un microcontrolador como el ESP32 -->
+    <symbol id="i-chip" viewBox="0 0 48 48">
+      <rect x="11" y="11" width="26" height="26" rx="3" style="fill:var(--blanco)"/>
+      <rect x="17" y="17" width="14" height="14" rx="1.5" style="fill:var(--ac);stroke:none"/>
+      <path d="M18 4v7M24 4v7M30 4v7M18 37v7M24 37v7M30 37v7M4 18h7M4 24h7M4 30h7M37 18h7M37 24h7M37 30h7"/>
+    </symbol>
+    <symbol id="i-pc" viewBox="0 0 48 48">
+      <rect x="4" y="7" width="40" height="27" rx="3"/>
+      <rect x="8.5" y="11.5" width="31" height="18" rx="1" style="fill:var(--ac);stroke:none"/>
+      <path d="M24 34v6M16 41h16"/>
+    </symbol>
+    <symbol id="i-lapiz" viewBox="0 0 48 48">
+      <path d="M33 6l9 9-25 25-9-9z" style="fill:var(--ac)"/>
+      <path d="M8 31 5.5 42.5 17 40z" style="fill:var(--blanco)"/>
+      <path d="M27 12l9 9"/>
+    </symbol>
+    <symbol id="i-descarga" viewBox="0 0 24 24">
+      <path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>
+    </symbol>
+    <symbol id="i-atras" viewBox="0 0 24 24">
+      <path d="M20 12H5M11 6l-6 6 6 6"/>
+    </symbol>
+  </defs>
+</svg>
+
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header class="barra">
+  <div class="barra__fila">
+    <a class="boton barra__volver" href="../indice.html"><svg aria-hidden="true" focusable="false"><use href="#i-atras"/></svg><span>Índice</span></a>
+    <span class="barra__titulo">TP N°9 — APIs REST y MQTT</span>
+    <button class="boton" type="button" data-imprimir aria-label="Guardar en PDF">
+      <svg aria-hidden="true" focusable="false"><use href="#i-descarga"/></svg><span><span class="boton__largo">Guardar </span>PDF</span>
+    </button>
+  </div>
+  <nav class="partes" aria-label="Partes del TP N°9">
+    <a href="#pag-27">27 · Cliente-servidor y API REST</a>
+    <a href="#pag-28">28 · Verbos y códigos</a>
+    <a href="#pag-29">29 · JSON y fetch</a>
+    <a href="#pag-30">30 · MQTT</a>
+    <a href="#simulador">Petición real</a>
+    <a href="#profundizar">Para profundizar</a>
+    <a href="#actividades">Actividades</a>
+    <a href="#actividades-2">En la compu</a>
+  </nav>
+</header>
+
+<main id="contenido" class="laminas">
+  <h1 class="sr-only">TP N°9 — APIs REST y MQTT</h1>
+
+  <!-- =================== LÁMINA 27 =================== -->
+  <article class="lamina lamina--densa lamina--compacta" id="pag-27" aria-labelledby="t27">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°9</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t27"><span class="tit__num">27.</span> Cliente-servidor y API REST</h2>
+      <p class="tit__sub">Recursos, endpoints y las partes de una URL</p>
+    </div>
+
+    <div class="intro">
+      <svg class="ico ico--xl" aria-hidden="true" focusable="false"><use href="#i-servidor"/></svg>
+      <p>Una <strong>API</strong> (interfaz de programación de aplicaciones) es la forma en que un programa le pide datos a otro: dice qué se puede pedir y cómo. Una <strong>API REST</strong> funciona sobre HTTP, como la web (TP7, lámina 22): el <strong>cliente</strong>, nuestra página en el navegador, envía una <strong>solicitud</strong> a una URL, y el <strong>servidor</strong> de la API devuelve una <strong>respuesta</strong> con un código y los datos.</p>
+    </div>
+
+    <div class="columnas columnas--api">
+        <figure class="esquema esquema--api">
+          <svg viewBox="0 0 420 186" role="img" aria-labelledby="cs-t cs-d">
+            <title id="cs-t">Cliente y servidor de una API REST</title>
+            <desc id="cs-d">A la izquierda, el cliente: nuestra página, en el navegador. A la derecha, el servidor dolarapi.com, con los endpoints de su API: /v1/dolares, /v1/dolares/oficial, /v1/dolares/blue y /v1/dolares/tarjeta. 1, el cliente envía la solicitud GET /v1/dolares/oficial. 2, el servidor devuelve la respuesta: 200 OK y los datos en JSON.</desc>
+            <rect class="esq-caja-pide" x="2" y="50" width="104" height="86" rx="8"/>
+            <text class="esq-rot" x="54" y="81" text-anchor="middle">Cliente</text>
+            <text class="esq-txt" x="54" y="101" text-anchor="middle">nuestra página,</text>
+            <text class="esq-txt" x="54" y="117" text-anchor="middle">en el navegador</text>
+            <rect class="esq-caja-responde" x="276" y="2" width="142" height="182" rx="8"/>
+            <text class="esq-rot" x="347" y="24" text-anchor="middle">Servidor</text>
+            <text class="esq-mono" x="347" y="41" text-anchor="middle">dolarapi.com</text>
+            <text class="esq-txt" x="347" y="62" text-anchor="middle">Endpoints de la API</text>
+            <rect class="esq-endpoint" x="284" y="70" width="126" height="22" rx="4"/>
+            <text class="esq-mono" x="291" y="85">/v1/dolares</text>
+            <rect class="esq-endpoint esq-endpoint--si" x="284" y="96" width="126" height="22" rx="4"/>
+            <text class="esq-mono" x="291" y="111">/v1/dolares/oficial</text>
+            <rect class="esq-endpoint" x="284" y="122" width="126" height="22" rx="4"/>
+            <text class="esq-mono" x="291" y="137">/v1/dolares/blue</text>
+            <rect class="esq-endpoint" x="284" y="148" width="126" height="22" rx="4"/>
+            <text class="esq-mono" x="291" y="163">/v1/dolares/tarjeta</text>
+            <path class="esq-pide" d="M108 80H262" style="stroke-width:3"/>
+            <path class="esq-pide" d="M273 80l-12-6.5v13z" style="stroke:none"/>
+            <text class="esq-rot" x="190" y="71" text-anchor="middle">1. Solicitud</text>
+            <text class="esq-mono" x="190" y="97" text-anchor="middle">GET /v1/dolares/oficial</text>
+            <path class="esq-responde" d="M274 128H119" style="stroke-width:3"/>
+            <path class="esq-responde" d="M108 128l12-6.5v13z" style="stroke:none"/>
+            <text class="esq-rot" x="190" y="119" text-anchor="middle">2. Respuesta</text>
+            <text class="esq-txt" x="190" y="146" text-anchor="middle">200 OK + datos en JSON</text>
+          </svg>
+        </figure>
+
+      <section class="panel" aria-labelledby="re27">
+        <div class="panel__cab"><h3 class="subtitulo" id="re27">Recurso y endpoint</h3></div>
+        <ul class="lista-txt pf__lista">
+          <li><strong>Recurso:</strong> cada cosa que ofrece la API: el dólar oficial, el clima de una ciudad, un libro de la biblioteca.</li>
+          <li><strong>Endpoint:</strong> la URL donde se pide un recurso, sin los parámetros. Cada recurso tiene la suya: el del dólar oficial es <code class="cod-bloque">https://dolarapi.com/v1/dolares/oficial</code></li>
+          <li><strong>Consumir una API:</strong> usarla desde un programa: pedirle un recurso y usar los datos que llegan.</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="panel" aria-labelledby="url27">
+      <div class="panel__cab">
+        <h3 class="subtitulo" id="url27">Las partes de una URL</h3>
+        <p class="panel__nota">Ejemplo: el clima de<br>Ushuaia, con Open-Meteo</p>
+      </div>
+      <p class="url-completa"><code>https://api.open-meteo.com/v1/forecast?latitude=-54.8&amp;longitude=-68.3&amp;current=temperature_2m</code></p>
+      <ol class="url-partes" aria-label="Las partes de la URL">
+        <li><code>https://</code><h4>Protocolo</h4><p>HTTPS: viaja cifrado (TP7).</p></li>
+        <li><code>api.open-meteo.com</code><h4>Dominio</h4><p>El servidor de la API. DNS lo traduce en una IP (TP7).</p></li>
+        <li><code>/v1/forecast</code><h4>Ruta del recurso</h4><p>Qué pedimos: el pronóstico (<em>forecast</em>), en la versión 1 (<em>v1</em>) de la API.</p></li>
+        <li><code><span>?latitude=-54.8</span><span>&amp;longitude=-68.3</span><span>&amp;current=temperature_2m</span></code><h4>Parámetros</h4><p>Datos extra, después del <code>?</code>: cada uno es <code>clave=valor</code>, y se separan con <code>&amp;</code>. Acá: dónde queda Ushuaia y que mande la temperatura actual.</p></li>
+      </ol>
+      <p class="url-endpoint">El endpoint es la URL sin los parámetros: <code>https://api.open-meteo.com/v1/forecast</code>. Con otros parámetros, da el clima de otra ciudad.</p>
+    </section>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> una API REST ofrece recursos. Cada recurso se pide en su endpoint, con una URL: protocolo, dominio, ruta y, si hacen falta, parámetros.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 27">27</span>
+    </footer>
+  </article>
+
+  <!-- =================== LÁMINA 28 =================== -->
+  <article class="lamina lamina--densa lamina--compacta" id="pag-28" aria-labelledby="t28">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°9</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t28"><span class="tit__num">28.</span> Verbos HTTP y códigos</h2>
+      <p class="tit__sub">Qué hacer con el recurso y cómo salió</p>
+    </div>
+
+    <p class="texto">En el TP7 (lámina 22) vimos que cada solicitud HTTP lleva un <strong>método</strong>, como GET. En una API REST, el método, también llamado <strong>verbo</strong>, dice qué hacer con el recurso; la URL dice cuál.</p>
+
+    <section class="panel" aria-labelledby="vb28">
+      <div class="panel__cab">
+        <h3 class="subtitulo" id="vb28">Los cuatro verbos</h3>
+        <p class="panel__nota">Ejemplo: la API de la biblioteca<br>de la escuela (inventada)</p>
+      </div>
+      <p class="texto">Las API públicas, como DolarAPI y Open-Meteo, <strong>solo dejan leer</strong> (<code>GET</code>): nadie de afuera puede crear, cambiar ni borrar sus datos. Para ver los cuatro verbos usamos una API inventada, la de la biblioteca de la escuela, en <code>https://api.redesdelaula.com</code>.</p>
+      <table class="tabla-puertos tabla-verbos">
+        <caption class="sr-only">Los cuatro verbos HTTP, su acción, un ejemplo con la API de la biblioteca y el código si sale bien</caption>
+        <thead><tr><th scope="col">Verbo</th><th scope="col">Acción</th><th scope="col">En la API de la biblioteca</th><th scope="col">Si sale bien</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">GET</th><td><strong>Leer</strong></td><td><code>GET /libros/12</code> trae el libro 12</td><td>200</td></tr>
+          <tr><th scope="row">POST</th><td><strong>Crear</strong></td><td><code>POST /libros</code> crea un libro con los datos enviados</td><td>201</td></tr>
+          <tr><th scope="row">PUT</th><td><strong>Modificar</strong></td><td><code>PUT /libros/12</code> cambia el libro 12 por los datos enviados</td><td>200</td></tr>
+          <tr><th scope="row">DELETE</th><td><strong>Borrar</strong></td><td><code>DELETE /libros/12</code> borra el libro 12</td><td>200</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="http-par" aria-labelledby="hp28">
+      <h3 class="http__tit" id="hp28">Un POST, por dentro <span>· crear un libro</span></h3>
+      <div class="columnas">
+        <div class="ventana-cod" role="group" aria-label="La solicitud">
+          <div class="ventana-cod__barra" aria-hidden="true">HTTP · la solicitud</div>
+<pre class="ventana-cod__txt"><b>POST</b> <span class="t-str">/libros</span> HTTP/1.1
+<span class="t-atr">Host:</span> api.redesdelaula.com
+<span class="t-atr">Content-Type:</span> application/json
+
+{"titulo": "Internet"}</pre>
+        </div>
+        <div class="ventana-cod" role="group" aria-label="La respuesta">
+          <div class="ventana-cod__barra" aria-hidden="true">HTTP · la respuesta</div>
+<pre class="ventana-cod__txt">HTTP/1.1 <span class="t-num">201</span> Created
+<span class="t-atr">Content-Type:</span> application/json
+
+{"id": 13, "titulo": "Internet"}</pre>
+        </div>
+      </div>
+      <p class="http__nota">Los datos van en el <strong>cuerpo</strong>, en JSON (lámina 29). Respuesta: <code>201</code>, creado con el número 13.</p>
+    </section>
+
+    <section aria-labelledby="cod28">
+      <h3 class="subtitulo" id="cod28">Códigos de respuesta</h3>
+      <p class="texto codigos__intro">Del TP7 retomamos 200, 404 y 500, y sumamos 201 y 400. El primer número dice cómo salió: <strong>2</strong>, bien; <strong>4</strong>, error en el pedido (del cliente); <strong>5</strong>, error del servidor.</p>
+      <ul class="codigos" aria-labelledby="cod28">
+        <li class="grupo grupo--ok"><b>200</b><strong>OK</strong><span>Salió bien.</span></li>
+        <li class="grupo grupo--ok"><b>201</b><strong>Created</strong><span>Se creó el recurso nuevo (POST).</span></li>
+        <li class="grupo grupo--error"><b>400</b><strong>Bad Request</strong><span>Pedido mal armado: un POST sin título.</span></li>
+        <li class="grupo grupo--error"><b>404</b><strong>Not Found</strong><span>No existe ese recurso: <code>/libros/999</code>.</span></li>
+        <li class="grupo grupo--error"><b>500</b><strong>Internal Server Error</strong><span>Falló el servidor.</span></li>
+      </ul>
+    </section>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> la URL dice qué recurso; el verbo, qué hacer: GET lee, POST crea, PUT modifica y DELETE borra. El código de respuesta dice cómo salió.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 28">28</span>
+    </footer>
+  </article>
+
+  <!-- =================== LÁMINA 29 =================== -->
+  <article class="lamina lamina--densa lamina--compacta" id="pag-29" aria-labelledby="t29">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°9</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t29"><span class="tit__num">29.</span> JSON y fetch</h2>
+      <p class="tit__sub">Pedir los datos, convertirlos y mostrarlos</p>
+    </div>
+
+    <section class="panel" aria-labelledby="js29">
+      <div class="panel__cab"><h3 class="subtitulo" id="js29">Cómo se escribe JSON</h3></div>
+      <p class="texto"><strong>JSON</strong> (en inglés, <em>JavaScript Object Notation</em>) es el formato de texto de casi todas las API REST.</p>
+      <div class="json-ej">
+        <div class="ventana-cod" role="group" aria-label="JSON de ejemplo: el libro 12">
+          <div class="ventana-cod__barra" aria-hidden="true">JSON · GET /libros/12</div>
+<pre class="ventana-cod__txt">{
+  <span class="t-atr">"id"</span>: <span class="t-num">12</span>,
+  <span class="t-atr">"titulo"</span>: <span class="t-str">"Manual de redes"</span>,
+  <span class="t-atr">"paginas"</span>: <span class="t-num">120</span>,
+  <span class="t-atr">"prestado"</span>: <b>true</b>,
+  <span class="t-atr">"temas"</span>: [<span class="t-str">"cables"</span>, <span class="t-str">"wifi"</span>]
+}</pre>
+        </div>
+        <div class="lectura">
+          <p class="lectura__tit">Un <strong>objeto</strong> va entre llaves <code>{ }</code>, con pares <strong>clave: valor</strong> separados por comas; la <strong>clave</strong> es el nombre del dato, entre comillas dobles. Convertido en el objeto <code>datos</code>, se lee así:</p>
+          <ul>
+            <li><code>datos.titulo</code><span class="lectura__flecha" aria-hidden="true">→</span><span class="sr-only">: </span><samp>Manual de redes</samp><span class="lectura__tipo"><strong>texto</strong>, entre comillas</span></li>
+            <li><code>datos.paginas</code><span class="lectura__flecha" aria-hidden="true">→</span><span class="sr-only">: </span><samp>120</samp><span class="lectura__tipo"><strong>número</strong>, sin comillas</span></li>
+            <li><code>datos.prestado</code><span class="lectura__flecha" aria-hidden="true">→</span><span class="sr-only">: </span><samp>true</samp><span class="lectura__tipo"><strong>true</strong> o <strong>false</strong>, sin comillas</span></li>
+            <li><code>datos.temas[0]</code><span class="lectura__flecha" aria-hidden="true">→</span><span class="sr-only">: </span><samp>cables</samp><span class="lectura__tipo"><strong>lista</strong>, entre corchetes <code>[ ]</code>, con comas; se cuenta desde 0</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="fe29">
+      <div class="panel__cab">
+        <h3 class="subtitulo" id="fe29">La receta: pedir, convertir y mostrar</h3>
+        <p class="panel__nota">Probala en el simulador<br>«Petición real»</p>
+      </div>
+      <div class="ventana-cod" role="group" aria-label="Código de ejemplo: un botón que muestra el dólar oficial">
+        <div class="ventana-cod__barra" aria-hidden="true">HTML + JavaScript</div>
+<pre class="ventana-cod__txt">&lt;<b>button</b> <span class="t-atr">onclick</span>=<span class="t-str">"mostrarDolar()"</span>&gt;Ver el dólar&lt;/<b>button</b>&gt;
+&lt;<b>p</b> <span class="t-atr">id</span>=<span class="t-str">"precio"</span>&gt;&lt;/<b>p</b>&gt;
+&lt;<b>script</b>&gt;
+<b>async function</b> <span class="t-fun">mostrarDolar</span>() {
+  <b>const</b> respuesta = <b>await</b> <span class="t-fun">fetch</span>(<span class="t-str">"https://dolarapi.com/v1/dolares/oficial"</span>);
+  <b>const</b> datos = <b>await</b> respuesta.<span class="t-fun">json</span>();
+  <b>const</b> precio = document.<span class="t-fun">getElementById</span>(<span class="t-str">"precio"</span>);
+  precio.<span class="t-atr">textContent</span> = <span class="t-str">"Dólar "</span> + datos.<span class="t-atr">nombre</span> + <span class="t-str">": $"</span> + datos.<span class="t-atr">venta</span>;
+}
+&lt;/<b>script</b>&gt;</pre>
+      </div>
+      <div class="receta">
+        <ol class="lista-pasos" aria-label="Los pasos de la receta">
+          <li class="grupo"><b>1</b><span><code>async function</code>: la función puede <strong>esperar</strong> (<code>await</code>) a la red.</span></li>
+          <li class="grupo"><b>2</b><span><code>await fetch(url)</code>: <strong>envía</strong> la solicitud (un GET, si no se indica otro verbo) y espera la respuesta. Su código queda en <code>respuesta.status</code>.</span></li>
+          <li class="grupo grupo--naranja"><b>3</b><span><code>await respuesta.json()</code>: <strong>convierte</strong> el JSON que llegó en un objeto, <code>datos</code>.</span></li>
+          <li class="grupo"><b>4</b><span><strong>Mostrar:</strong> <code>datos.venta</code> lee un valor y <code>textContent</code> lo escribe en el párrafo.</span></li>
+        </ol>
+        <div class="salida">
+          <p class="salida__tit">Salida esperada</p>
+          <p>Al tocar <span class="salida__boton">Ver el dólar</span>: <span class="salida__dato">Dólar Oficial: $1535</span> <span class="salida__nota">(cambia cada día)</span></p>
+        </div>
+      </div>
+    </section>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> la API responde en JSON: <code>fetch</code> pide, <code>respuesta.json()</code> convierte y <code>textContent</code> muestra el dato.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 29">29</span>
+    </footer>
+  </article>
+
+  <!-- =================== LÁMINA 30 =================== -->
+  <article class="lamina lamina--densa lamina--compacta" id="pag-30" aria-labelledby="t30">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°9</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t30"><span class="tit__num">30.</span> MQTT</h2>
+      <p class="tit__sub">Publicar y suscribirse: mensajes entre dispositivos</p>
+    </div>
+
+    <div class="intro">
+      <svg class="ico ico--xl" aria-hidden="true" focusable="false"><use href="#i-chip"/></svg>
+      <p><strong>MQTT</strong> es un protocolo para enviar mensajes cortos entre dispositivos: sensores, placas como el <strong>ESP32</strong> (una placa chica con Wi-Fi que se programa) y servidores. Gasta poca memoria, poca batería y poca red; por eso se usa mucho en el Internet de las cosas (IoT).</p>
+    </div>
+
+    <div class="columnas">
+      <figure class="esquema esquema--mqtt">
+        <svg viewBox="0 0 440 196" role="img" aria-labelledby="mq-t mq-d">
+          <title id="mq-t">Publicar y suscribirse con MQTT</title>
+          <desc id="mq-d">En el medio, el broker Mosquitto, en el puerto 1883. 1, la pantalla de preceptoría y la app del celular se suscriben al tópico escuela/laboratorio/temperatura. 2, un sensor con un ESP32 publica 21.5 en ese tópico. 3, el broker entrega 21.5 a los dos suscriptos.</desc>
+          <defs>
+            <marker id="mq-fp" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path class="esq-pide" d="M0 0 10 5 0 10z" style="stroke:none"/></marker>
+            <marker id="mq-fr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path class="esq-responde" d="M0 0 10 5 0 10z" style="stroke:none"/></marker>
+          </defs>
+          <text class="esq-txt" x="220" y="13" text-anchor="middle">Tópico: <tspan class="esq-mono">escuela/laboratorio/temperatura</tspan></text>
+          <rect class="esq-caja-pide" x="2" y="72" width="104" height="66" rx="8"/>
+          <text class="esq-rot" x="54" y="95" text-anchor="middle">Publisher</text>
+          <text class="esq-txt" x="54" y="113" text-anchor="middle">sensor con</text>
+          <text class="esq-txt" x="54" y="128" text-anchor="middle">un ESP32</text>
+          <rect class="esq-caja-responde" x="168" y="60" width="104" height="90" rx="8"/>
+          <text class="esq-rot" x="220" y="88" text-anchor="middle">Broker</text>
+          <text class="esq-txt" x="220" y="107" text-anchor="middle">Mosquitto</text>
+          <text class="esq-mono" x="220" y="125" text-anchor="middle">puerto 1883</text>
+          <rect class="esq-caja-pide" x="334" y="28" width="104" height="62" rx="8"/>
+          <text class="esq-rot" x="386" y="50" text-anchor="middle">Subscriber</text>
+          <text class="esq-txt" x="386" y="67" text-anchor="middle">pantalla de</text>
+          <text class="esq-txt" x="386" y="82" text-anchor="middle">preceptoría</text>
+          <rect class="esq-caja-pide" x="334" y="124" width="104" height="62" rx="8"/>
+          <text class="esq-rot" x="386" y="146" text-anchor="middle">Subscriber</text>
+          <text class="esq-txt" x="386" y="163" text-anchor="middle">app del</text>
+          <text class="esq-txt" x="386" y="178" text-anchor="middle">celular</text>
+          <path class="esq-pide esq-sub" d="M332 50 278 77" marker-end="url(#mq-fp)"/>
+          <path class="esq-pide esq-sub" d="M332 164 278 137" marker-end="url(#mq-fp)"/>
+          <path class="esq-pide" d="M108 105H162" style="stroke-width:3" marker-end="url(#mq-fp)"/>
+          <path class="esq-responde" d="M274 93 328 66" style="stroke-width:3" marker-end="url(#mq-fr)"/>
+          <path class="esq-responde" d="M274 121 328 148" style="stroke-width:3" marker-end="url(#mq-fr)"/>
+          <circle class="esq-num" cx="296" cy="50" r="8"/><text class="esq-num-txt" x="296" y="54" text-anchor="middle">1</text>
+          <circle class="esq-num" cx="296" cy="164" r="8"/><text class="esq-num-txt" x="296" y="168" text-anchor="middle">1</text>
+          <circle class="esq-num" cx="135" cy="91" r="8"/><text class="esq-num-txt" x="135" y="95" text-anchor="middle">2</text>
+          <text class="esq-mono" x="135" y="124" text-anchor="middle">21.5</text>
+          <circle class="esq-num" cx="309" cy="92" r="8"/><text class="esq-num-txt" x="309" y="96" text-anchor="middle">3</text>
+          <circle class="esq-num" cx="309" cy="122" r="8"/><text class="esq-num-txt" x="309" y="126" text-anchor="middle">3</text>
+        </svg>
+        <figcaption>
+          <ol class="lista-pasos" aria-label="Los pasos del esquema">
+            <li class="grupo"><b>1</b><span>La pantalla y la app <strong>se suscriben</strong> al tópico.</span></li>
+            <li class="grupo"><b>2</b><span>El sensor <strong>publica</strong> <code>21.5</code> en ese tópico.</span></li>
+            <li class="grupo grupo--naranja"><b>3</b><span>El broker <strong>entrega</strong> <code>21.5</code> a todos los suscriptos, al instante.</span></li>
+          </ol>
+        </figcaption>
+      </figure>
+
+      <section class="panel" aria-labelledby="pt30">
+        <div class="panel__cab">
+          <h3 class="subtitulo" id="pt30">Las partes</h3>
+          <p class="puerto"><span class="puerto__rot">Puerto</span><b class="puerto__num">1883</b><span class="etq etq--tcp">TCP</span></p>
+        </div>
+        <ul class="lista-txt pf__lista">
+          <li><strong>Broker:</strong> el servidor del medio. Recibe cada mensaje y lo entrega a los suscriptos a su tópico. En el proyecto usamos <strong>Mosquitto</strong>.</li>
+          <li><strong>Publisher</strong> (publicador): <strong>publica</strong> un mensaje en un tópico.</li>
+          <li><strong>Subscriber</strong> (suscriptor): se <strong>suscribe</strong> a un tópico y recibe sus mensajes.</li>
+          <li><strong>Tópico:</strong> el tema del mensaje, con niveles separados por <code>/</code>.</li>
+        </ul>
+        <p>Publisher y subscriber no se hablan entre sí: cada uno se conecta solo al broker.</p>
+      </section>
+    </div>
+
+    <table class="tabla-comp tabla-comp--http">
+      <caption class="sr-only">Comparación entre HTTP y MQTT</caption>
+      <thead>
+        <tr><th scope="col">Aspecto</th><th scope="col" class="grupo">HTTP (API REST)</th><th scope="col" class="grupo grupo--naranja">MQTT</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Cómo se comunican</th><td><strong>Pedir y responder:</strong> el cliente pide y el servidor responde.</td><td><strong>Publicar y suscribirse:</strong> el broker reparte los mensajes.</td></tr>
+        <tr><th scope="row">La conexión</th><td>Se abre para cada pedido y se cierra.</td><td>Queda abierta: el mensaje llega al instante.</td></tr>
+        <tr><th scope="row">El mensaje</th><td>Pesado: lleva muchos headers.</td><td>Liviano: el encabezado ocupa desde 2 bytes.</td></tr>
+        <tr><th scope="row">Cuándo conviene</th><td>Una página o una app que pide datos cuando los necesita: el dólar, el clima.</td><td>Dispositivos que mandan o reciben datos todo el tiempo o al instante: sensores, el ESP32.</td></tr>
+      </tbody>
+    </table>
+
+    <p class="texto">Se usan juntos: la página le pide al servidor con HTTP, y el servidor publica en MQTT para el ESP32, que está suscripto. Así funciona el proyecto del TP10.</p>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> en HTTP, el cliente pide y el servidor responde. En MQTT se publica y se suscribe a tópicos: el broker reparte los mensajes por una conexión abierta.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 30">30</span>
+    </footer>
+  </article>
+
+  <!-- =================== PETICIÓN REAL (hoja propia, sin número de lámina) =================== -->
+  <article class="lamina lamina--sim" id="simulador" aria-labelledby="tsim">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°9</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="tsim">Petición real</h2>
+      <p class="tit__sub">Un GET a DolarAPI, en el momento</p>
+    </div>
+
+    <section class="simulador" data-sim="api" aria-labelledby="tsim">
+      <div class="sim__cab">
+        <span class="etq etq--sim">Simulador</span>
+        <p class="sim__aviso">Petición real: los datos llegan de DolarAPI en el momento. Hace falta Internet.</p>
+      </div>
+      <p class="sim__intro">Elegí un endpoint y tocá «Enviar GET». Vas a ver la URL que se arma, el código de respuesta, el JSON que llega y el dato ya mostrado en la página, como con la receta de la lámina 29. Probá también con <code>/v1/dolares/euro</code>, un recurso que no existe.</p>
+
+      <div class="sim__controles no-imprimir" data-sim-js hidden>
+        <form class="sim__form" novalidate>
+          <div class="sim__campo">
+            <label for="sim-endpoint">Endpoint de DolarAPI</label>
+            <select id="sim-endpoint">
+              <option value="/v1/dolares/oficial">/v1/dolares/oficial · el dólar oficial</option>
+              <option value="/v1/dolares/blue">/v1/dolares/blue · el dólar blue</option>
+              <option value="/v1/dolares/tarjeta">/v1/dolares/tarjeta · el dólar tarjeta</option>
+              <option value="/v1/dolares/mayorista">/v1/dolares/mayorista · el dólar mayorista</option>
+              <option value="/v1/dolares">/v1/dolares · todos, en una lista</option>
+              <option value="/v1/dolares/euro">/v1/dolares/euro · no existe</option>
+            </select>
+          </div>
+          <button class="boton" type="submit">Enviar GET</button>
+        </form>
+      </div>
+
+      <p class="sim__estado" role="status" aria-live="polite">Ejemplo resuelto: un GET al dólar oficial.</p>
+
+      <div class="api">
+        <p class="api__ejemplo" data-api="ejemplo">Escrito en el cuadernillo: los valores son de un día cualquiera y la fecha va recortada.</p>
+        <section class="api__bloque api__bloque--url" aria-labelledby="api-url">
+          <h3 id="api-url">1. La URL armada</h3>
+          <p class="api__url" data-api="url"><b>GET</b> https://dolarapi.com<span class="api__ruta">/v1/dolares/oficial</span></p>
+          <p class="api__nota">Dominio + ruta del recurso: el endpoint.</p>
+        </section>
+        <section class="api__bloque api__bloque--cod" aria-labelledby="api-cod">
+          <h3 id="api-cod">2. El código de respuesta</h3>
+          <p class="api__codigo grupo grupo--ok" data-api="codigo"><b>200</b><span>OK</span></p>
+        </section>
+        <section class="api__bloque api__bloque--json" aria-labelledby="api-json">
+          <h3 id="api-json">3. El JSON que llegó</h3>
+          <div class="ventana-cod">
+            <div class="ventana-cod__barra" aria-hidden="true">JSON</div>
+<pre class="ventana-cod__txt" data-api="json" tabindex="0">{
+  <span class="t-atr">"moneda"</span>: <span class="t-str">"USD"</span>,
+  <span class="t-atr">"casa"</span>: <span class="t-str">"oficial"</span>,
+  <span class="t-atr">"nombre"</span>: <span class="t-str">"Oficial"</span>,
+  <span class="t-atr">"compra"</span>: <span class="t-num">1485</span>,
+  <span class="t-atr">"venta"</span>: <span class="t-num">1535</span>,
+  <span class="t-atr">"fechaActualizacion"</span>: <span class="t-str">"…"</span>
+}</pre>
+          </div>
+        </section>
+        <section class="api__bloque api__bloque--pag" aria-labelledby="api-pag">
+          <h3 id="api-pag">4. En la página</h3>
+          <div class="api__pagina" data-api="pagina"><p>Dólar Oficial: compra $1485 · venta $1535</p></div>
+          <p class="api__nota" data-api="con">Con <code>datos.nombre</code>, <code>datos.compra</code> y <code>datos.venta</code>.</p>
+        </section>
+      </div>
+    </section>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 9</span>
+    </footer>
+  </article>
+
+  <!-- =================== PARA PROFUNDIZAR =================== -->
+  <article class="lamina lamina--pf" id="profundizar" aria-labelledby="tpf">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°9</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="tpf"><span class="tit__num">+</span> Para profundizar</h2>
+      <p class="tit__sub">Las API desde el navegador, y más de JSON y MQTT</p>
+    </div>
+
+    <div class="pf-grid">
+      <section class="pf" aria-labelledby="pf27">
+        <p class="pf__etiqueta">Lámina 27</p>
+        <h3 class="pf__titulo" id="pf27">Por qué algunas API no responden desde el navegador</h3>
+        <div class="pf__cols">
+          <div class="pf__texto">
+            <p>Cuando una página le pide datos con <code>fetch</code> a otro dominio, el navegador revisa la respuesta antes de dársela a JavaScript. Si el servidor no la autoriza con el header <code>Access-Control-Allow-Origin</code>, el navegador la bloquea y <code>fetch</code> da error, aunque la misma URL se vea bien en la barra de direcciones.</p>
+            <p>Esta regla se llama <strong>CORS</strong> (en inglés, <em>Cross-Origin Resource Sharing</em>: compartir recursos entre orígenes distintos).</p>
+          </div>
+          <div class="pf__caja">
+            <h4>Las API de este TP</h4>
+            <p>DolarAPI, Open-Meteo y PokéAPI responden <code>Access-Control-Allow-Origin: *</code>: dejan leer sus datos desde cualquier página. Si una API no lo permite, sus datos se piden desde un servidor, no desde el navegador.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="pf" aria-labelledby="pf28">
+        <p class="pf__etiqueta">Lámina 28</p>
+        <h3 class="pf__titulo" id="pf28">Ver la petición: F12 › Red</h3>
+        <div class="pf__cols">
+          <div class="pf__texto">
+            <p>Las herramientas para desarrolladores del navegador (Chrome o Edge) muestran cada petición. Con la página abierta: <kbd>F12</kbd>, la pestaña <strong>Red</strong> (<em>Network</em>) y, después, tocar el botón o recargar la página.</p>
+            <p>Cada fila es una petición: el nombre del recurso, el <strong>Estado</strong> (el código de respuesta) y el <strong>Tipo</strong> (<em>fetch</em>, si la hizo JavaScript).</p>
+          </div>
+          <div class="pf__caja">
+            <h4>Una petición, por dentro</h4>
+            <p>Con un clic en la fila, <strong>Encabezados</strong> muestra la URL, el método y el código; <strong>Respuesta</strong>, el JSON tal como llegó. Si algo falla, el error aparece en rojo en la pestaña <strong>Consola</strong>.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="pf" aria-labelledby="pf29">
+        <p class="pf__etiqueta">Lámina 29</p>
+        <h3 class="pf__titulo" id="pf29">Por qué JSON reemplazó a XML</h3>
+        <div class="pf__cols">
+          <div class="pf__texto">
+            <p>Antes, muchas API respondían en <strong>XML</strong>, un formato con etiquetas, parecido al HTML. El mismo dato, en los dos formatos:</p>
+            <ul class="pf__lista">
+              <li>XML: <code>&lt;venta&gt;1535&lt;/venta&gt;</code></li>
+              <li>JSON: <code>"venta": 1535</code></li>
+            </ul>
+            <p>JSON usa menos texto, es más fácil de leer y JavaScript lo convierte directo en un objeto, con <code>respuesta.json()</code>. Por eso hoy casi todas las API REST responden en JSON.</p>
+          </div>
+          <div class="pf__caja">
+            <h4>Otra forma de escribir fetch</h4>
+            <p>En ejemplos de Internet vas a encontrar <code>fetch</code> con <code>.then()</code> en lugar de <code>await</code>. Hace lo mismo; en este cuadernillo usamos siempre <code>async</code> y <code>await</code>.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="pf" aria-labelledby="pf30">
+        <p class="pf__etiqueta">Lámina 30</p>
+        <h3 class="pf__titulo" id="pf30">Tópicos con comodines</h3>
+        <div class="pf__cols">
+          <div class="pf__texto">
+            <p>Al suscribirse se pueden usar comodines. El <code>+</code> reemplaza un nivel: <code>escuela/+/temperatura</code> recibe la temperatura de todas las aulas. El <code>#</code> reemplaza todos los niveles que siguen: <code>escuela/#</code> recibe todo lo de la escuela.</p>
+            <p>Al publicar no se usan: cada mensaje va a un tópico exacto.</p>
+          </div>
+          <div class="pf__caja">
+            <h4>MQTT cifrado</h4>
+            <p>El puerto 1883 no cifra: lo que viaja se puede leer. Como HTTPS con HTTP, MQTT cifrado usa otro puerto: el 8883.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 9</span>
+    </footer>
+  </article>
+
+  <!-- =================== ACTIVIDADES · Parte 1 =================== -->
+  <article class="lamina lamina--act lamina--densa" id="actividades" aria-labelledby="act-1">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°9</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <header class="act-banda">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-lapiz"/></svg>
+      <div>
+        <h2 id="act-1">Actividades para hacer en la carpeta</h2>
+        <p>TP N°9 — APIs REST y MQTT</p>
+      </div>
+      <span class="act-banda__parte">Parte<br>1 de 2</span>
+    </header>
+
+    <p class="consigna"><strong>Consigna:</strong> Respondé cada punto de forma completa, usando tus propias palabras. Podés apoyarte en las láminas, en el simulador y en “Para profundizar” del TP N°9.</p>
+
+    <ol class="acts acts--2col">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">1-</span> Cliente-servidor y API REST</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Separá en partes estas dos URL: protocolo, dominio, ruta del recurso y parámetros. ¿Cuál no tiene parámetros?
+            <code class="cod-bloque cod-url">https://dolarapi.com/v1/<wbr>dolares/tarjeta</code>
+            <code class="cod-bloque cod-url">https://api.open-meteo.com/v1/<wbr>forecast?latitude=-53.8&amp;<wbr>longitude=-67.7&amp;<wbr>current=wind_speed_10m</code></div></li>
+          <li><b class="act__letra">b)</b><div>¿Qué es una API REST? ¿Qué diferencia hay entre un recurso y un endpoint? Escribí el endpoint de cada URL del inciso a).</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">2-</span> Verbos HTTP y códigos</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Copiá y completá el cuadro con la API de la biblioteca.
+            <table class="act-tabla act-tabla--compacta">
+              <caption class="sr-only">Cuadro para completar con la acción y un ejemplo de cada verbo</caption>
+              <thead><tr><th scope="col">Verbo</th><th scope="col">Acción</th><th scope="col">Ejemplo</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">GET</th><td></td><td></td></tr>
+                <tr><th scope="row">POST</th><td></td><td></td></tr>
+                <tr><th scope="row">PUT</th><td></td><td></td></tr>
+                <tr><th scope="row">DELETE</th><td></td><td></td></tr>
+              </tbody>
+            </table></div></li>
+          <li><b class="act__letra">b)</b><div>¿Qué código llega en cada caso y qué significa? Pedir el libro 12 / crear un libro / crear uno sin título / pedir el libro 999 / el servidor falla.</div></li>
+          <li><b class="act__letra">c)</b><div>¿Por qué DolarAPI solo deja leer (GET)?</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <ol class="acts" start="3">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">3-</span> JSON y fetch</h3>
+        <div class="act__cuerpo act__cuerpo--json">
+          <div class="ventana-cod" role="group" aria-label="JSON que respondió DolarAPI al pedir el dólar blue">
+            <div class="ventana-cod__barra" aria-hidden="true">JSON · /v1/dolares/blue</div>
+<pre class="ventana-cod__txt">{
+  <span class="t-atr">"moneda"</span>: <span class="t-str">"USD"</span>,
+  <span class="t-atr">"casa"</span>: <span class="t-str">"blue"</span>,
+  <span class="t-atr">"nombre"</span>: <span class="t-str">"Blue"</span>,
+  <span class="t-atr">"compra"</span>: <span class="t-num">1530</span>,
+  <span class="t-atr">"venta"</span>: <span class="t-num">1550</span>,
+  <span class="t-atr">"fechaActualizacion"</span>: <span class="t-str">"…"</span>
+}</pre>
+          </div>
+          <ol class="act__items">
+            <li><b class="act__letra">a)</b><div>En este JSON, ¿dónde empieza y dónde termina el objeto? Indicá una clave, un valor de texto y un valor de número. ¿Por qué <code>1550</code> va sin comillas?</div></li>
+            <li><b class="act__letra">b)</b><div>Copiá la función de abajo, completá lo que falta y explicá cada paso de la receta.</div></li>
+            <li><b class="act__letra">c)</b><div>¿Qué muestra la página con este JSON?</div></li>
+          </ol>
+        </div>
+        <div class="ventana-cod ventana-cod--act" role="group" aria-label="Función para completar: faltan cuatro palabras">
+          <div class="ventana-cod__barra" aria-hidden="true">JavaScript</div>
+<pre class="ventana-cod__txt"><span class="hueco"><span aria-hidden="true">______</span><span class="sr-only">(falta)</span></span> <b>function</b> <span class="t-fun">mostrarBlue</span>() {
+  <b>const</b> respuesta = <span class="hueco"><span aria-hidden="true">______</span><span class="sr-only">(falta)</span></span> <span class="t-fun">fetch</span>(<span class="t-str">"https://dolarapi.com/v1/dolares/blue"</span>);
+  <b>const</b> datos = <b>await</b> respuesta.<span class="hueco"><span aria-hidden="true">______</span><span class="sr-only">(falta)</span></span>();
+  <b>const</b> precio = document.<span class="t-fun">getElementById</span>(<span class="t-str">"precio"</span>);
+  precio.<span class="t-atr">textContent</span> = <span class="t-str">"Dólar "</span> + datos.<span class="t-atr">nombre</span> + <span class="t-str">": $"</span> + datos.<span class="hueco"><span aria-hidden="true">______</span><span class="sr-only">(falta)</span></span>;
+}</pre>
+        </div>
+      </li>
+    </ol>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 9</span>
+    </footer>
+  </article>
+
+  <!-- =================== ACTIVIDADES · Parte 2 =================== -->
+  <article class="lamina lamina--act lamina--densa" id="actividades-parte-2" aria-labelledby="act-1b">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°9</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <header class="act-banda">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-lapiz"/></svg>
+      <div>
+        <h2 id="act-1b">Actividades para hacer en la carpeta</h2>
+        <p>TP N°9 — APIs REST y MQTT</p>
+      </div>
+      <span class="act-banda__parte">Parte<br>2 de 2</span>
+    </header>
+
+    <ol class="acts" start="4">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">4-</span> MQTT</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Copiá el cuadro y completalo para comparar HTTP y MQTT.
+            <table class="act-tabla act-tabla--compacta">
+              <caption class="sr-only">Cuadro para comparar HTTP y MQTT</caption>
+              <thead><tr><th scope="col">Aspecto</th><th scope="col">HTTP (API REST)</th><th scope="col">MQTT</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Cómo se comunican</th><td></td><td></td></tr>
+                <tr><th scope="row">La conexión</th><td></td><td></td></tr>
+                <tr><th scope="row">El mensaje</th><td></td><td></td></tr>
+                <tr><th scope="row">Cuándo conviene</th><td></td><td></td></tr>
+              </tbody>
+            </table></div></li>
+          <li><b class="act__letra">b)</b><div>En la huerta de la escuela, un ESP32 mide la humedad de la tierra y la publica en el tópico <code>huerta/humedad</code>. Una pantalla del aula está suscripta a ese tópico. ¿Quién es el publisher y quién el subscriber? ¿Qué hace el broker y en qué puerto escucha?</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">5-</span> Caso integrador</h3>
+        <p class="act__caso">La biblioteca suma un cartel en el pasillo, manejado por un ESP32, que muestra los libros nuevos. La bibliotecaria escribe el título de un libro en una página y toca el botón «Agregar». La página hace un <code>fetch</code> a <code>https://api.redesdelaula.com/libros</code>; el servidor guarda el libro y la página muestra «Libro agregado». Después, el servidor publica el título en el tópico <code>biblioteca/novedades</code>.</p>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Escribí el recorrido en orden y explicá qué pasa en cada paso: botón → fetch → servidor → código → JSON → página.</div></li>
+          <li><b class="act__letra">b)</b><div>¿Qué verbo usa el fetch? ¿Qué código responde el servidor si el libro se creó? ¿Y si la bibliotecaria tocó «Agregar» sin escribir el título?</div></li>
+          <li><b class="act__letra">c)</b><div>Seguí el recorrido con MQTT: ¿quién publica y quién tiene que estar suscripto para que el cartel muestre el título? ¿Qué hace el broker?</div></li>
+          <li><b class="act__letra">d)</b><div>¿Por qué para el cartel conviene MQTT y no HTTP?</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 9</span>
+    </footer>
+  </article>
+
+  <!-- =================== ACTIVIDADES EN LA COMPUTADORA =================== -->
+  <article class="lamina lamina--act lamina--compu lamina--densa" id="actividades-2" aria-labelledby="act-2">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°9</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <header class="act-banda">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pc"/></svg>
+      <div>
+        <h2 id="act-2">Actividades para hacer en la computadora</h2>
+        <p>TP N°9 — APIs REST y MQTT</p>
+      </div>
+    </header>
+
+    <p class="consigna"><strong>Consigna:</strong> Armá una página en HTML + JavaScript que consuma al menos una API pública con <code>fetch()</code> y muestre los datos en la página. Seguí los pasos.</p>
+
+    <ol class="acts">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">1-</span> Elegí la API</h3>
+        <ul class="apis" aria-label="Tres API públicas para elegir">
+          <li><strong>DolarAPI</strong><div><code class="cod-bloque">https://dolarapi.com/v1/dolares/oficial</code> También <code>/blue</code>, <code>/tarjeta</code>… Mostrá <code>nombre</code>, <code>compra</code> y <code>venta</code>.</div></li>
+          <li><strong>Open-Meteo</strong><div><code class="cod-bloque">https://api.open-meteo.com/v1/forecast<wbr>?latitude=-54.8<wbr>&amp;longitude=-68.3<wbr>&amp;current=temperature_2m</code> La temperatura actual está en <code>datos.current.temperature_2m</code>.</div></li>
+          <li><strong>PokéAPI</strong><div><code class="cod-bloque">https://pokeapi.co/api/v2/pokemon/pikachu</code> U otro nombre. El JSON es muy largo: mostrá solo algunos campos, como <code>name</code>, <code>height</code> (en decímetros) y <code>weight</code> (en hectogramos).</div></li>
+        </ul>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Abrí el endpoint en el navegador y mirá el JSON que llega. Elegí qué datos vas a mostrar.</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <ol class="acts acts--2col" start="2">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">2-</span> Armá la página</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Creá una carpeta con un archivo <code class="cod-archivo">index.html</code>.</div></li>
+          <li><b class="act__letra">b)</b><div>Escribí el HTML: un título, un botón y un párrafo con un <code>id</code> para el dato.</div></li>
+          <li><b class="act__letra">c)</b><div>Debajo, en un <code>&lt;script&gt;</code>, escribí la función con la receta de la lámina 29: pedir, convertir y mostrar el dato con <code>textContent</code>.</div></li>
+          <li><b class="act__letra">d)</b><div>Mostrá al menos dos datos del JSON.</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">3-</span> Probala</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Abrí <code class="cod-archivo">index.html</code> en el navegador, tocá el botón y comprobá que aparece el dato.</div></li>
+          <li><b class="act__letra">b)</b><div>Abrí <kbd>F12</kbd> › Red, tocá otra vez el botón y anotá el método y el código de respuesta.</div></li>
+          <li><b class="act__letra">c)</b><div>Cambiá el endpoint por un recurso que no exista (por ejemplo, <code>/v1/dolares/euro</code>) y anotá qué código llega.</div></li>
+          <li><b class="act__letra">d)</b><div>Si te sobra tiempo, sumá otro botón con otro endpoint o con otra API.</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <section class="entrega" aria-labelledby="entrega9">
+      <h3 class="entrega__tit" id="entrega9">Entrega</h3>
+      <ul class="entrega__lista">
+        <li>La carpeta del proyecto comprimida en un <code class="cod-archivo">.zip</code>, por Classroom.</li>
+        <li>Un informe breve: qué endpoints se consumieron, qué métodos HTTP se usaron y cómo se procesó la respuesta.</li>
+      </ul>
+    </section>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 9</span>
+    </footer>
+  </article>
+</main>
+
+<script src="../assets/js/actividades.js"></script>
+<script src="../assets/js/simuladores.js"></script>
+</body>
+</html>

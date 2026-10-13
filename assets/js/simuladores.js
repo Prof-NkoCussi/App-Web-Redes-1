@@ -251,6 +251,201 @@
     todo(false);
   }
 
+  /* ==========================================================
+     TP9 · Petición real: un GET a DolarAPI
+     ========================================================== */
+  function simuladorApi(sim) {
+    var BASE = "https://dolarapi.com";
+    var ESPERA = 10000;   /* milisegundos sin respuesta antes de dar el pedido por perdido */
+    /* El nombre de cada código: con HTTP/2 el navegador no lo trae */
+    var TEXTOS = { 200: "OK", 201: "Created", 400: "Bad Request", 403: "Forbidden", 404: "Not Found",
+      429: "Too Many Requests", 500: "Internal Server Error", 502: "Bad Gateway", 503: "Service Unavailable" };
+    /* Partes de un JSON: texto (y si sigue ":", clave), número, true/false/null */
+    var FICHAS = /("(?:\\.|[^"\\])*")(\s*:)?|(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)|\b(true|false|null)\b/g;
+
+    var form = sim.querySelector(".sim__form");
+    var select = sim.querySelector("#sim-endpoint");
+    var estado = sim.querySelector(".sim__estado");
+    var ejemplo = sim.querySelector(".api").cloneNode(true);   /* el ejemplo resuelto escrito en el HTML */
+    var pedido = 0;
+
+    function parte(nombre) { return sim.querySelector("[data-api='" + nombre + "']"); }
+
+    function avisar(texto, esError) {
+      estado.textContent = texto;
+      estado.classList.toggle("sim__estado--error", !!esError);
+    }
+
+    function nombreCodigo(status) { return status + (TEXTOS[status] ? " " + TEXTOS[status] : ""); }
+
+    /* ---- Dibujo de cada parte ---- */
+    function ponerUrl(ruta) {
+      var p = parte("url");
+      var verbo = document.createElement("b");
+      var resto = document.createElement("span");
+      verbo.textContent = "GET";
+      resto.className = "api__ruta";
+      resto.textContent = ruta;
+      p.textContent = "";
+      p.appendChild(verbo);
+      p.appendChild(document.createTextNode(" " + BASE));
+      p.appendChild(resto);
+    }
+
+    function ponerCodigo(status) {
+      var p = parte("codigo");
+      var num = document.createElement("b");
+      var txt = document.createElement("span");
+      p.className = "api__codigo" + (status === null ? "" : status < 300 ? " grupo grupo--ok" : status >= 400 ? " grupo grupo--error" : " grupo");
+      num.textContent = status === null ? "…" : String(status);
+      txt.textContent = status === null ? "esperando" : (TEXTOS[status] || "");
+      p.textContent = "";
+      p.appendChild(num);
+      p.appendChild(txt);
+    }
+
+    function pintarJson(pre, texto) {
+      var desde = 0, m, ficha;
+      pre.textContent = "";
+      FICHAS.lastIndex = 0;
+      while ((m = FICHAS.exec(texto)) !== null) {
+        if (m.index > desde) { pre.appendChild(document.createTextNode(texto.slice(desde, m.index))); }
+        ficha = document.createElement(m[4] ? "b" : "span");
+        if (m[1]) { ficha.className = m[2] ? "t-atr" : "t-str"; ficha.textContent = m[1]; }
+        else if (m[3]) { ficha.className = "t-num"; ficha.textContent = m[3]; }
+        else { ficha.textContent = m[4]; }
+        pre.appendChild(ficha);
+        if (m[2]) { pre.appendChild(document.createTextNode(m[2])); }
+        desde = FICHAS.lastIndex;
+      }
+      pre.appendChild(document.createTextNode(texto.slice(desde)));
+    }
+
+    function ponerSinJson(pre, status, texto) {
+      var aviso = document.createElement("span");
+      aviso.className = "api__sin-json";
+      aviso.textContent = status + ", sin JSON";
+      pre.textContent = "";
+      pre.appendChild(aviso);
+      pre.appendChild(document.createTextNode(texto ? "\nLlegó un texto que no es JSON:\n" + texto.slice(0, 300) : "\nLa respuesta llegó vacía."));
+    }
+
+    function ponerCon(campos, fin) {
+      var con = parte("con");
+      con.textContent = "Con ";
+      campos.forEach(function (c, i) {
+        if (i > 0) { con.appendChild(document.createTextNode(i === campos.length - 1 ? " y " : ", ")); }
+        var code = document.createElement("code");
+        code.textContent = c;
+        con.appendChild(code);
+      });
+      con.appendChild(document.createTextNode(fin || "."));
+    }
+
+    function esDolar(d) { return !!d && typeof d === "object" && "nombre" in d && "compra" in d && "venta" in d; }
+
+    /* Muestra el dato en "la página", como la receta de la lámina 29. Devuelve si pudo. */
+    function ponerPagina(status, datos) {
+      var caja = parte("pagina");
+      var p = document.createElement("p");
+      caja.textContent = "";
+      caja.classList.remove("api__pagina--vacia");
+      if (status === 200 && Array.isArray(datos) && datos.length && datos.every(esDolar)) {
+        var ul = document.createElement("ul");
+        datos.forEach(function (d) {
+          var li = document.createElement("li");
+          li.textContent = d.nombre + ": venta $" + d.venta;
+          ul.appendChild(li);
+        });
+        caja.appendChild(ul);
+        ponerCon(["datos[0].nombre", "datos[0].venta"], ", y lo mismo con cada objeto de la lista.");
+        return true;
+      }
+      if (status === 200 && esDolar(datos)) {
+        p.textContent = "Dólar " + datos.nombre + ": compra $" + datos.compra + " · venta $" + datos.venta;
+        caja.appendChild(p);
+        ponerCon(["datos.nombre", "datos.compra", "datos.venta"]);
+        return true;
+      }
+      caja.classList.add("api__pagina--vacia");
+      p.textContent = status === 404 ? "No hay ningún dato para mostrar: el recurso no existe." : "No hay ningún dato para mostrar.";
+      caja.appendChild(p);
+      parte("con").textContent = datos === null ? "Sin JSON, no hay ningún objeto datos para leer." : "Llegó un JSON, pero no trae los campos nombre, compra y venta.";
+      return false;
+    }
+
+    /* ---- La respuesta ---- */
+    function mostrarRespuesta(status, texto) {
+      var limpio = texto.trim();
+      var datos = null;
+      if (limpio) {
+        try { datos = JSON.parse(limpio); } catch (e) { datos = null; }
+      }
+      ponerCodigo(status);
+      if (datos !== null) { pintarJson(parte("json"), limpio); } else { ponerSinJson(parte("json"), status, limpio); }
+      var mostro = ponerPagina(status, datos);
+      parte("ejemplo").textContent = "Respuesta real, recién llegada de DolarAPI.";
+
+      var linea = "Llegó la respuesta: " + nombreCodigo(status) + ". ";
+      if (mostro) {
+        linea += Array.isArray(datos) ? "El JSON es una lista de " + datos.length + " objetos." : "El JSON trae " + Object.keys(datos).length + " campos, y la página muestra el dato.";
+      } else if (status === 404) {
+        linea += datos === null ? "Ese recurso no existe: la respuesta llegó vacía, sin JSON." : "Ese recurso no existe.";
+      } else if (status >= 500) {
+        linea += "Falló el servidor de DolarAPI. Probá de nuevo en un rato.";
+      } else {
+        linea += "No llegó el dato esperado.";
+      }
+      avisar(linea, !mostro);
+    }
+
+    function volverAlEjemplo() {
+      var actual = sim.querySelector(".api");
+      actual.parentNode.replaceChild(ejemplo.cloneNode(true), actual);
+      avisar("No llegó ninguna respuesta de DolarAPI: puede faltar Internet o la API puede estar caída. Abajo queda el ejemplo resuelto del cuadernillo.", true);
+    }
+
+    function enviar() {
+      var ruta = select.value;
+      var url = BASE + ruta;
+      var este = ++pedido;
+      var control = typeof AbortController === "function" ? new AbortController() : null;
+      var reloj = setTimeout(function () { if (control) { control.abort(); } }, ESPERA);
+
+      /* Si antes falló y quedó el ejemplo, se sigue dibujando sobre él */
+      ponerUrl(ruta);
+      ponerCodigo(null);
+      parte("json").textContent = "Esperando la respuesta…";
+      parte("pagina").textContent = "";
+      parte("con").textContent = "";
+      parte("ejemplo").textContent = "Pedido en curso…";
+      avisar("Enviando GET a " + url + "…");
+
+      fetch(url, control ? { cache: "no-store", signal: control.signal } : { cache: "no-store" })
+        .then(function (r) {
+          return r.text().then(function (texto) { return { status: r.status, texto: texto }; });
+        })
+        .then(function (res) {
+          clearTimeout(reloj);
+          if (este === pedido) { mostrarRespuesta(res.status, res.texto); }
+        }, function () {
+          clearTimeout(reloj);
+          if (este === pedido) { volverAlEjemplo(); }
+        });
+    }
+
+    /* Sin fetch (navegador muy viejo) queda solo el ejemplo resuelto */
+    if (typeof window.fetch !== "function") { return; }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      enviar();
+    });
+    Array.prototype.forEach.call(sim.querySelectorAll("[data-sim-js]"), function (el) { el.hidden = false; });
+  }
+
   var dns = document.querySelector("[data-sim='dns']");
   if (dns) { simuladorDns(dns); }
+  var api = document.querySelector("[data-sim='api']");
+  if (api) { simuladorApi(api); }
 })();

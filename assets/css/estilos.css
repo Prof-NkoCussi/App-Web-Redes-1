@@ -1331,3 +1331,174 @@ kbd {
 @media print {
   :root { --consola-ok: #166534; --consola-error: #B91C1C; }
 }
+
+/* ==========================================================
+   TP9: API REST, JSON, fetch y MQTT
+   ========================================================== */
+/* Código en su propio renglón (una URL larga dentro de un texto) */
+code.cod-bloque { display: block; width: fit-content; max-width: 100%; margin: 3px 0; }
+
+/* Esquemas: cliente-servidor de una API y publicar/suscribirse */
+.esquema--api svg, .esquema--mqtt svg { max-width: 440px; }
+.esquema .esq-mono { font-family: var(--fuente-mono); font-size: 10.5px; fill: var(--tinta); }
+.esq-endpoint { fill: var(--blanco); stroke: var(--naranja); stroke-width: 1; }
+.esq-endpoint--si { fill: var(--acento-suave); stroke: var(--acento-texto); stroke-width: 2; }
+.esq-sub { fill: none; stroke-width: 2; stroke-dasharray: 5 4; }
+.esq-num { fill: var(--blanco); stroke: var(--tinta); stroke-width: 1.5; }
+.esquema .esq-num-txt { font-family: var(--fuente-titular); font-weight: 800; font-size: 12px; }
+.esquema--mqtt { display: grid; gap: 8px; align-content: start; }
+.esquema--mqtt figcaption { margin-top: 0; text-align: left; }
+
+/* Las partes de una URL: cada parte con su nombre abajo */
+.url-completa { margin-bottom: 7px; font-size: 14.5px; line-height: 1.4; }
+.url-partes { display: grid; gap: 10px; }
+.url-partes > li { display: grid; gap: 3px; align-content: start; }
+.url-partes > li > code {
+  display: block; justify-self: start; white-space: nowrap;
+  padding: 5px 8px 6px; border-radius: 6px; font-size: 14px; line-height: 1.45;
+  background: var(--blanco); color: var(--tinta); box-shadow: inset 0 4px 0 var(--acento), inset 0 0 0 1px var(--linea);
+}
+.url-partes > li > code span { display: block; }
+.url-partes h4 { margin-top: 3px; font-family: var(--fuente-titulo); font-weight: 700; font-size: 17px; line-height: 1.2; color: var(--tinta); }
+.url-partes p { font-size: 14.5px; line-height: 1.33; }
+.url-endpoint { margin-top: 6px; font-size: 15px; line-height: 1.38; }
+
+/* Los cuatro verbos: tabla como la de puertos */
+.tabla-verbos { margin-top: 8px; }
+.tabla-verbos th, .tabla-verbos td { vertical-align: top; }
+.tabla-verbos tbody td:last-child, .tabla-verbos thead th:last-child { text-align: center; }
+.tabla-verbos thead th:last-child { white-space: nowrap; }
+.tabla-verbos tbody td:last-child { font-family: var(--fuente-titular); font-weight: 800; font-size: 17px; color: var(--tinta); }
+/* Un POST por dentro: la solicitud y la respuesta lado a lado */
+.http-par { display: grid; gap: 6px; }
+.http-par .ventana-cod { min-width: 0; }
+.http__nota { font-size: 14.5px; line-height: 1.35; }
+.codigos__intro { margin-top: 8px; }
+
+/* Cómo se escribe JSON: el ejemplo, las reglas y cómo se lee un dato */
+.json-ej { display: grid; gap: 10px; align-items: start; }
+.json-ej .ventana-cod { min-width: 0; }
+.lectura { display: grid; gap: 6px; align-content: start; }
+.lectura__tit { font-size: 15px; line-height: 1.38; }
+.lectura ul { display: grid; gap: 4px; }
+.lectura li {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 1px 8px;
+  background: var(--blanco); border-radius: 6px; padding: 3px 10px 4px; font-size: 14.5px; line-height: 1.35;
+}
+.lectura__flecha { font-weight: 700; color: var(--acento-texto); }
+.lectura samp { font-family: var(--fuente-mono); font-size: .92em; font-weight: 700; color: var(--tinta); }
+.lectura__tipo { margin-left: auto; font-size: 13.5px; color: var(--gris); }
+.lectura__tipo strong { color: var(--gris); }
+
+/* La receta: los pasos y la salida esperada */
+.receta { display: grid; gap: 6px; margin-top: 8px; }
+.salida {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px;
+  background: var(--blanco); border: 1.5px dashed var(--gris); border-radius: 8px; padding: 6px 12px 7px;
+}
+.salida__tit { font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); }
+.salida p { font-size: 15px; line-height: 1.45; }
+.salida__boton {
+  display: inline-block; padding: 0 7px; font-size: 13.5px; line-height: 1.4; white-space: nowrap;
+  background: var(--panel); border: 1.5px solid var(--gris); border-radius: 4px;
+}
+.salida .salida__dato { font-size: 17px; font-weight: 700; color: var(--tinta); white-space: nowrap; }
+.salida .salida__nota { font-size: 13.5px; color: var(--gris); }
+
+/* MQTT: los pasos del esquema */
+.columnas .esquema--mqtt .lista-pasos li { font-size: 14.5px; }
+
+/* HTTP o MQTT: la tabla comparativa con texto más largo */
+.tabla-comp--http td { text-align: left; }
+.tabla-comp.tabla-comp--http thead th:first-child, .tabla-comp.tabla-comp--http tbody th { width: 21%; }
+
+/* ---------- Simulador "Petición real" ---------- */
+.api { display: grid; gap: 8px; grid-template-areas: "ej" "url" "cod" "json" "pag"; align-items: start; }
+.api__ejemplo { grid-area: ej; font-size: 13.5px; font-style: italic; color: var(--gris); }
+.api__bloque { display: grid; gap: 5px; align-content: start; min-width: 0; background: var(--blanco); border-radius: 8px; padding: 8px 12px 10px; }
+.api__bloque--url { grid-area: url; }
+.api__bloque--cod { grid-area: cod; }
+.api__bloque--json { grid-area: json; }
+.api__bloque--pag { grid-area: pag; }
+.api__bloque h3 { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); }
+.api__url { font-family: var(--fuente-mono); font-size: 14px; line-height: 1.45; color: var(--tinta); overflow-wrap: anywhere; }
+.api__url b { margin-right: 4px; color: var(--acento-texto); }
+.api__ruta { background: var(--acento-suave); box-shadow: inset 0 -2px 0 var(--acento); border-radius: 2px; }
+.api__nota { font-size: 13.5px; line-height: 1.35; color: var(--gris); }
+.api__codigo {
+  justify-self: start; display: flex; align-items: baseline; gap: 10px;
+  padding: 2px 16px 3px 17px; border-radius: 8px;
+  background: var(--grupo-claro, var(--panel)); box-shadow: inset 5px 0 0 var(--grupo, var(--linea));
+}
+.api__codigo b { font-family: var(--fuente-titular); font-weight: 800; font-size: 32px; line-height: 1.1; color: var(--tinta); }
+.api__codigo span { font-weight: 700; font-size: 17px; color: var(--tinta); }
+.api .ventana-cod__txt { max-height: 24em; overflow: auto; font-size: 13px; }
+.api__sin-json { color: var(--consola-error); font-weight: 700; }
+.api__pagina { border: 1.5px solid var(--linea); border-radius: 6px; padding: 8px 12px; font-size: 16px; line-height: 1.4; color: var(--tinta); }
+.api__pagina ul { display: grid; gap: 2px; }
+.api__pagina--vacia { color: var(--gris); font-style: italic; }
+
+/* Actividades: el JSON al lado de la consigna, el código para completar y las API para elegir */
+.act__cuerpo > .ventana-cod { margin-top: 9px; }
+.ventana-cod--act { margin-top: 6px; }
+.ventana-cod--act .ventana-cod__txt { font-size: 12.5px; }
+.hueco { color: var(--cod-str); font-weight: 700; }
+/* URL para separar en partes: se corta solo donde lo marca <wbr>, nunca en medio de una palabra */
+code.cod-url { overflow-wrap: normal; }
+.apis { display: grid; gap: 4px; margin-top: 7px; }
+.apis li { display: grid; gap: 0 10px; background: var(--blanco); border-radius: 8px; padding: 4px 12px 5px; font-size: 15px; line-height: 1.38; }
+.apis strong { font-family: var(--fuente-titulo); font-size: 16.5px; }
+.apis .cod-bloque { margin: 0 0 3px; }
+
+@media (min-width: 600px), print {
+  .url-partes {
+    grid-template-columns: minmax(min-content, .55fr) minmax(min-content, 1fr) minmax(min-content, .95fr) minmax(min-content, 1.75fr);
+    gap: 0 24px;
+  }
+  .url-partes > li { position: relative; }
+  .url-partes > li:not(:last-child)::after {
+    content: "+"; position: absolute; right: -17px; top: 3px;
+    font-weight: 700; font-size: 19px; color: var(--acento-texto);
+  }
+  .json-ej { grid-template-columns: auto minmax(0, 1fr); }
+  .receta .lista-pasos { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); }
+  .apis li { grid-template-columns: 96px minmax(0, 1fr); }
+  .columnas--api { align-items: center; }
+  .api { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "ej ej" "url url" "cod json" "pag json"; grid-template-rows: auto auto auto 1fr; }
+}
+
+@media (min-width: 860px), print {
+  .tabla-comp.tabla-comp--http th, .tabla-comp.tabla-comp--http td { font-size: 14.5px; padding: 5px 9px; line-height: 1.25; }
+  .tabla-comp.tabla-comp--http thead th { font-size: 16px; padding: 6px 8px; }
+  .tabla-verbos { font-size: 14px; }
+  .tabla-verbos th, .tabla-verbos td { padding: 3px 8px; }
+  .json-ej .ventana-cod__txt, .http-par .ventana-cod__txt { font-size: 12.5px; line-height: 1.45; padding: 6px 12px 8px; }
+  /* Láminas con mucho texto (TP9): letra un poco más chica que en .lamina--densa */
+  .lamina--compacta .intro { padding: 10px 16px; }
+  .lamina--compacta .intro p { font-size: 16px; line-height: 1.38; }
+  .lamina--compacta .intro .ico--xl { width: 58px; height: 58px; }
+  .lamina--compacta .lista-txt { font-size: 15px; gap: 4px; }
+  .lamina--compacta .panel > p, .lamina--compacta .panel .texto { font-size: 15px; line-height: 1.38; }
+  .lamina--compacta .subtitulo { font-size: 22px; }
+  .lamina--compacta .subtitulo::after { margin-top: 4px; height: 4px; }
+  .lamina--compacta .lista-pasos li { padding: 4px 10px 4px 5px; }
+  .lamina--compacta .lista-pasos b { height: 30px; font-size: 20px; }
+  .receta .lista-pasos li { font-size: 14px; line-height: 1.3; }
+  .lamina--compacta .ventana-cod__txt { font-size: 12.5px; line-height: 1.45; }
+  .url-partes p { font-size: 14px; }
+  .url-partes > li > code { font-size: 13px; }
+  .url-completa { font-size: 13.5px; }
+  .codigos li span { line-height: 1.25; }
+  .lamina--compacta .cod-bloque { font-size: 12px; }
+  .columnas--api { grid-template-columns: 1fr 1.1fr; }
+  .receta .lista-pasos { gap: 5px; }
+  .receta .lista-pasos li, .esquema--mqtt .lista-pasos li { padding: 3px 10px 3px 4px; grid-template-columns: 28px 1fr; }
+  .receta .lista-pasos b, .esquema--mqtt .lista-pasos b { height: 26px; font-size: 18px; }
+  .tabla-comp.tabla-comp--http { width: calc(100% + 8px); margin: -4px; border-spacing: 4px; }
+  .act .cod-bloque { font-size: 12px; }
+  .act .ventana-cod__txt { font-size: 12.5px; line-height: 1.4; padding: 6px 12px 8px; }
+  /* Hoja del simulador: el contenido arriba y el pie abajo, como en las actividades */
+  .lamina--sim { justify-content: flex-start; }
+  .lamina--sim > .pie { margin-top: auto; }
+  .lamina--compacta .texto { font-size: 15px; line-height: 1.4; }
+}
