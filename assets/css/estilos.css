@@ -1287,7 +1287,6 @@ kbd {
   .router-cab > .router-plan { grid-area: plan; }
   .router-cab > .mapa-panel { grid-area: mapa; }
   .ajuste-fila { grid-template-columns: 1fr 1fr; align-items: center; gap: 10px; }
-  .entrega__lista { grid-template-columns: 1fr 1fr; }
   .fija { grid-template-columns: 1fr 300px; }
   .router-funciones { grid-template-columns: 1.3fr 1fr; }
 }
