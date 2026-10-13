@@ -65,6 +65,7 @@ En `:root`, estas variables toman estos valores. Las de ventanas, código, grise
   --ok: #15803D;       --ok-oscuro: #166534;      --ok-claro: #DCFCE7;
   --error: #B91C1C;    --error-claro: #FEE2E2;                               /* nueva */
   --archivo: #F59E0B;  --archivo-texto: #92400E;  --archivo-claro: #FEF3C7;  --archivo-linea: #FDE68A;
+  --codigo-texto: #BE123C;  --codigo-claro: #FFF1F2;  --codigo-linea: #FECDD3;   /* 13/10: código dentro del texto (5,7:1) */
 
   /* Terminal */
   --consola-ok: #86EFAC;  --consola-error: #FCA5A5;                          /* nuevas */
@@ -108,6 +109,7 @@ Cada color significa algo y nunca es el único dato: siempre va con texto o íco
 | **Verde** (`--ok…`) | Funciona. "En el router del laboratorio". "Recomendación" | Resultados, recuadros |
 | **Rojo** (`--error…`) | Falla: sin respuesta, error | Resultados de diagnóstico |
 | **Ámbar** (`--archivo…`) | Carpetas y archivos | TP6, nombres de archivo |
+| **Rojo rosado** (`--codigo…`, 13/10) | Código dentro del texto: lo que se escribe tal cual | `<code>` en el texto corrido, las tablas y los recuadros |
 
 - **Dos grupos en un mismo esquema:** el primero con el acento (`.grupo`) y el segundo en naranja (`.grupo.grupo--naranja`). Cliente y servidor van siempre así, en todos los TPs. Funciona y falla: `grupo--ok` y `grupo--error`.
 - **Texto sobre color:** sobre `--acento` y `--archivo`, texto oscuro (`--tinta`). Sobre `--ok`, `--naranja-texto` y `--error`, blanco. Nunca texto blanco sobre `--acento` ni sobre `--naranja`.
@@ -116,7 +118,7 @@ Cada color significa algo y nunca es el único dato: siempre va con texto o íco
 - **Cableado (TP3):** los colores reales de los hilos, como variables `--hilo-*`, y cada hilo con su nombre escrito.
 - **Campos de los simuladores** (inputs, selects): borde `--gris`. El `--acento` da 2,1:1 sobre blanco y no alcanza para un control.
 - **Ventanas de código y terminal:** `div.ventana-cod` > `div.ventana-cod__barra` (`aria-hidden`, con el rótulo: "JavaScript", "JSON", "HTTP", "Símbolo del sistema") + el contenido. Colores: `<b>` palabras clave, `.t-fun` funciones, `.t-str` textos, `.t-atr` campos y propiedades, `.t-num` números, `.t-com` comentarios. En la terminal, lo que sale bien en `--consola-ok` y los errores en `--consola-error`. En la impresión pasan a fondo claro (el CSS ya lo hace).
-- **Código dentro del texto:** `<code>` toma el acento. Sirve para comandos, IP, puertos y rutas. `code.cod-archivo` para carpetas y nombres de archivo.
+- **Código dentro del texto** (13/10): `<code>` va en **rojo rosado** (`--codigo-*`), no en el verde del acento. Va así todo lo que se escribe tal cual en la PC, el navegador o el código: comandos, IP, puertos, URL y dominios, rutas y endpoints, verbos con su ruta (`GET /libros/12`), JavaScript (`async function`, `respuesta.json()`), headers (`Access-Control-Allow-Origin`), JSON y XML (`<venta>1535</venta>`). Las clases `cod-cmd` y `cod-ip` quedan en el HTML, pero ya no cambian el color. `code.cod-archivo`, en ámbar, para carpetas y nombres de archivo.
 - **Recuadros:** `div.nota.nota--importante` (naranja) y `div.nota.nota--consejo` o `.pf__caja--consejo` ("Recomendación", verde), con su ícono delante del título (`#i-importante`, `#i-consejo`).
 - **Actividades:** en la carpeta, con el acento. En la computadora, `article.lamina--compu`, con `--acento-fuerte` (el acento un tono más oscuro, con texto oscuro encima), para seguir el mismo hilo de color (10/10).
 - **Portada:** cada tarjeta `.tp` lleva la franja izquierda del acento. Etiquetas en `.tp__meta`, antes de "Láminas": `etq--sim` ("Simulador", en los TPs que tienen uno) y `etq--compu` ("En la compu", verde, en los TP8, TP9 y TP10).
