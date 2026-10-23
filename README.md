@@ -40,7 +40,7 @@ Una versión web del cuadernillo de Redes I, pensada para leer desde la computad
 | 7 | Transporte y protocolos de aplicación | ✅ Disponible |
 | 8 | APIs REST y MQTT | ✅ Disponible |
 | 9 | Configurando el router | ✅ Disponible |
-| 10 | Proyecto integrador YoLo | Próximamente |
+| 10 | Proyecto integrador YoLo | ✅ Disponible |
 | 11 | Seguridad en redes | Próximamente |
 
 ## Estructura del repositorio

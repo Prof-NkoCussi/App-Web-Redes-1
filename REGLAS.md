@@ -96,7 +96,7 @@ Textos fijos:
 - **`<title>`, descripción y `theme-color`** (`#26C9A1`) de cada página.
 - **Ícono de la materia:** tres equipos conectados a un nodo central (red en estrella), en versión sólida para la cabecera.
 - **Sin eslóganes ni frases decorativas.**
-- **Sin años calendario en el sitio** (ni 2026 ni 2027): el cuadernillo se reusa todos los años.
+- **Sin años calendario en el sitio** (ni 2026 ni 2027): el cuadernillo se reusa todos los años. (22/10) Tampoco fechas de dictado ni de entrega («miércoles 11/11»): las fechas van en Classroom.
 - **Progreso:** la clave de `localStorage` es `redes:tp-visto-`. No usar `bd1:`, `prog:` ni `tpd1:`: todos los cuadernillos comparten el dominio `prof-nkocussi.github.io`.
 
 ## Colores
@@ -128,29 +128,33 @@ Cada color significa algo y nunca es el único dato: siempre va con texto o íco
 
 Copiar la estructura de `_fuente/modelo-tp01.html` hasta que exista el primer TP de Redes; después, la de ese TP.
 
-1. **Barra superior** (`header.barra`): botón "Índice" · "TP N°X — nombre del TP" · botón PDF (`data-imprimir`). Debajo, `nav.partes` con accesos a cada lámina, al simulador, a "Para profundizar", a "Actividades" y a "Paso a paso". Verificar a 360 px (el TP7 tiene nombre largo).
+1. **Barra superior** (`header.barra`): botón "Índice" · "TP N°X — nombre del TP" · botón PDF (`data-imprimir`). Debajo, `nav.partes` con accesos a cada lámina, al simulador, a "Para profundizar", a "Actividades" y a "Paso a paso" (este último, solo cuando la página existe). En el TP10, también a "Entrega y evaluación". Verificar a 360 px (el TP7 tiene nombre largo).
 2. **Láminas** (`article.lamina#pag-N`): `.cab` → `.tit` (número + título + subtítulo) → bloques → `.idea` (Idea clave) → `.pie`. **3 láminas por TP**; el TP7 tiene 5, el TP8 4 y el TP10 1.
-3. **Para profundizar** (`article.lamina.lamina--pf#profundizar`): `.pf-grid` de 2×2, un bloque `.pf` por lámina (texto + recuadro `.pf__caja`). Con 3 láminas, el cuarto bloque integra. En el TP7 puede usar dos hojas; en el TP8 (4 láminas, un bloque por lámina), también.
+3. **Para profundizar** (`article.lamina.lamina--pf#profundizar`): `.pf-grid` de 2×2, un bloque `.pf` por lámina (texto + recuadro `.pf__caja`). Con 3 láminas, el cuarto bloque integra. En el TP7 puede usar dos hojas; en el TP8 (4 láminas, un bloque por lámina), también. (22/10) En el TP10 (una lámina), tres hojas con un bloque por pregunta de la defensa: `ping`; F12 › Red y los puertos; las IP y el video (el bloque de `ping`, con sus dos terminales, ocupa una hoja).
 4. **Actividades para hacer en la carpeta** (`article.lamina.lamina--act#actividades`), con la estructura de los .docx de la materia:
    - Secciones numeradas `N- Tema`, desde 1 en cada TP.
    - Incisos `a)`, `b)`, `c)` con la letra destacada.
    - Cuadros comparativos para completar (`.act-tabla`).
-   - **Un punto por lámina + un caso integrador.** En una sola hoja (dos en el TP7 y en el TP8). Más cortas que en Base de Datos: no se suman 2 o 3 puntos extra.
+   - **Un punto por lámina + un caso integrador.** En una sola hoja (dos en el TP7 y en el TP8). Más cortas que en Base de Datos: no se suman 2 o 3 puntos extra. El TP9 y el TP10 no llevan caso integrador; el TP10 tiene un solo punto, sobre la lámina 31.
    - Sin cierre: no llevan `REALIZAR EN LA CARPETA.` ni `Fecha límite`.
    - Sin corrección automática.
 5. **Actividades para hacer en la computadora** (`article.lamina--compu#actividades-2`), solo en los TP8, TP9 y TP10: pasos numerados y un recuadro "Entrega" con la lista de lo que se entrega, con viñetas (10/10: sin casillas; en el TP9, una sola línea, sin lista).
+   - (22/10) **TP10:** dos hojas. La primera: la consigna, "¿Qué es el TP final?", "El objetivo" y la bitácora. La segunda: la ruta de trabajo, una etapa por bloque, cada una con lo que hacen y su entregable, y el recuadro "Entrega". Después va "Entrega y evaluación" (`#entrega`, dos partes, porque no entra en una A4): qué reciben y qué hacen y el checklist de entrega; cómo se evalúa, las preguntas de la defensa y las reglas y cuidados.
+   - **Excepción del TP10:** el checklist de entrega va **con casillas**, tal como está en la guía de Nicolás.
 6. **Mini-juego:** si el TP tiene juego en la app Redes I Games, cierra con el botón "Jugar el mini-juego de este TP". Ver "Componentes nuevos".
 
 Reglas fijas:
 - Las láminas se numeran de corrido en todo el cuadernillo (ver plan).
 - Al terminar un TP: activarlo en `index.html` (de `div.tp.tp--pronto` a `a.tp` con `href` y su `tp__visto`) y pasar su estado a "✅ Disponible" en el README.
-- Objetivo de tiempo: 4 encuentros por TP. El TP9 se da en 2 y el TP10 en 6.
+- Objetivo de tiempo: 4 encuentros por TP. El TP9 se da en 2. El TP10 se trabaja en 6 etapas, en las horas de Redes I y de Software II.
 
 ## Regla de las actividades (innegociable)
 
 **Las actividades de un TP se resuelven únicamente con el contenido de ese TP** (láminas y "Para profundizar"). Nada que no esté en el material. La terminología de cada consigna coincide palabra por palabra con la del contenido.
 
 Antes de entregar, revisar inciso por inciso: ¿dónde está la respuesta? Si no está, se agrega al contenido o se saca el inciso. Por eso "investigá" pasa a "explicá con el material".
+
+(22/10) En el TP10 la regla vale también para las preguntas de la defensa: cada una se responde con la lámina 31 y "Para profundizar" (y lo que retoman de los TP7 a TP9). La única excepción es "¿Qué hiciste vos, cuál fue tu rol en el grupo?", que se responde con el trabajo de cada uno.
 
 ## Componentes nuevos
 
@@ -185,6 +189,7 @@ El repo de origen no tiene nada interactivo. Lo que sigue se crea en el TP donde
 - **Diagramas:** todos en SVG simple, con `role="img"` y texto alternativo: topologías, recorrido de un paquete, handshake, encapsulación, cliente-servidor, capas, publicar/suscribirse de MQTT, arquitectura del YoLo. Si hace falta una foto real (rack, patch panel), dejar un marcador visible: `[FOTO: qué mostrar]`.
 - **Botón del mini-juego:** enlace a la app ya publicada (`https://prof-nkocussi.github.io/App-redes-games/`, repo `Prof-NkoCussi/App-redes-games`, un juego por carpeta `games/tpN/`). Confirmar la URL de cada juego en ese repo. Hoy hay juego de los TP1 a TP5. El botón va solo en los TPs que tienen juego. El cuadernillo linkea a la app: no se fusionan.
 - **Código JavaScript** (TP8 y TP10): `let` y `const`, `===`, punto y coma, comillas dobles, textos unidos con `+`. Las peticiones se escriben con `async function` y `await fetch()`, como receta fija; `.then()` solo se nombra en "Para profundizar". Al lado de cada ejemplo va escrita la salida esperada.
+  - (22/10) **TP10:** los alumnos programan el `fetch` de cada botón. El cuadernillo muestra el endpoint (`POST /api/comando`) y el JSON (`{"accion":"adelante"}`), que están en la guía, pero **no publica el código resuelto de los botones** ni el del video.
   - **(13/10) Los alumnos recién empiezan a programar.** El `fetch` se queda, pero no lo escriben desde cero: usan un **modelo armado** y lo modifican de a una cosa (la URL o un campo). En las actividades no se pide escribir código desde cero: a lo sumo, completar una sola cosa del modelo.
   - El modelo del TP8 está en `assets/descargas/api-dolar/` (`index.html` + `app.js` con comentarios, y `api-dolar.zip`), y se muestra **tal cual** en la lámina 26, con los comentarios en `.t-com`. Si se cambia el modelo, se cambian los tres archivos y la lámina, y se vuelve a probar con doble clic, con DolarAPI y con PokéAPI. El `.zip` se arma con `tar -a` de Windows, para que las rutas vayan con `/`.
 
@@ -248,7 +253,7 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 | 7 | Transporte y protocolos de aplicación | 19–23 | TCP y UDP, con el handshake de tres pasos · puertos · DNS y DHCP · HTTP y HTTPS · FTP, SSH y correo | DNS |
 | 8 | APIs REST y MQTT | 24–27 | cliente-servidor, recursos y endpoints · verbos HTTP y códigos de respuesta · JSON y `fetch` · MQTT: broker, publisher, subscriber y tópicos | Petición real |
 | 9 | Configurando el router | 28–30 | la IP de la PC: `ipconfig` e IP fija en Windows · cómo funciona un router y cómo se entra · configurar el router: Wi-Fi, DHCP e IP fijas | Simulador del panel, app aparte |
-| 10 | Proyecto integrador YoLo | 31 | mapa del proyecto: navegador → servidor → broker MQTT → ESP32 → motores, el protocolo de cada tramo y el esquema de red. El resto es práctica en la compu (6 clases) | — |
+| 10 | Proyecto integrador YoLo | 31 | mapa del proyecto: app web → servidor → broker MQTT → robot (ESP32-CAM), el protocolo y el puerto de cada tramo, y el video directo a la app. El resto es práctica en la compu (6 etapas) y la hoja "Entrega y evaluación" | — |
 | 11 | Seguridad en redes (de soporte) | 32–34 | amenazas (sniffing, spoofing, Man-in-the-Middle, DoS) · firewall, DMZ y VPN · HTTPS, certificados y Wi-Fi (WPA2, WPA3, redes públicas) | — |
 
 ### Detalle de los TP7 a TP11 (texto nuevo)
@@ -285,10 +290,17 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - "Para profundizar": la IP 169.254 cuando no hay DHCP; `ifconfig` en Linux; la IP pública en el laboratorio y port forwarding; control de acceso; firmware, reiniciar y reset de fábrica.
 - `ping`, `tracert`, `nslookup` y `netstat` quedan para Redes II.
 
-**TP10 · Proyecto integrador YoLo** (C, 13/10)
-- L31 **Mapa del proyecto:** la arquitectura navegador → servidor → broker MQTT → ESP32 → motores, qué protocolo va en cada tramo y el esquema de red.
-- El resto del TP10 es todo práctica: una guía de 6 clases en la computadora. Nicolás les da una app web muy básica, que los alumnos reestructuran y diseñan con CSS a su gusto. Además usan GitHub y README (articula con Software II), configuran en el router una red Wi-Fi fija para el robot y prueban las conexiones con `ping`.
+**TP10 · Proyecto integrador YoLo** (C, 22/10: sale de la guía de Nicolás, `_fuente/tp10/TP10-YoLo-guia.md`; reemplaza el texto del 13/10)
+- **Es el trabajo final de Redes I y de Software II:** un solo proyecto, una entrega y una defensa, que vale para las dos materias. Articula con Programación II (JavaScript, para programar los botones). Grupos de 2 integrantes (23/10: antes 2 o 3). No hay teoría nueva: usan todo lo del año junto.
+- **El robot:** YoLo v1, con una ESP32-CAM (un ESP32 con cámara). Tiene motores, una cámara y un sensor de obstáculos: si hay un obstáculo a menos de 15 cm, no avanza (puede ir hacia atrás o girar para salir). El video sale de la cámara por HTTP (MJPEG) y va **directo al navegador, sin pasar por el servidor**.
+- **La arquitectura,** toda dentro de la red Wi-Fi del robot, que configura cada grupo: app web (HTML, CSS y `fetch`, la arman los alumnos) → servidor Node.js + Express, en el puerto 3000 (HTTP) → broker MQTT Mosquitto, en el puerto 1883 (MQTT) → robot.
+- **El endpoint:** `POST /api/comando` con un JSON, por ejemplo `{"accion":"adelante"}`. Cinco comandos: `adelante`, `atras`, `izquierda`, `derecha` y `stop`. El servidor publica el comando en el tópico del robot; el robot está suscripto. Desafío opcional: un endpoint `GET /api/estado` con el estado del robot.
+- **Los alumnos programan el `fetch` de cada botón.** El cuadernillo muestra el endpoint y el JSON, pero no el código resuelto (ver "Código JavaScript").
+- L31 **Mapa del proyecto:** esquema SVG de la arquitectura, rehecho del diagrama de la guía: la red Wi-Fi del robot; app → servidor (HTTP, 3000) → broker (MQTT, 1883) → robot; el video del robot a la app por HTTP (MJPEG), en línea punteada. App y robot en el acento (la app pide, el robot se suscribe, como en el TP8); servidor y broker en naranja. Abajo, el recorrido de un comando en 3 pasos (texto de la guía) y la tabla de los 5 comandos.
+- "Para profundizar", en tres hojas, un bloque por pregunta de la defensa: `ping` en Windows (cómo se usa; responde o «Tiempo de espera agotado»); F12 › Red (el `fetch`, el JSON en «Carga útil» y el código en «Estado»); qué IP tiene cada parte y cómo se asigna (retoma la reserva por MAC del TP9); los puertos del servidor y del broker; por qué el video no pasa por el servidor.
+- Práctica en la compu: 6 etapas, con GitHub (una rama por integrante y pull requests), Trello, `BITACORA.md`, script `.bat` e informe (ver "Práctica y entrega").
 - **El cuadernillo no publica la solución.**
+- **Datos que no están en la guía y se supusieron** (22/10, a confirmar con Nicolás): el servidor y el broker corren en la misma PC (la guía solo pide `ping` al robot y al servidor); la IP del robot se reserva en el router por su MAC, porque el robot no se abre; la PC del servidor lleva IP fija o reservada; para el video, el robot atiende como servidor HTTP y la app lo pide a la IP del robot; el código del ejemplo de F12 › Red es `200`. IP de ejemplo, con los datos del cuadernillo: router `192.168.1.1`, PC del servidor `192.168.1.10`, robot `192.168.1.20`, PC con la app `192.168.1.25`.
 
 **TP11 · Seguridad en redes**
 - L32 **Amenazas:** sniffing, spoofing, Man-in-the-Middle y DoS: cómo funciona cada una, qué daño causa y cómo se defiende.
@@ -316,7 +328,14 @@ El contenido ya está escrito y verificado. Fuente: las diapositivas de Gamma (e
   - Entrega (C, 13/10): una captura de pantalla de cada ejercicio, en el documento que ya está creado en Classroom. Sin el `.zip`. Una sola línea, sin lista, como en el TP9.
   - (13/10) En la carpeta, una pregunta sobre `fetch()`: qué es y qué hace.
 - **TP9.** (C, 9/10) Carpeta: un punto por lámina, sin caso integrador (10/10: se sacó la planilla de configuración). Computadora, individual: configurar el router en el simulador del panel (10/10), como práctica para el proyecto final. Reset de fábrica si ya se usó; entrar al panel y crear la contraseña de administrador; SSID y clave con WPA/WPA2 Personal; ver el rango DHCP y los dispositivos; reservar una IP para la PC y comprobarla con `ipconfig`; poner una IP fija en Windows; copia de seguridad. Entrega por Classroom: la captura del resumen del simulador, con todos los pasos en ✓.
-- **TP10.** (C, 13/10) Una sola lámina, el mapa del proyecto. El resto del TP10 es todo práctica: una guía de 6 clases en la computadora. Nicolás les da una app web muy básica, que los alumnos reestructuran y diseñan con CSS a su gusto. Además usan GitHub y README (articula con Software II), configuran en el router una red Wi-Fi fija para el robot y prueban las conexiones con `ping`. El cuadernillo no publica la solución. La tabla de clases se rearma cuando se haga el TP10. (C) "Identificar vulnerabilidades" pasa al TP11.
+- **TP10.** (C, 22/10: reemplaza el texto del 13/10; sale de la guía `_fuente/tp10/TP10-YoLo-guia.md`, que es texto de Nicolás: se pasa al formato del cuadernillo y se avisa antes de cambiar algo)
+  - Una sola lámina, el mapa del proyecto. Es el trabajo final de Redes I y de Software II (un proyecto, una entrega, una defensa); articula con Programación II. En grupos de 2.
+  - Carpeta: un punto sobre la lámina 31, sin caso integrador: el esquema de red, el recorrido de un comando y qué protocolo y qué puerto hay en cada tramo (y el camino del video).
+  - Computadora, en grupo: la ruta de trabajo de la guía, una etapa por bloque, con lo que hacen y su entregable. 1 · Arranque (grupo y roles, esquema de red, kit y app, tablero de Trello); 2 · La red (router, `ping`, ambiente de desarrollo); 3 · La app (HTML y CSS, repositorio con una rama por integrante); 4 · Integración (`fetch` de los botones, video, pull requests); 5 · Documentación (README, informe, script `.bat`, bitácora); 6 · Defensa. Al final de cada clase, una entrada en `BITACORA.md`, que también se evalúa.
+  - Hoja "Entrega y evaluación" (dos partes, porque no entra en una A4): qué reciben y qué hacen; el desafío opcional `GET /api/estado`; el checklist de entrega (repositorio en GitHub, README.md y otros entregables), **con casillas, tal cual la guía**; cómo se evalúa (Redes I mira tres cosas; Software II: producto 40 %, proceso 35 %, defensa 25 %); las preguntas de la defensa; reglas y cuidados.
+  - (23/10) La guía cambió: grupos de 2; el objetivo 2 sin `ping`; el 5, solo "commits claros"; el checklist de GitHub con un solo ítem, sin el script `.bat` ni las capturas del `ping`; la última pregunta de la defensa es "¿Qué hiciste vos, cuál fue tu rol en el grupo?". El cuadernillo sigue la guía nueva.
+  - Sin fechas: la guía dice "miércoles 11/11" y "2/12 o 4/12"; en el cuadernillo no van, porque se reusa todos los años. Las fechas van en Classroom.
+  - (C) "Identificar vulnerabilidades" pasa al TP11.
 - **TP11.** Trabajo grupal: cada grupo toma una amenaza (sniffing, spoofing, Man-in-the-Middle, DoS) y explica cómo funciona, qué daño causa y qué defensas existen. Cuadro general de amenazas y contramedidas. Diagrama con la ubicación de firewall, DMZ y VPN. Diferencia entre HTTP y HTTPS y qué son los certificados digitales. WPA2, WPA3 y riesgos de las redes Wi-Fi públicas. (C) "Investigación" pasa a "explicación con el material". (C) Caso integrador sobre el YoLo.
 
 ## Orden de producción
@@ -354,11 +373,26 @@ TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primer
 - TP8 (ajuste): los alumnos recién empiezan a programar. El `fetch` se queda, pero no lo escriben desde cero: usan un modelo armado (`assets/descargas/api-dolar/`) y lo modifican. La práctica en la compu es la del modelo, en 6 pasos chicos.
 - **Se invierten el TP8 y el TP9.** TP8 · APIs REST y MQTT, láminas 24 a 27 (antes TP9, 27 a 30); TP9 · Configurando el router, láminas 28 a 30 (antes TP8, 24 a 26). Solo cambian el orden y los números: el contenido es el mismo. TP10 (31) y TP11 (32 a 34) no cambian. Los archivos también se intercambian: `tp08.html` es el de APIs y `tp09.html`, el del router.
 
+## Decisiones confirmadas (22/10)
+
+- **TP10 sale de la guía de Nicolás** (`_fuente/tp10/TP10-YoLo-guia.md`). Es el trabajo final de Redes I y de Software II: un solo proyecto, una entrega y una defensa. Articula con Programación II (JavaScript).
+- Robot **YoLo v1** con ESP32-CAM: motores, cámara con video por HTTP (MJPEG) directo al navegador, sin pasar por el servidor, y un sensor que no lo deja avanzar con un obstáculo a menos de 15 cm.
+- Servidor Node.js + Express en el puerto 3000; broker Mosquitto en el 1883. Endpoint `POST /api/comando` con `{"accion":"adelante"}`; cinco comandos (`adelante`, `atras`, `izquierda`, `derecha`, `stop`). Desafío opcional: `GET /api/estado`.
+- Los alumnos programan el `fetch` de cada botón: el cuadernillo muestra el endpoint y el JSON, no el código resuelto.
+- Trabajo en 6 etapas, con GitHub (una rama por integrante y pull requests), Trello, `BITACORA.md`, script `.bat` e informe.
+- "Para profundizar" del TP10 cubre todas las preguntas de la defensa, en tres hojas.
+- Excepción del TP10: el checklist de entrega va con casillas, como en la guía.
+- Sin fechas en el cuadernillo: van en Classroom.
+- La versión paso a paso del TP10 (`tp10-pasos.html`) se hace más adelante, cuando Nicolás lo pida.
+
 ## Pendientes a consultar con Nicolás
 
 - **TP8:** probar desde el colegio DolarAPI (simulador y ejemplos), Open-Meteo y PokéAPI, y el modelo: descargar el `.zip`, descomprimirlo y abrir `index.html` con doble clic.
 - **TP8:** versión paso a paso (`tp08-pasos.html`), después de que Nicolás apruebe el texto. Solo conceptos, sin programar.
-- **TP10:** copiar el .docx del YoLo y el código de la plantilla en `_fuente/tp10/`.
+- **TP10:** confirmar los datos supuestos (ver el detalle del TP10): servidor y broker en la misma PC, la IP del robot reservada por MAC, el video pedido a la IP del robot y el código que responde `POST /api/comando`. Si se puede, copiar en `_fuente/tp10/` el código del servidor y de la app de partida, para verificarlos.
+- **TP10:** versión paso a paso (`tp10-pasos.html`), cuando Nicolás lo pida. Es la guía del rol de documentación.
+- **TP10 (23/10), dudas de la guía:** "cada pull" (¿pull request?) y "cual" sin tilde en la última pregunta de la defensa, pasados tal cual; las etapas 3 y 4 y la fila "Proceso" de Software II siguen nombrando ramas y pull requests, y la etapa 5 y "Producto" el script `.bat`, aunque el checklist ya no los pide.
+- **TP8:** a 360 px, el bloque "¿Dónde consigo una API?" queda 8 px más ancho que la hoja y se corta el borde (ya estaba antes del TP10).
 - **Paso a paso:** link del cuestionario de Google Forms de cada TP.
 - **Simulador del router:** capturas de Backup & Restore y del formulario Add de Address Reservation (y, si se puede, de Administration) para cambiar las pantallas provisorias.
 

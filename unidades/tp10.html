@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TP N°10 — Proyecto integrador YoLo · Redes I</title>
+  <meta name="description" content="TP N°10 de Redes I: el proyecto integrador YoLo, trabajo final de Redes I y de Software II. El mapa del proyecto (app web, servidor, broker MQTT y robot), ping, F12 › Red, las IP y los puertos, la ruta de trabajo en 6 etapas, la entrega y la defensa. Prof. Nicolás A. Cussi.">
+  <meta name="theme-color" content="#26C9A1">
+  <link rel="preload" href="../assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/barlow-semi-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/estilos.css">
+</head>
+<body data-tp="10">
+
+<!-- ====== Íconos (SVG simples) ====== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Red en estrella: tres equipos conectados a un nodo central -->
+    <symbol id="i-red-solido" viewBox="0 0 48 48">
+      <path d="M24 24V15M24 24L9 36M24 24l15 12" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round"/>
+      <g style="fill:currentColor;stroke:none">
+        <circle cx="24" cy="24" r="5"/>
+        <rect x="17" y="1" width="14" height="10" rx="2"/>
+        <path d="M22.5 10.5h3V13h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+        <rect x="2" y="31" width="14" height="10" rx="2"/>
+        <path d="M7.5 40.5h3V43h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+        <rect x="32" y="31" width="14" height="10" rx="2"/>
+        <path d="M37.5 40.5h3V43h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+      </g>
+    </symbol>
+    <symbol id="i-foco" viewBox="0 0 48 48">
+      <path d="M24 2.5v4M10 8.5l2.8 2.8M38 8.5l-2.8 2.8M4 22h4M40 22h4"/>
+      <path d="M24 12a10 10 0 0 0-6.2 17.8c1.4 1.2 2.2 2.6 2.2 4.2v1h8v-1c0-1.6.8-3 2.2-4.2A10 10 0 0 0 24 12z" style="fill:var(--ac)"/>
+      <path d="M20 39h8M21.5 43h5"/>
+    </symbol>
+    <!-- Robot con cámara, sobre ruedas -->
+    <symbol id="i-robot" viewBox="0 0 48 48">
+      <path d="M24 13V7M20 7h8"/>
+      <rect x="7" y="13" width="34" height="21" rx="4" style="fill:var(--blanco)"/>
+      <circle cx="24" cy="23.5" r="6.5" style="fill:var(--ac)"/>
+      <circle cx="24" cy="23.5" r="2"/>
+      <circle cx="14" cy="38.5" r="5" style="fill:var(--blanco)"/>
+      <circle cx="34" cy="38.5" r="5" style="fill:var(--blanco)"/>
+    </symbol>
+    <symbol id="i-importante" viewBox="0 0 48 48">
+      <path d="M24 5 3 42h42z" style="fill:var(--ac)"/>
+      <path d="M24 18v12M24 35.5v.5" style="stroke:var(--blanco)"/>
+    </symbol>
+    <symbol id="i-pc" viewBox="0 0 48 48">
+      <rect x="4" y="7" width="40" height="27" rx="3"/>
+      <rect x="8.5" y="11.5" width="31" height="18" rx="1" style="fill:var(--ac);stroke:none"/>
+      <path d="M24 34v6M16 41h16"/>
+    </symbol>
+    <!-- Lista con tildes: la entrega -->
+    <symbol id="i-lista" viewBox="0 0 48 48">
+      <rect x="9" y="7" width="30" height="37" rx="3" style="fill:var(--blanco)"/>
+      <rect x="17" y="3.5" width="14" height="7" rx="2" style="fill:var(--ac)"/>
+      <path d="M15 21l3 3 5-6M27 21h6M15 33l3 3 5-6M27 33h6"/>
+    </symbol>
+    <symbol id="i-lapiz" viewBox="0 0 48 48">
+      <path d="M33 6l9 9-25 25-9-9z" style="fill:var(--ac)"/>
+      <path d="M8 31 5.5 42.5 17 40z" style="fill:var(--blanco)"/>
+      <path d="M27 12l9 9"/>
+    </symbol>
+    <symbol id="i-descarga" viewBox="0 0 24 24">
+      <path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>
+    </symbol>
+    <symbol id="i-atras" viewBox="0 0 24 24">
+      <path d="M20 12H5M11 6l-6 6 6 6"/>
+    </symbol>
+  </defs>
+</svg>
+
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header class="barra">
+  <div class="barra__fila">
+    <a class="boton barra__volver" href="../indice.html"><svg aria-hidden="true" focusable="false"><use href="#i-atras"/></svg><span>Índice</span></a>
+    <span class="barra__titulo">TP N°10 — Proyecto integrador YoLo</span>
+    <button class="boton" type="button" data-imprimir aria-label="Guardar en PDF">
+      <svg aria-hidden="true" focusable="false"><use href="#i-descarga"/></svg><span><span class="boton__largo">Guardar </span>PDF</span>
+    </button>
+  </div>
+  <nav class="partes" aria-label="Partes del TP N°10">
+    <a href="#pag-31">31 · Mapa del proyecto</a>
+    <a href="#profundizar">Para profundizar</a>
+    <a href="#actividades">Actividades</a>
+    <a href="#actividades-2">En la compu</a>
+    <a href="#entrega">Entrega y evaluación</a>
+  </nav>
+</header>
+
+<main id="contenido" class="laminas">
+  <h1 class="sr-only">TP N°10 — Proyecto integrador YoLo</h1>
+
+  <!-- =================== LÁMINA 31 =================== -->
+  <article class="lamina lamina--densa lamina--compacta lamina--apretada" id="pag-31" aria-labelledby="t31">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t31"><span class="tit__num">31.</span> Mapa del proyecto</h2>
+      <p class="tit__sub">Qué viaja, por dónde y con qué protocolo</p>
+    </div>
+
+    <div class="intro">
+      <svg class="ico ico--xl" aria-hidden="true" focusable="false"><use href="#i-robot"/></svg>
+      <p><strong>YoLo v1</strong> es un robot con cámara que se maneja desde una página web. Tiene una placa <strong>ESP32-CAM</strong> (un ESP32 con cámara, TP8), motores y un sensor de obstáculos. Este mapa muestra cómo se comunican las partes del proyecto.</p>
+    </div>
+
+    <div class="mapa">
+      <figure class="esquema esquema--yolo">
+        <svg viewBox="0 0 420 320" role="img" aria-labelledby="yl-t yl-d">
+          <title id="yl-t">Mapa del proyecto YoLo</title>
+          <desc id="yl-d">Todo está dentro de la red Wi-Fi del robot, que configuran ustedes. Arriba a la izquierda, la app web: HTML, CSS y fetch; la arman ustedes. Arriba a la derecha, el servidor: Node.js más Express, en el puerto 3000. Abajo a la derecha, el broker MQTT: Mosquitto, en el puerto 1883. Abajo a la izquierda, el robot YoLo v1: una ESP32-CAM, con motores y cámara. Flecha 1, de la app al servidor, por HTTP. Flecha 2, del servidor al broker, por MQTT. Flecha 3, del broker al robot, por MQTT. Con línea punteada, el video va del robot a la app por HTTP (MJPEG): directo, sin pasar por el servidor.</desc>
+          <defs>
+            <marker id="yl-punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path class="yl-punta" d="M0 0 10 5 0 10z"/></marker>
+          </defs>
+          <rect class="yl-red" x="1" y="1" width="418" height="318" rx="14"/>
+          <circle class="yl-wifi-punto" cx="22" cy="26" r="2.2"/>
+          <path class="yl-wifi" d="M17 21.5a7 7 0 0 1 10 0M13.5 18a12 12 0 0 1 17 0M10 14.5a17 17 0 0 1 24 0"/>
+          <text class="yl-red-rot" x="40" y="27">Red Wi-Fi del robot <tspan class="yl-red-sub">(la configuran ustedes)</tspan></text>
+
+          <rect class="yl-caja yl-caja--pide" x="14" y="42" width="140" height="92" rx="9"/>
+          <text class="esq-rot" x="84" y="67" text-anchor="middle">App web</text>
+          <text class="esq-txt" x="84" y="87" text-anchor="middle">HTML, CSS y fetch</text>
+          <text class="yl-nota" x="84" y="106" text-anchor="middle">(la arman ustedes)</text>
+
+          <rect class="yl-caja yl-caja--responde" x="266" y="42" width="140" height="92" rx="9"/>
+          <text class="esq-rot" x="336" y="67" text-anchor="middle">Servidor</text>
+          <text class="esq-txt" x="336" y="87" text-anchor="middle">Node.js + Express</text>
+          <rect class="yl-pill" x="293" y="98" width="86" height="21" rx="10.5"/>
+          <text class="yl-pill-txt" x="336" y="113" text-anchor="middle">puerto 3000</text>
+
+          <rect class="yl-caja yl-caja--responde" x="266" y="214" width="140" height="92" rx="9"/>
+          <text class="esq-rot" x="336" y="239" text-anchor="middle">Broker MQTT</text>
+          <text class="esq-txt" x="336" y="259" text-anchor="middle">Mosquitto</text>
+          <rect class="yl-pill" x="293" y="270" width="86" height="21" rx="10.5"/>
+          <text class="yl-pill-txt" x="336" y="285" text-anchor="middle">puerto 1883</text>
+
+          <rect class="yl-caja yl-caja--pide" x="14" y="214" width="140" height="92" rx="9"/>
+          <text class="esq-rot" x="84" y="239" text-anchor="middle">Robot YoLo v1</text>
+          <text class="esq-txt" x="84" y="259" text-anchor="middle">ESP32-CAM</text>
+          <text class="esq-txt" x="84" y="278" text-anchor="middle">motores y cámara</text>
+
+          <path class="yl-flecha" d="M156 88H262" marker-end="url(#yl-punta)"/>
+          <circle class="esq-num" cx="172" cy="70" r="8"/><text class="esq-num-txt" x="172" y="74" text-anchor="middle">1</text>
+          <rect class="yl-tag" x="186" y="60" width="52" height="20" rx="10"/>
+          <text class="yl-tag-txt" x="212" y="74.5" text-anchor="middle">HTTP</text>
+
+          <path class="yl-flecha" d="M336 136V210" marker-end="url(#yl-punta)"/>
+          <circle class="esq-num" cx="358" cy="158" r="8"/><text class="esq-num-txt" x="358" y="162" text-anchor="middle">2</text>
+          <rect class="yl-tag" x="348" y="172" width="52" height="20" rx="10"/>
+          <text class="yl-tag-txt" x="374" y="186.5" text-anchor="middle">MQTT</text>
+
+          <path class="yl-flecha" d="M264 262H158" marker-end="url(#yl-punta)"/>
+          <rect class="yl-tag" x="184" y="234" width="52" height="20" rx="10"/>
+          <text class="yl-tag-txt" x="210" y="248.5" text-anchor="middle">MQTT</text>
+          <circle class="esq-num" cx="250" cy="244" r="8"/><text class="esq-num-txt" x="250" y="248" text-anchor="middle">3</text>
+
+          <path class="yl-video" d="M84 212V138" marker-end="url(#yl-punta)"/>
+          <rect class="yl-tag yl-tag--video" x="96" y="163" width="146" height="22" rx="11"/>
+          <text class="yl-tag-txt" x="169" y="178.5" text-anchor="middle">Video: HTTP (MJPEG)</text>
+          <text class="yl-nota" x="100" y="203">directo, sin pasar por el servidor</text>
+        </svg>
+        <figcaption>En el acento, quienes piden o se suscriben: la app y el robot. En naranja, los servidores: el servidor y el broker.</figcaption>
+      </figure>
+
+      <section class="panel comandos" aria-labelledby="cm31">
+        <div class="panel__cab"><h3 class="subtitulo" id="cm31">Los cinco comandos</h3></div>
+        <p>Todos van a <code>POST /api/comando</code>; cambia solo el comando del JSON. Se escriben tal cual: en minúscula y sin tilde.</p>
+        <table class="tabla-puertos tabla-comandos">
+          <caption class="sr-only">Los cinco comandos y qué hace el robot con cada uno</caption>
+          <thead><tr><th scope="col">Comando</th><th scope="col">El robot…</th></tr></thead>
+          <tbody>
+            <tr><th scope="row"><code>adelante</code></th><td>avanza</td></tr>
+            <tr><th scope="row"><code>atras</code></th><td>va hacia atrás</td></tr>
+            <tr><th scope="row"><code>izquierda</code></th><td>gira a la izquierda</td></tr>
+            <tr><th scope="row"><code>derecha</code></th><td>gira a la derecha</td></tr>
+            <tr><th scope="row"><code>stop</code></th><td>se detiene</td></tr>
+          </tbody>
+        </table>
+        <div class="nota nota--importante">
+          <h4><svg class="ico tit-ico" aria-hidden="true" focusable="false"><use href="#i-importante"/></svg>El sensor de obstáculos</h4>
+          <p>Si hay un obstáculo a menos de 15 cm, el robot no avanza: puede ir hacia atrás o girar para salir.</p>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel recorrido" aria-labelledby="rc31">
+      <div class="panel__cab"><h3 class="subtitulo" id="rc31">El recorrido de un comando</h3></div>
+      <p>Cuando apretás un botón, el comando hace este recorrido:</p>
+      <ol class="lista-pasos recorrido__pasos" aria-label="El recorrido de un comando">
+        <li class="grupo"><b>1</b><span><strong>App → servidor (HTTP).</strong> El botón hace un <code>fetch</code> al endpoint <code>POST /api/comando</code> con un JSON, por ejemplo <code class="sin-corte">{"accion":"adelante"}</code>.</span></li>
+        <li class="grupo grupo--naranja"><b>2</b><span><strong>Servidor → broker (MQTT).</strong> El servidor publica el comando en el tópico del robot.</span></li>
+        <li class="grupo grupo--naranja"><b>3</b><span><strong>Broker → robot (MQTT).</strong> El robot está suscripto a ese tópico, recibe el comando y mueve los motores.</span></li>
+      </ol>
+      <div class="recorrido__notas">
+        <p>En el paso 1, el servidor le contesta a la app con un código de respuesta (TP8, lámina 25).</p>
+        <p class="recorrido__video"><strong>El video hace otro camino:</strong> sale de la cámara del robot y llega directo al navegador por HTTP, sin pasar por el servidor.</p>
+      </div>
+    </section>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> el comando va de la app al servidor por HTTP (puerto 3000) y del servidor al robot por MQTT, a través del broker (puerto 1883). El video va directo del robot a la app, por HTTP.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 31">31</span>
+    </footer>
+  </article>
+
+  <!-- =================== PARA PROFUNDIZAR =================== -->
+  <article class="lamina lamina--pf lamina--arriba" id="profundizar" aria-labelledby="tpf">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="tpf"><span class="tit__num">+</span> Para profundizar</h2>
+      <p class="tit__sub">Para la defensa: ping</p>
+    </div>
+
+    <div class="pf-grid pf-grid--1">
+      <section class="pf" aria-labelledby="pf-ping">
+        <p class="pf__etiqueta">Lámina 31 · Etapa 2</p>
+        <h3 class="pf__titulo" id="pf-ping">ping: ¿responde el equipo?</h3>
+        <p><code class="cod-cmd">ping</code> le manda al equipo, a su IP, cuatro mensajes cortos y espera que conteste cada uno. Sirve para saber si el robot y la PC del servidor están en la red. Se escribe en el <strong>Símbolo del sistema</strong> (<kbd>Win</kbd> + <kbd>R</kbd>, <code class="cod-cmd">cmd</code> y <kbd>Enter</kbd>): <code class="cod-cmd">ping</code> y la IP del equipo.</p>
+
+        <div class="cmd ping">
+          <div class="ventana-cod ventana-cod--terminal" role="group" aria-label="Salida de ping cuando el equipo responde">
+            <div class="ventana-cod__barra" aria-hidden="true">Símbolo del sistema</div>
+<pre class="ventana-cod__txt" tabindex="0"><span class="t-prompt">C:\Users\Alumno&gt;</span><span class="t-cmd">ping 192.168.1.10</span>
+
+Haciendo ping a 192.168.1.10 con 32 bytes de datos:
+<span class="t-ok">Respuesta desde 192.168.1.10: bytes=32 tiempo=3ms TTL=128</span>
+<span class="t-ok">Respuesta desde 192.168.1.10: bytes=32 tiempo=5ms TTL=128</span>
+<span class="t-ok">Respuesta desde 192.168.1.10: bytes=32 tiempo=4ms TTL=128</span>
+<span class="t-ok">Respuesta desde 192.168.1.10: bytes=32 tiempo=6ms TTL=128</span>
+
+Estadísticas de ping para 192.168.1.10:
+    Paquetes: enviados = 4, recibidos = 4, perdidos = 0
+    (0% perdidos),
+Tiempos aproximados de ida y vuelta en milisegundos:
+    Mínimo = 3ms, Máximo = 6ms, Media = 4ms</pre>
+          </div>
+          <div class="ping__lectura grupo grupo--ok">
+            <h4>Responde</h4>
+            <ul class="pf__lista">
+              <li>Cuatro «Respuesta desde» y la IP del equipo: <strong>está en la red</strong>. En el ejemplo, la PC del servidor.</li>
+              <li><strong>tiempo:</strong> cuánto tardó el mensaje en ir y volver, en milisegundos (ms).</li>
+              <li>Al final, el resumen: <strong>enviados = 4, recibidos = 4, perdidos = 0</strong>.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="cmd ping">
+          <div class="ventana-cod ventana-cod--terminal" role="group" aria-label="Salida de ping cuando el equipo no responde">
+            <div class="ventana-cod__barra" aria-hidden="true">Símbolo del sistema</div>
+<pre class="ventana-cod__txt" tabindex="0"><span class="t-prompt">C:\Users\Alumno&gt;</span><span class="t-cmd">ping 192.168.1.20</span>
+
+Haciendo ping a 192.168.1.20 con 32 bytes de datos:
+<span class="t-error">Tiempo de espera agotado para esta solicitud.</span>
+<span class="t-error">Tiempo de espera agotado para esta solicitud.</span>
+<span class="t-error">Tiempo de espera agotado para esta solicitud.</span>
+<span class="t-error">Tiempo de espera agotado para esta solicitud.</span>
+
+Estadísticas de ping para 192.168.1.20:
+    Paquetes: enviados = 4, recibidos = 0, perdidos = 4
+    (100% perdidos),</pre>
+          </div>
+          <div class="ping__lectura grupo grupo--error">
+            <h4>No responde</h4>
+            <ul class="pf__lista">
+              <li><strong>«Tiempo de espera agotado para esta solicitud»:</strong> el mensaje no volvió. El resumen dice <strong>perdidos = 4</strong>.</li>
+              <li>El equipo está apagado, está conectado a otra red o tiene otra IP. En el ejemplo, el robot.</li>
+              <li>«Host de destino inaccesible» también quiere decir que no llegó, aunque el resumen diga perdidos = 0.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pf__cols pf__cols--2">
+          <div class="pf__caja">
+            <h4>ping prueba el equipo, no la aplicación</h4>
+            <p><code class="cod-cmd">ping</code> llega a la IP, no a un puerto (TP7, lámina 20). La PC del servidor puede responder aunque el servidor Node.js esté apagado: la aplicación se prueba con la app y F12 › Red.</p>
+          </div>
+          <div class="pf__caja">
+            <h4>¿La conexión es estable?</h4>
+            <p><code class="cod-cmd">ping -t 192.168.1.20</code> sigue mandando mensajes hasta que apretás <kbd>Ctrl</kbd> + <kbd>C</kbd>. Si cada tanto aparece «Tiempo de espera agotado», la conexión se corta.</p>
+          </div>
+          <div class="pf__caja pf__caja--consejo pf__caja--ancha">
+            <h4>Las capturas de la etapa 2</h4>
+            <p>Para el entregable, una captura del <code class="cod-cmd">ping</code> al robot y otra del <code class="cod-cmd">ping</code> a la PC del servidor, con <span class="sin-corte"><kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd></span>.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 10</span>
+    </footer>
+  </article>
+
+  <!-- =================== PARA PROFUNDIZAR · Hoja 2 =================== -->
+  <article class="lamina lamina--pf lamina--arriba" id="profundizar-2" aria-labelledby="tpf2">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="tpf2"><span class="tit__num">+</span> Para profundizar</h2>
+      <p class="tit__sub">Para la defensa: F12 › Red y los puertos</p>
+    </div>
+
+    <div class="pf-grid pf-grid--1">
+      <section class="pf" aria-labelledby="pf-red">
+        <p class="pf__etiqueta">Lámina 31 · Etapa 4</p>
+        <h3 class="pf__titulo" id="pf-red">El fetch, el JSON y el código: F12 › Red</h3>
+        <div class="pf__cols pf__cols--red">
+          <div class="pf__texto">
+            <p>Como en el TP8 (Para profundizar de la lámina 25): con la app abierta en Chrome o Edge, <kbd>F12</kbd>, la pestaña <strong>Red</strong> (<em>Network</em>) y tocar un botón. Cada <code>fetch</code> es una fila: el <strong>Nombre</strong> es el final de la URL, el <strong>Estado</strong> es el código de respuesta y el <strong>Tipo</strong>, <code>fetch</code>. El filtro <strong>Fetch y XHR</strong> deja solo los pedidos de JavaScript.</p>
+            <p>Con un clic en la fila:</p>
+            <ul class="pf__lista">
+              <li><strong>Encabezados:</strong> la URL de solicitud, el método (<code>POST</code>) y el código de estado.</li>
+              <li><strong>Carga útil</strong> (<em>Payload</em>): el JSON que mandó el botón.</li>
+              <li><strong>Respuesta:</strong> lo que contestó el servidor.</li>
+            </ul>
+          </div>
+          <div class="red-lado">
+            <figure class="captura captura--red">
+              <div class="captura__barra" aria-hidden="true">F12 › Red · Fetch y XHR</div>
+              <table>
+                <caption class="sr-only">Ejemplo de la pestaña Red después de tocar el botón adelante</caption>
+                <thead><tr><th scope="col">Nombre</th><th scope="col">Estado</th><th scope="col">Tipo</th></tr></thead>
+                <tbody><tr class="pide"><td>comando</td><td>200</td><td>fetch</td></tr></tbody>
+              </table>
+              <dl class="red-detalle">
+                <dt>Encabezados</dt><dd>POST http://192.168.1.10:3000<wbr>/api/comando</dd>
+                <dt>Carga útil</dt><dd>{"accion":"adelante"}</dd>
+              </dl>
+              <figcaption class="captura__pie">Esquema simplificado: después de tocar «adelante».</figcaption>
+            </figure>
+            <div class="pf__caja">
+              <h4>Cómo leer el Estado</h4>
+              <ul class="pf__lista">
+                <li><strong>2…:</strong> salió bien; por ejemplo, <code>200</code> OK (TP8, lámina 25).</li>
+                <li><strong>4…:</strong> error en el pedido: <code>400</code>, mal armado; <code>404</code>, ese endpoint no existe.</li>
+                <li><strong>5…:</strong> falló el servidor.</li>
+                <li><strong>(ha fallado),</strong> en rojo y sin código: el pedido no llegó al servidor. Revisá la IP y el puerto de la URL, y probá con <code class="cod-cmd">ping</code>.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pf" aria-labelledby="pf-puertos">
+        <p class="pf__etiqueta">Lámina 31 · TP7 y TP8</p>
+        <h3 class="pf__titulo" id="pf-puertos">Los puertos del servidor y del broker</h3>
+        <div class="pf__cols pf__cols--lado">
+          <div class="pf__texto">
+            <ul class="puertos-yolo">
+              <li class="grupo grupo--naranja"><p class="puerto"><span class="puerto__rot">Puerto</span><b class="puerto__num">3000</b><span class="etq etq--tcp">TCP</span></p><p><strong>Servidor</strong> Node.js + Express: atiende <strong>HTTP</strong>.</p></li>
+              <li class="grupo grupo--naranja"><p class="puerto"><span class="puerto__rot">Puerto</span><b class="puerto__num">1883</b><span class="etq etq--tcp">TCP</span></p><p><strong>Broker</strong> Mosquitto: atiende <strong>MQTT</strong>.</p></li>
+            </ul>
+            <p>La IP dice a qué equipo va cada mensaje, y el puerto, a qué aplicación (TP7, lámina 20). El servidor y el broker están en la misma PC: tienen la misma IP y se distinguen por el puerto.</p>
+            <p>Los dos tramos de MQTT usan el puerto del broker: el servidor y el robot se conectan los dos al broker, en el 1883 (TP8, lámina 27).</p>
+          </div>
+          <div class="pf__caja">
+            <h4>El puerto en la URL</h4>
+            <p>Sin número, una URL con <code>http://</code> va al puerto 80 (TP7). Como el servidor escucha en el 3000, la URL lo lleva después de dos puntos:</p>
+            <p><code class="cod-url">http://192.168.1.10:3000<wbr>/api/comando</code></p>
+            <p>El 3000 y el 1883 son puertos registrados: del 1024 al 49151 (TP7, lámina 20).</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 10</span>
+    </footer>
+  </article>
+
+  <!-- =================== PARA PROFUNDIZAR · Hoja 3 =================== -->
+  <article class="lamina lamina--pf lamina--arriba" id="profundizar-3" aria-labelledby="tpf3">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="tpf3"><span class="tit__num">+</span> Para profundizar</h2>
+      <p class="tit__sub">Para la defensa: las IP y el video</p>
+    </div>
+
+    <div class="pf-grid pf-grid--1">
+      <section class="pf" aria-labelledby="pf-ip">
+        <p class="pf__etiqueta">Lámina 31 · TP9 · Etapa 2</p>
+        <h3 class="pf__titulo" id="pf-ip">Qué IP tiene cada parte y cómo se asigna</h3>
+        <p>La app le manda los comandos al servidor a su IP; el robot se conecta al broker con su IP; y la app le pide el video al robot a su IP. Si alguna de esas IP cambiara, no se encontrarían: por eso la PC del servidor y el robot llevan una IP que no cambia, fija o reservada (TP9).</p>
+        <table class="tabla-puertos tabla-ip">
+          <caption class="sr-only">Las partes del proyecto, una IP de ejemplo para cada una y cómo se asigna</caption>
+          <thead><tr><th scope="col">Parte</th><th scope="col">IP de ejemplo</th><th scope="col">Cómo se asigna</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Router</th><td><code class="cod-ip">192.168.1.1</code></td><td>Es la puerta de enlace de la red (TP9, lámina 29).</td></tr>
+            <tr><th scope="row">PC del servidor <span>(servidor y broker)</span></th><td><code class="cod-ip">192.168.1.10</code></td><td><strong>Fija</strong>, puesta en Windows (TP9, lámina 28), o <strong>reservada</strong> en el router. Fuera del rango DHCP.</td></tr>
+            <tr><th scope="row">Robot YoLo</th><td><code class="cod-ip">192.168.1.20</code></td><td><strong>Reservada</strong> en el router, con la MAC del robot (TP9, lámina 30). El robot no se abre: su IP se asigna desde el router.</td></tr>
+            <tr><th scope="row">Notebook o celular con la app</th><td><code class="cod-ip">192.168.1.25</code></td><td><strong>Dinámica</strong>, por DHCP: nadie tiene que encontrarla, porque la app empieza cada pedido.</td></tr>
+          </tbody>
+        </table>
+        <div class="pf__cols pf__cols--2">
+          <div class="pf__caja">
+            <h4>Dónde se ve cada IP</h4>
+            <p>En el router, en la lista de dispositivos conectados, con su MAC (TP9, lámina 30): ahí aparecen el robot y la PC del servidor. En una PC, con <code class="cod-cmd">ipconfig</code> (TP9, lámina 28).</p>
+          </div>
+          <div class="pf__caja">
+            <h4>Son IP de ejemplo</h4>
+            <p>Usan la red <code class="cod-ip">192.168.1.0</code> del cuadernillo. Las de tu grupo las sacás de tu router: son las que van en el esquema de red.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="pf" aria-labelledby="pf-video">
+        <p class="pf__etiqueta">Lámina 31</p>
+        <h3 class="pf__titulo" id="pf-video">Por qué el video no pasa por el servidor</h3>
+        <div class="pf__cols pf__cols--lado">
+          <div class="pf__texto">
+            <p>El video de la cámara es <strong>MJPEG</strong> (<em>Motion JPEG</em>): una foto JPEG detrás de otra, varias por segundo, que llegan por una misma respuesta HTTP que no termina. Para el video, el robot hace de servidor: la app se lo pide a la IP del robot.</p>
+            <p>Si pasara por el servidor, cada foto viajaría dos veces por el Wi-Fi (robot → servidor → app): el doble de tráfico, más demora y más trabajo para el servidor. Directo, llega antes.</p>
+          </div>
+          <div class="pf__caja">
+            <h4>¿Y por MQTT?</h4>
+            <p>MQTT es para mensajes cortos (TP8, lámina 27): <code>{"accion":"stop"}</code> ocupa 17 bytes; una sola foto, miles. Por eso los comandos van por MQTT y el video, por HTTP.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 10</span>
+    </footer>
+  </article>
+
+  <!-- =================== ACTIVIDADES EN LA CARPETA =================== -->
+  <article class="lamina lamina--act" id="actividades" aria-labelledby="act-1">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <header class="act-banda">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-lapiz"/></svg>
+      <div>
+        <h2 id="act-1">Actividades para hacer en la carpeta</h2>
+        <p>TP N°10 — Proyecto integrador YoLo</p>
+      </div>
+    </header>
+
+    <p class="consigna"><strong>Consigna:</strong> Respondé cada punto de forma completa, usando tus propias palabras. Podés apoyarte en la lámina 31 y en “Para profundizar” del TP N°10.</p>
+
+    <ol class="acts acts--amplio">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">1-</span> Mapa del proyecto</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Dibujá el esquema de red del proyecto: la red Wi-Fi del robot con sus cuatro partes, y las flechas del camino de un comando y del video. En cada flecha, escribí el protocolo.</div></li>
+          <li><b class="act__letra">b)</b><div>Explicá el recorrido de un comando en tres pasos, desde que tocás el botón «adelante» hasta que se mueven los motores. ¿A qué endpoint va el <code>fetch</code> y qué JSON manda?</div></li>
+          <li><b class="act__letra">c)</b><div>Copiá y completá el cuadro: qué protocolo viaja en cada tramo del comando y en qué puerto.
+            <table class="act-tabla">
+              <caption class="sr-only">Cuadro para completar con el protocolo y el puerto de cada tramo</caption>
+              <thead><tr><th scope="col">Tramo</th><th scope="col">Protocolo</th><th scope="col">Puerto</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">App → servidor</th><td></td><td></td></tr>
+                <tr><th scope="row">Servidor → broker</th><td></td><td></td></tr>
+                <tr><th scope="row">Broker → robot</th><td></td><td></td></tr>
+              </tbody>
+            </table></div></li>
+          <li><b class="act__letra">d)</b><div>¿Por qué camino llega el video a la app y con qué protocolo? ¿Por qué no pasa por el servidor?</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 10</span>
+    </footer>
+  </article>
+
+  <!-- =================== ACTIVIDADES EN LA COMPUTADORA · Parte 1 =================== -->
+  <article class="lamina lamina--act lamina--compu lamina--densa" id="actividades-2" aria-labelledby="act-2">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <header class="act-banda">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pc"/></svg>
+      <div>
+        <h2 id="act-2">Actividades para hacer en la computadora</h2>
+        <p>TP N°10 — Proyecto integrador YoLo · En grupo</p>
+      </div>
+      <span class="act-banda__parte">Parte<br>1 de 2</span>
+    </header>
+
+    <p class="consigna"><strong>Consigna:</strong> En grupo, van a hacer andar a YoLo: un robot con cámara que se maneja desde una página web, sobre una red que arman ustedes. Al final lo defienden en vivo.</p>
+
+    <div class="tpfinal">
+      <section class="panel" aria-labelledby="tf10">
+        <div class="panel__cab"><h3 class="subtitulo" id="tf10">¿Qué es el TP final?</h3></div>
+        <p>El TP10 es el trabajo final de <strong>Redes I</strong> y de <strong>Software II</strong>. Es uno solo y vale para las dos materias: un mismo proyecto, una misma entrega y una misma defensa.</p>
+        <p>No hay teoría nueva. Van a usar lo que ya vieron en el año, pero todo junto y funcionando de verdad:</p>
+        <ul class="pf__lista">
+          <li><strong>De Redes I:</strong> HTTP, puertos, API REST, JSON, MQTT y la configuración del router.</li>
+          <li><strong>De Software II:</strong> el ambiente de desarrollo, HTML y CSS, Git y GitHub, el tablero de Trello y la documentación.</li>
+          <li><strong>De Programación II:</strong> JavaScript, para programar los botones.</li>
+        </ul>
+        <table class="datos">
+          <caption class="sr-only">Datos del TP final</caption>
+          <tbody>
+            <tr><th scope="row">Grupos</th><td>De 2 integrantes</td></tr>
+            <tr><th scope="row">Cierre</th><td>Defensa oral con el robot funcionando</td></tr>
+            <tr><th scope="row">Fechas</th><td>En Classroom</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="panel" aria-labelledby="ob10">
+        <div class="panel__cab"><h3 class="subtitulo" id="ob10">El objetivo</h3></div>
+        <p>Entender cómo se comunican las partes de un sistema conectado y demostrarlo haciéndolo andar. No alcanza con que el robot se mueva: tienen que poder explicar <strong>qué viaja, por dónde y con qué protocolo</strong>.</p>
+        <p>Al terminar el TP, el grupo tiene que poder:</p>
+        <ol class="objetivos">
+          <li>Configurar un router con una red Wi-Fi propia y direcciones IP fijas o reservadas.</li>
+          <li>Comprobar que el robot y el servidor responden.</li>
+          <li>Programar los botones de la app para que manden los comandos con <code>fetch</code> y JSON.</li>
+          <li>Diseñar la app con HTML y CSS y mostrar el video del robot.</li>
+          <li>Trabajar en equipo en GitHub: commits claros.</li>
+          <li>Documentar el proyecto para que otra persona lo pueda instalar y usar.</li>
+          <li>Explicar y defender cada decisión en forma oral.</li>
+        </ol>
+      </section>
+    </div>
+
+    <div class="nota nota--importante">
+      <h3><svg class="ico tit-ico" aria-hidden="true" focusable="false"><use href="#i-importante"/></svg>La bitácora</h3>
+      <p>Al final de cada clase, anoten en la bitácora (<code class="cod-archivo">BITACORA.md</code>) qué hicieron, qué problemas tuvieron y qué decidieron. Eso también se evalúa.</p>
+    </div>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 10</span>
+    </footer>
+  </article>
+
+  <!-- =================== ACTIVIDADES EN LA COMPUTADORA · Parte 2 =================== -->
+  <article class="lamina lamina--act lamina--compu lamina--densa" id="actividades-3" aria-labelledby="act-3">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <header class="act-banda">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pc"/></svg>
+      <div>
+        <h2 id="act-3">Actividades para hacer en la computadora</h2>
+        <p>TP N°10 — Proyecto integrador YoLo · En grupo</p>
+      </div>
+      <span class="act-banda__parte">Parte<br>2 de 2</span>
+    </header>
+
+    <section class="ruta" aria-labelledby="ru10">
+      <h3 class="subtitulo" id="ru10">Ruta de trabajo</h3>
+      <p class="ruta__intro">El trabajo se organiza en 6 etapas, cada una con su entregable. Se trabaja en las horas de Redes I y de Software II.</p>
+    </section>
+
+    <ol class="acts acts--2col">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">1-</span> Arranque</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Arman el grupo y reparten roles.</div></li>
+          <li><b class="act__letra">b)</b><div>Ven el mapa del proyecto (lámina 31) y dibujan el esquema de red.</div></li>
+          <li><b class="act__letra">c)</b><div>Reciben el kit y la app.</div></li>
+          <li><b class="act__letra">d)</b><div>Crean el tablero en Trello.</div></li>
+        </ol>
+        <p class="etapa__entregable"><span>Entregable</span> Esquema de red dibujado y tablero creado.</p>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">2-</span> La red</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Configuran el router (Wi-Fi, DHCP, IP fijas o reservadas), como en el TP9.</div></li>
+          <li><b class="act__letra">b)</b><div>Hacen <code class="cod-cmd">ping</code> al robot y al servidor (Para profundizar).</div></li>
+          <li><b class="act__letra">c)</b><div>Preparan el ambiente de desarrollo.</div></li>
+        </ol>
+        <p class="etapa__entregable"><span>Entregable</span> Red funcionando, con capturas del <code class="cod-cmd">ping</code>.</p>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">3-</span> La app</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Reestructuran la app y la diseñan con HTML y CSS.</div></li>
+          <li><b class="act__letra">b)</b><div>Crean el repositorio en GitHub, con una rama por integrante.</div></li>
+        </ol>
+        <p class="etapa__entregable"><span>Entregable</span> Repositorio con los primeros commits.</p>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">4-</span> Integración</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Programan el <code>fetch</code> de los botones (lámina 31), suman el video y corrigen errores (F12 › Red, en Para profundizar).</div></li>
+          <li><b class="act__letra">b)</b><div>Unen las ramas con pull requests.</div></li>
+        </ol>
+        <p class="etapa__entregable"><span>Entregable</span> Los 5 comandos funcionando y el video visible.</p>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">5-</span> Documentación</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Escriben el README y el informe, suman el script <code class="cod-archivo">.bat</code> y cierran la bitácora.</div></li>
+        </ol>
+        <p class="etapa__entregable"><span>Entregable</span> Documentación completa.</p>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">6-</span> Defensa</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Muestran el robot funcionando y explican el proyecto.</div></li>
+        </ol>
+        <p class="etapa__entregable"><span>Entregable</span> Demo en vivo y entrega final.</p>
+      </li>
+    </ol>
+
+    <section class="entrega" aria-labelledby="entrega10">
+      <h3 class="entrega__tit" id="entrega10">Entrega</h3>
+      <p>Cada etapa tiene su entregable. Antes de la defensa, revisen el checklist de entrega, en la hoja «Entrega y evaluación».</p>
+    </section>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 10</span>
+    </footer>
+  </article>
+
+  <!-- =================== ENTREGA Y EVALUACIÓN · Parte 1 =================== -->
+  <article class="lamina lamina--act lamina--compu lamina--densa lamina--entrega" id="entrega" aria-labelledby="ent-1">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <header class="act-banda">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-lista"/></svg>
+      <div>
+        <h2 id="ent-1">Entrega y evaluación</h2>
+        <p>TP N°10 — Proyecto integrador YoLo</p>
+      </div>
+      <span class="act-banda__parte">Parte<br>1 de 2</span>
+    </header>
+
+    <section class="recibe" aria-labelledby="rec10">
+      <h3 class="ent__tit" id="rec10">Qué reciben y qué hacen ustedes</h3>
+      <div class="recibe__cols">
+        <div class="recibe__col">
+          <h4>Lo reciben listo</h4>
+          <ul class="pf__lista">
+            <li>El robot armado y programado</li>
+            <li>El servidor Node.js y el broker MQTT funcionando</li>
+            <li>Una app web básica, para usar de punto de partida</li>
+            <li>Una lámina de referencia y una guía por clase</li>
+          </ul>
+        </div>
+        <div class="recibe__col recibe__col--hacen">
+          <h4>Lo hacen ustedes</h4>
+          <ul class="pf__lista">
+            <li>Configurar el router: red Wi-Fi propia, DHCP e IP fijas o reservadas</li>
+            <li>Probar con <code class="cod-cmd">ping</code> que el robot y el servidor responden</li>
+            <li>Programar el <code>fetch</code> de cada botón y mostrar la respuesta del servidor</li>
+            <li>Reestructurar y diseñar la app con HTML y CSS, con el video del robot</li>
+            <li>Versionar en GitHub, organizarse en Trello y documentar todo</li>
+          </ul>
+        </div>
+      </div>
+      <p class="recibe__desafio"><strong>Desafío opcional:</strong> si terminan antes, pueden agregar al servidor un endpoint <code>GET /api/estado</code> que muestre el estado del robot.</p>
+    </section>
+
+    <section class="checklist" aria-labelledby="chk10">
+      <h3 class="ent__tit" id="chk10">Checklist de entrega</h3>
+      <p>Antes de la defensa, revisen que tengan todo:</p>
+      <div class="checklist__cols">
+        <div>
+          <h4>Repositorio en GitHub</h4>
+          <ul class="casillas">
+            <li>Un commit por cambio, con mensajes claros</li>
+          </ul>
+        </div>
+        <div>
+          <h4>README.md</h4>
+          <ul class="casillas">
+            <li>Qué es el proyecto, integrantes y roles</li>
+            <li>Esquema de red</li>
+            <li>Requisitos e instalación (<code class="cod-cmd">npm install</code>) y extensiones de VS Code</li>
+            <li>Cómo ejecutarlo y manual de uso</li>
+            <li>Una captura de la app funcionando</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Otros entregables</h4>
+          <ul class="casillas">
+            <li>Tablero de Trello al día, con responsables y fechas</li>
+            <li><code class="cod-archivo">BITACORA.md</code> con una entrada por clase</li>
+            <li>Informe breve: el proyecto, la red, cómo se organizaron y qué dificultades tuvieron</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 10</span>
+    </footer>
+  </article>
+
+  <!-- =================== ENTREGA Y EVALUACIÓN · Parte 2 =================== -->
+  <article class="lamina lamina--act lamina--compu lamina--densa lamina--entrega" id="entrega-2" aria-labelledby="ent-2">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <header class="act-banda">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-lista"/></svg>
+      <div>
+        <h2 id="ent-2">Entrega y evaluación</h2>
+        <p>TP N°10 — Proyecto integrador YoLo</p>
+      </div>
+      <span class="act-banda__parte">Parte<br>2 de 2</span>
+    </header>
+
+    <section class="evalua" aria-labelledby="ev10">
+      <h3 class="ent__tit" id="ev10">Cómo se evalúa</h3>
+      <p>Se evalúa todo el recorrido, no solo el día de la defensa. GitHub y Trello muestran quién hizo cada commit, cada pull y cada tarea, así que <strong>cada integrante tiene que aportar</strong>.</p>
+      <div class="evalua__cols">
+        <div>
+          <h4><strong>Redes I</strong> mira tres cosas:</h4>
+          <ul class="pf__lista">
+            <li>Que la app funcione y se comunique con el servidor.</li>
+            <li>Que en la defensa los comandos lleguen al robot con una conexión estable, y que sepan explicar qué protocolo interviene en cada tramo.</li>
+            <li>Que la documentación tenga el esquema de red, el manual de uso y el código.</li>
+          </ul>
+        </div>
+        <div>
+          <h4><strong>Software II</strong> reparte la nota así:</h4>
+          <table class="tabla-puertos tabla-nota">
+            <caption class="sr-only">Cómo reparte la nota Software II: parte, peso y qué se mira</caption>
+            <thead><tr><th scope="col">Parte</th><th scope="col">Peso</th><th scope="col">Qué se mira</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Producto</th><td class="tabla-nota__peso">40 %</td><td>La app funciona, el repositorio está ordenado, el README alcanza para instalar el proyecto y el script anda</td></tr>
+              <tr><th scope="row">Proceso</th><td class="tabla-nota__peso">35 %</td><td>Todos hacen commits y pull requests; tablero y bitácora al día; cumplen el plan</td></tr>
+              <tr><th scope="row">Defensa</th><td class="tabla-nota__peso">25 %</td><td>Cada integrante explica y responde preguntas</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="defensa" aria-labelledby="df10">
+      <h3 class="ent__tit" id="df10">La defensa</h3>
+      <p>Muestran el robot funcionando en vivo y explican el proyecto. Cada integrante tiene que poder responder preguntas como estas:</p>
+      <ul class="defensa__preguntas">
+        <li><span>¿Qué protocolo viaja entre la app y el servidor? ¿Y entre el servidor y el robot?</span> <span class="donde">Lámina 31</span></li>
+        <li><span>¿En qué puerto escucha el servidor? ¿Y el broker?</span> <span class="donde">Lámina 31 · Para profundizar</span></li>
+        <li><span>¿Qué IP tiene el robot y cómo se la asignaron?</span> <span class="donde">Para profundizar · TP9</span></li>
+        <li><span>¿Qué hace el <code>fetch</code> de un botón? ¿Qué JSON manda y qué código de respuesta vuelve?</span> <span class="donde">Lámina 31 · Para profundizar</span></li>
+        <li><span>¿Por qué el video no pasa por el servidor?</span> <span class="donde">Para profundizar</span></li>
+        <li><span>¿Qué hiciste vos, cual fue tu rol en el grupo?</span> <span class="donde">Su trabajo</span></li>
+      </ul>
+    </section>
+
+    <section class="reglas" aria-labelledby="rg10">
+      <h3 class="ent__tit" id="rg10">Reglas y cuidados</h3>
+      <ul class="pf__lista reglas__lista">
+        <li><strong>El robot no se abre.</strong> No se desconectan cables ni se tocan las placas. El trabajo es de red y de software.</li>
+        <li><strong>Las baterías las maneja solo el docente.</strong> Si notan que el robot se reinicia o anda lento, avisen: probablemente necesita carga.</li>
+        <li><strong>Prueben el robot en el piso o con las ruedas en el aire</strong>, nunca al borde de la mesa.</li>
+        <li><strong>La red del robot es solo para el proyecto.</strong> No la conecten a otras redes ni cambien la configuración de otro grupo.</li>
+        <li><strong>Si se traban, pregunten.</strong> Los errores son parte del trabajo: antes de preguntar, prueben <code class="cod-cmd">ping</code>, revisen la pestaña Red del navegador y lean el código de respuesta.</li>
+      </ul>
+    </section>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 10</span>
+    </footer>
+  </article>
+</main>
+
+<script src="../assets/js/actividades.js"></script>
+</body>
+</html>
