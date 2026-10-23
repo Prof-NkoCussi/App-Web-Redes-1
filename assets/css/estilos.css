@@ -1597,17 +1597,8 @@ code.cod-url { overflow-wrap: normal; }
 .comandos .nota h4 { font-size: 16.5px; }
 .comandos .nota p { font-size: 14.5px; line-height: 1.35; }
 
-/* Para profundizar: ping, con la terminal y cómo se lee */
+/* Para profundizar: un bloque por fila */
 .pf-grid.pf-grid--1 { grid-template-columns: 1fr; }
-.pf--todo { grid-column: 1 / -1; }
-.ping { margin-top: 2px; }
-.ping__lectura {
-  display: grid; gap: 4px; align-content: start;
-  background: var(--blanco); border-radius: 8px; padding: 7px 12px 9px 14px; box-shadow: inset 4px 0 0 var(--grupo);
-}
-.ping__lectura h4 { font-family: var(--fuente-titulo); font-weight: 700; font-size: 17px; line-height: 1.2; }
-.ping__lectura.grupo--ok h4 { color: var(--ok); }
-.ping__lectura.grupo--error h4 { color: var(--error); }
 
 /* F12 › Red: esquema simplificado de la pestaña, con la fila del fetch */
 .red-lado { display: grid; gap: 8px; align-content: start; min-width: 0; }
@@ -1722,7 +1713,6 @@ code.cod-url { overflow-wrap: normal; }
   .pf-grid.pf-grid--1 { align-content: start; }
   /* "Ruta de trabajo": el título y la explicación en una fila */
   .ruta { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0 18px; }
-  .ping__lectura li { font-size: 13.5px; }
   .lamina--entrega { gap: 3mm; }
   .lamina--entrega .act-banda h2 { font-size: 32px; }
 }

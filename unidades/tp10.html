@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TP N°10 — Proyecto integrador YoLo · Redes I</title>
-  <meta name="description" content="TP N°10 de Redes I: el proyecto integrador YoLo, trabajo final de Redes I y de Software II. El mapa del proyecto (app web, servidor, broker MQTT y robot), ping, F12 › Red, las IP y los puertos, la ruta de trabajo en 6 etapas, la entrega y la defensa. Prof. Nicolás A. Cussi.">
+  <meta name="description" content="TP N°10 de Redes I: el proyecto integrador YoLo, trabajo final de Redes I y de Software II. El mapa del proyecto (app web, servidor, broker MQTT y robot), F12 › Red, las IP y los puertos, la ruta de trabajo en 6 etapas, la entrega y la defensa. Prof. Nicolás A. Cussi.">
   <meta name="theme-color" content="#26C9A1">
   <link rel="preload" href="../assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../assets/fonts/barlow-semi-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -223,99 +223,6 @@
 
     <div class="tit">
       <h2 class="tit__h" id="tpf"><span class="tit__num">+</span> Para profundizar</h2>
-      <p class="tit__sub">Para la defensa: ping</p>
-    </div>
-
-    <div class="pf-grid pf-grid--1">
-      <section class="pf" aria-labelledby="pf-ping">
-        <p class="pf__etiqueta">Lámina 31</p>
-        <h3 class="pf__titulo" id="pf-ping">ping: ¿responde el equipo?</h3>
-        <p><code class="cod-cmd">ping</code> le manda al equipo, a su IP, cuatro mensajes cortos y espera que conteste cada uno. Sirve para saber si el robot y la PC del servidor están en la red. Se escribe en el <strong>Símbolo del sistema</strong> (<kbd>Win</kbd> + <kbd>R</kbd>, <code class="cod-cmd">cmd</code> y <kbd>Enter</kbd>): <code class="cod-cmd">ping</code> y la IP del equipo.</p>
-
-        <div class="cmd ping">
-          <div class="ventana-cod ventana-cod--terminal" role="group" aria-label="Salida de ping cuando el equipo responde">
-            <div class="ventana-cod__barra" aria-hidden="true">Símbolo del sistema</div>
-<pre class="ventana-cod__txt" tabindex="0"><span class="t-prompt">C:\Users\Alumno&gt;</span><span class="t-cmd">ping 192.168.1.10</span>
-
-Haciendo ping a 192.168.1.10 con 32 bytes de datos:
-<span class="t-ok">Respuesta desde 192.168.1.10: bytes=32 tiempo=3ms TTL=128</span>
-<span class="t-ok">Respuesta desde 192.168.1.10: bytes=32 tiempo=5ms TTL=128</span>
-<span class="t-ok">Respuesta desde 192.168.1.10: bytes=32 tiempo=4ms TTL=128</span>
-<span class="t-ok">Respuesta desde 192.168.1.10: bytes=32 tiempo=6ms TTL=128</span>
-
-Estadísticas de ping para 192.168.1.10:
-    Paquetes: enviados = 4, recibidos = 4, perdidos = 0
-    (0% perdidos),
-Tiempos aproximados de ida y vuelta en milisegundos:
-    Mínimo = 3ms, Máximo = 6ms, Media = 4ms</pre>
-          </div>
-          <div class="ping__lectura grupo grupo--ok">
-            <h4>Responde</h4>
-            <ul class="pf__lista">
-              <li>Cuatro «Respuesta desde» y la IP del equipo: <strong>está en la red</strong>. En el ejemplo, la PC del servidor.</li>
-              <li><strong>tiempo:</strong> cuánto tardó el mensaje en ir y volver, en milisegundos (ms).</li>
-              <li>Al final, el resumen: <strong>enviados = 4, recibidos = 4, perdidos = 0</strong>.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="cmd ping">
-          <div class="ventana-cod ventana-cod--terminal" role="group" aria-label="Salida de ping cuando el equipo no responde">
-            <div class="ventana-cod__barra" aria-hidden="true">Símbolo del sistema</div>
-<pre class="ventana-cod__txt" tabindex="0"><span class="t-prompt">C:\Users\Alumno&gt;</span><span class="t-cmd">ping 192.168.1.20</span>
-
-Haciendo ping a 192.168.1.20 con 32 bytes de datos:
-<span class="t-error">Tiempo de espera agotado para esta solicitud.</span>
-<span class="t-error">Tiempo de espera agotado para esta solicitud.</span>
-<span class="t-error">Tiempo de espera agotado para esta solicitud.</span>
-<span class="t-error">Tiempo de espera agotado para esta solicitud.</span>
-
-Estadísticas de ping para 192.168.1.20:
-    Paquetes: enviados = 4, recibidos = 0, perdidos = 4
-    (100% perdidos),</pre>
-          </div>
-          <div class="ping__lectura grupo grupo--error">
-            <h4>No responde</h4>
-            <ul class="pf__lista">
-              <li><strong>«Tiempo de espera agotado para esta solicitud»:</strong> el mensaje no volvió. El resumen dice <strong>perdidos = 4</strong>.</li>
-              <li>El equipo está apagado, está conectado a otra red o tiene otra IP. En el ejemplo, el robot.</li>
-              <li>«Host de destino inaccesible» también quiere decir que no llegó, aunque el resumen diga perdidos = 0.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="pf__cols pf__cols--2">
-          <div class="pf__caja">
-            <h4>ping prueba el equipo, no la aplicación</h4>
-            <p><code class="cod-cmd">ping</code> llega a la IP, no a un puerto (TP7, lámina 20). La PC del servidor puede responder aunque el servidor Node.js esté apagado: la aplicación se prueba con la app y F12 › Red.</p>
-          </div>
-          <div class="pf__caja">
-            <h4>¿La conexión es estable?</h4>
-            <p><code class="cod-cmd">ping -t 192.168.1.20</code> sigue mandando mensajes hasta que apretás <kbd>Ctrl</kbd> + <kbd>C</kbd>. Si cada tanto aparece «Tiempo de espera agotado», la conexión se corta.</p>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <footer class="pie">
-      <span class="pie__linea"></span>
-      <span>Redes I — Prof. Nicolás A. Cussi</span>
-      <span class="pie__linea"></span>
-      <span class="pie__num">TP 10</span>
-    </footer>
-  </article>
-
-  <!-- =================== PARA PROFUNDIZAR · Hoja 2 =================== -->
-  <article class="lamina lamina--pf lamina--arriba" id="profundizar-2" aria-labelledby="tpf2">
-    <div class="cab" aria-hidden="true">
-      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
-      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
-      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10</span></div>
-      <span class="cab__raya"></span>
-    </div>
-
-    <div class="tit">
-      <h2 class="tit__h" id="tpf2"><span class="tit__num">+</span> Para profundizar</h2>
       <p class="tit__sub">Para la defensa: F12 › Red y los puertos</p>
     </div>
 
@@ -353,7 +260,7 @@ Estadísticas de ping para 192.168.1.20:
                 <li><strong>2…:</strong> salió bien; por ejemplo, <code>200</code> OK (TP8, lámina 25).</li>
                 <li><strong>4…:</strong> error en el pedido: <code>400</code>, mal armado; <code>404</code>, ese endpoint no existe.</li>
                 <li><strong>5…:</strong> falló el servidor.</li>
-                <li><strong>(ha fallado),</strong> en rojo y sin código: el pedido no llegó al servidor. Revisá la IP y el puerto de la URL, y probá con <code class="cod-cmd">ping</code>.</li>
+                <li><strong>(ha fallado),</strong> en rojo y sin código: el pedido no llegó al servidor. Revisá la IP y el puerto de la URL.</li>
               </ul>
             </div>
           </div>
@@ -390,8 +297,8 @@ Estadísticas de ping para 192.168.1.20:
     </footer>
   </article>
 
-  <!-- =================== PARA PROFUNDIZAR · Hoja 3 =================== -->
-  <article class="lamina lamina--pf lamina--arriba" id="profundizar-3" aria-labelledby="tpf3">
+  <!-- =================== PARA PROFUNDIZAR · Hoja 2 =================== -->
+  <article class="lamina lamina--pf lamina--arriba" id="profundizar-2" aria-labelledby="tpf2">
     <div class="cab" aria-hidden="true">
       <svg class="cab__logo"><use href="#i-red-solido"/></svg>
       <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
@@ -400,7 +307,7 @@ Estadísticas de ping para 192.168.1.20:
     </div>
 
     <div class="tit">
-      <h2 class="tit__h" id="tpf3"><span class="tit__num">+</span> Para profundizar</h2>
+      <h2 class="tit__h" id="tpf2"><span class="tit__num">+</span> Para profundizar</h2>
       <p class="tit__sub">Para la defensa: las IP y el video</p>
     </div>
 
@@ -645,7 +552,7 @@ Estadísticas de ping para 192.168.1.20:
           <h4>Lo hacen ustedes</h4>
           <ul class="pf__lista">
             <li>Configurar el router: red Wi-Fi propia, DHCP e IP fijas o reservadas</li>
-            <li>Probar con <code class="cod-cmd">ping</code> que el robot y el servidor responden</li>
+            <li>Probar que el robot y el servidor responden</li>
             <li>Programar el <code>fetch</code> de cada botón y mostrar la respuesta del servidor</li>
             <li>Reestructurar y diseñar la app con HTML y CSS, con el video del robot</li>
             <li>Versionar en GitHub, organizarse en Trello y documentar todo</li>
@@ -759,7 +666,7 @@ Estadísticas de ping para 192.168.1.20:
         <li><strong>Las baterías las maneja solo el docente.</strong> Si notan que el robot se reinicia o anda lento, avisen: probablemente necesita carga.</li>
         <li><strong>Prueben el robot en el piso o con las ruedas en el aire</strong>, nunca al borde de la mesa.</li>
         <li><strong>La red del robot es solo para el proyecto.</strong> No la conecten a otras redes ni cambien la configuración de otro grupo.</li>
-        <li><strong>Si se traban, pregunten.</strong> Los errores son parte del trabajo: antes de preguntar, prueben <code class="cod-cmd">ping</code>, revisen la pestaña Red del navegador y lean el código de respuesta.</li>
+        <li><strong>Si se traban, pregunten.</strong> Los errores son parte del trabajo: antes de preguntar, revisen la pestaña Red del navegador y lean el código de respuesta.</li>
       </ul>
     </section>
 

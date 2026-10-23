@@ -130,7 +130,7 @@ Copiar la estructura de `_fuente/modelo-tp01.html` hasta que exista el primer TP
 
 1. **Barra superior** (`header.barra`): botón "Índice" · "TP N°X — nombre del TP" · botón PDF (`data-imprimir`). Debajo, `nav.partes` con accesos a cada lámina, al simulador, a "Para profundizar", a "Actividades" y a "Paso a paso" (este último, solo cuando la página existe). En el TP10, también a "Entrega y evaluación". Verificar a 360 px (el TP7 tiene nombre largo).
 2. **Láminas** (`article.lamina#pag-N`): `.cab` → `.tit` (número + título + subtítulo) → bloques → `.idea` (Idea clave) → `.pie`. **3 láminas por TP**; el TP7 tiene 5, el TP8 4 y el TP10 1.
-3. **Para profundizar** (`article.lamina.lamina--pf#profundizar`): `.pf-grid` de 2×2, un bloque `.pf` por lámina (texto + recuadro `.pf__caja`). Con 3 láminas, el cuarto bloque integra. En el TP7 puede usar dos hojas; en el TP8 (4 láminas, un bloque por lámina), también. (22/10) En el TP10 (una lámina), tres hojas con un bloque por pregunta de la defensa: `ping`; F12 › Red y los puertos; las IP y el video (el bloque de `ping`, con sus dos terminales, ocupa una hoja).
+3. **Para profundizar** (`article.lamina.lamina--pf#profundizar`): `.pf-grid` de 2×2, un bloque `.pf` por lámina (texto + recuadro `.pf__caja`). Con 3 láminas, el cuarto bloque integra. En el TP7 puede usar dos hojas; en el TP8 (4 láminas, un bloque por lámina), también. (22/10) En el TP10 (una lámina), dos hojas con un bloque por pregunta de la defensa: F12 › Red y los puertos; las IP y el video. (23/10: se sacó la hoja de `ping`.)
 4. **Actividades para hacer en la carpeta** (`article.lamina.lamina--act#actividades`), con la estructura de los .docx de la materia:
    - Secciones numeradas `N- Tema`, desde 1 en cada TP.
    - Incisos `a)`, `b)`, `c)` con la letra destacada.
@@ -203,7 +203,7 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - Consignas de un solo paso: unir con flechas, completar con una palabra, marcar la opción, dibujar.
 - No pide: cálculos de subnetting, memorizar las capas con sus PDU, ejercicios de NAT, CIDR o binario, ni programar.
 - Cierra con el botón al cuestionario de Google Forms de ese TP. El botón se agrega cuando Nicolás pase el link; mientras tanto no se muestra.
-- En el TP10 es la guía del rol de documentación: fotos del armado, registro de los pasos de puesta en marcha y pruebas de `ping` en dupla.
+- En el TP10 es la guía del rol de documentación: fotos del armado y registro de los pasos de puesta en marcha. (23/10: sin `ping`.)
 
 ## Diseño
 
@@ -231,7 +231,7 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - **A quién va:** chicos de 16–17 años. Frases cortas, un concepto por bloque, ejemplos de la escuela y la vida cotidiana (el Wi-Fi de la casa, el laboratorio, el celular).
 - Teoría en tono neutro ("podemos…"); consignas en voseo ("Indicá", "Escribí", "Completá").
 - **No adelantar temas de TPs posteriores.** Sí retomar los anteriores, nombrando el TP.
-- **Windows:** `ipconfig` en el TP9 y `ping`, explicado brevemente, en el TP10. `tracert`, `nslookup` y `netstat` quedan para Redes II. El equivalente de Linux (`ifconfig`) se nombra solo en "Para profundizar".
+- **Windows:** `ipconfig` en el TP9. (23/10) `ping` no va en el TP10, ni en la teoría ni en las actividades: queda para Redes II, con `tracert`, `nslookup` y `netstat`. El equivalente de Linux (`ifconfig`) se nombra solo en "Para profundizar".
 - **Simplificaciones acordadas:** DNS y DHCP usan UDP; HTTP, HTTPS, FTP, SSH, SMTP, POP3 e IMAP usan TCP. No entrar en excepciones (DNS sobre TCP, HTTP/3).
 - **Seguridad:** el TP11 es de soporte y puede no darse. Lo mínimo va antes: HTTPS en el TP7; credenciales por defecto y WPA2/WPA3 en el TP9.
 - Palabras: "celular", "notebook", "puerta de enlace" (y `gateway` entre paréntesis la primera vez), "contraseña".
@@ -298,7 +298,7 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - **El endpoint:** `POST /api/comando` con un JSON, por ejemplo `{"accion":"adelante"}`. Cinco comandos: `adelante`, `atras`, `izquierda`, `derecha` y `stop`. El servidor publica el comando en el tópico del robot; el robot está suscripto. Desafío opcional: un endpoint `GET /api/estado` con el estado del robot.
 - **Los alumnos programan el `fetch` de cada botón.** El cuadernillo muestra el endpoint y el JSON, pero no el código resuelto (ver "Código JavaScript").
 - L31 **Mapa del proyecto:** esquema SVG de la arquitectura, rehecho del diagrama de la guía: la red Wi-Fi del robot; app → servidor (HTTP, 3000) → broker (MQTT, 1883) → robot; el video del robot a la app por HTTP (MJPEG), en línea punteada. App y robot en el acento (la app pide, el robot se suscribe, como en el TP8); servidor y broker en naranja. Abajo, el recorrido de un comando en 3 pasos (texto de la guía) y la tabla de los 5 comandos.
-- "Para profundizar", en tres hojas, un bloque por pregunta de la defensa: `ping` en Windows (cómo se usa; responde o «Tiempo de espera agotado»); F12 › Red (el `fetch`, el JSON en «Carga útil» y el código en «Estado»); qué IP tiene cada parte y cómo se asigna (retoma la reserva por MAC del TP9); los puertos del servidor y del broker; por qué el video no pasa por el servidor.
+- "Para profundizar", en dos hojas, un bloque por pregunta de la defensa (23/10: se sacó la hoja de `ping`): F12 › Red (el `fetch`, el JSON en «Carga útil» y el código en «Estado»); qué IP tiene cada parte y cómo se asigna (retoma la reserva por MAC del TP9); los puertos del servidor y del broker; por qué el video no pasa por el servidor.
 - Práctica en la compu: 6 etapas, con GitHub (una rama por integrante y pull requests), Trello, `BITACORA.md`, script `.bat` e informe (ver "Práctica y entrega").
 - **El cuadernillo no publica la solución.**
 - **Datos que no están en la guía y se supusieron** (22/10, a confirmar con Nicolás): el servidor y el broker corren en la misma PC (la guía solo pide `ping` al robot y al servidor); la IP del robot se reserva en el router por su MAC, porque el robot no se abre; la PC del servidor lleva IP fija o reservada; para el video, el robot atiende como servidor HTTP y la app lo pide a la IP del robot; el código del ejemplo de F12 › Red es `200`. IP de ejemplo, con los datos del cuadernillo: router `192.168.1.1`, PC del servidor `192.168.1.10`, robot `192.168.1.20`, PC con la app `192.168.1.25`.
@@ -359,7 +359,7 @@ TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primer
 
 - TP8 pasa a "Configurando el router": la IP de la PC, cómo funciona un router y cómo configurarlo. Es individual y sirve de práctica para el proyecto final, donde cada grupo configura su router. (13/10: ahora es el TP9, ver abajo.)
 - Router del laboratorio: TP-Link TL-WR850N v3, panel en inglés (cada menú con su traducción al lado).
-- `ping`, `tracert`, `nslookup` y `netstat` quedan para Redes II; `ping` se explica brevemente en el TP10.
+- `ping`, `tracert`, `nslookup` y `netstat` quedan para Redes II; `ping` se explica brevemente en el TP10. (23/10: ya no; `ping` sale del TP10.)
 - Las actividades no llevan cierre ("REALIZAR EN LA CARPETA." ni "Fecha límite").
 
 ## Decisiones confirmadas (13/10)
@@ -381,7 +381,8 @@ TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primer
 - Servidor Node.js + Express en el puerto 3000; broker Mosquitto en el 1883. Endpoint `POST /api/comando` con `{"accion":"adelante"}`; cinco comandos (`adelante`, `atras`, `izquierda`, `derecha`, `stop`). Desafío opcional: `GET /api/estado`.
 - Los alumnos programan el `fetch` de cada botón: el cuadernillo muestra el endpoint y el JSON, no el código resuelto.
 - Trabajo en 6 etapas, con GitHub (una rama por integrante y pull requests), Trello, `BITACORA.md`, script `.bat` e informe.
-- "Para profundizar" del TP10 cubre todas las preguntas de la defensa, en tres hojas.
+- "Para profundizar" del TP10 cubre todas las preguntas de la defensa, en dos hojas.
+- (23/10) **Sin `ping` en el TP10:** se sacó la hoja de "Para profundizar", el inciso y el entregable de la etapa 2, y la palabra en "Lo hacen ustedes" ("Probar que el robot y el servidor responden"), en "Reglas y cuidados" y en F12 › Red.
 - Excepción del TP10: el checklist de entrega va con casillas, como en la guía.
 - Sin fechas en el cuadernillo: van en Classroom.
 - La versión paso a paso del TP10 (`tp10-pasos.html`) se hace más adelante, cuando Nicolás lo pida.
