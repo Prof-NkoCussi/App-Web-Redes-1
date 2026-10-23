@@ -1608,7 +1608,6 @@ code.cod-url { overflow-wrap: normal; }
 .ping__lectura h4 { font-family: var(--fuente-titulo); font-weight: 700; font-size: 17px; line-height: 1.2; }
 .ping__lectura.grupo--ok h4 { color: var(--ok); }
 .ping__lectura.grupo--error h4 { color: var(--error); }
-.pf__caja--ancha { grid-column: 1 / -1; }
 
 /* F12 › Red: esquema simplificado de la pestaña, con la fila del fetch */
 .red-lado { display: grid; gap: 8px; align-content: start; min-width: 0; }
