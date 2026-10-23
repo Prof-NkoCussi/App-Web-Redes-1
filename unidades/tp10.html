@@ -57,11 +57,6 @@
       <rect x="17" y="3.5" width="14" height="7" rx="2" style="fill:var(--ac)"/>
       <path d="M15 21l3 3 5-6M27 21h6M15 33l3 3 5-6M27 33h6"/>
     </symbol>
-    <symbol id="i-lapiz" viewBox="0 0 48 48">
-      <path d="M33 6l9 9-25 25-9-9z" style="fill:var(--ac)"/>
-      <path d="M8 31 5.5 42.5 17 40z" style="fill:var(--blanco)"/>
-      <path d="M27 12l9 9"/>
-    </symbol>
     <symbol id="i-descarga" viewBox="0 0 24 24">
       <path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>
     </symbol>
@@ -84,7 +79,6 @@
   <nav class="partes" aria-label="Partes del TP N°10">
     <a href="#pag-31">31 · Mapa del proyecto</a>
     <a href="#profundizar">Para profundizar</a>
-    <a href="#actividades">Actividades</a>
     <a href="#actividades-2">En la compu</a>
     <a href="#entrega">Entrega y evaluación</a>
   </nav>
@@ -456,54 +450,6 @@ Estadísticas de ping para 192.168.1.20:
         </div>
       </section>
     </div>
-
-    <footer class="pie">
-      <span class="pie__linea"></span>
-      <span>Redes I — Prof. Nicolás A. Cussi</span>
-      <span class="pie__linea"></span>
-      <span class="pie__num">TP 10</span>
-    </footer>
-  </article>
-
-  <!-- =================== ACTIVIDADES EN LA CARPETA =================== -->
-  <article class="lamina lamina--act" id="actividades" aria-labelledby="act-1">
-    <div class="cab" aria-hidden="true">
-      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
-      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
-      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10</span></div>
-      <span class="cab__raya"></span>
-    </div>
-
-    <header class="act-banda">
-      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-lapiz"/></svg>
-      <div>
-        <h2 id="act-1">Actividades para hacer en la carpeta</h2>
-        <p>TP N°10 — Proyecto integrador YoLo</p>
-      </div>
-    </header>
-
-    <p class="consigna"><strong>Consigna:</strong> Respondé cada punto de forma completa, usando tus propias palabras. Podés apoyarte en la lámina 31 y en “Para profundizar” del TP N°10.</p>
-
-    <ol class="acts acts--amplio">
-      <li class="act">
-        <h3 class="act__titulo"><span class="act__num">1-</span> Mapa del proyecto</h3>
-        <ol class="act__items">
-          <li><b class="act__letra">a)</b><div>Dibujá el esquema de red del proyecto: la red Wi-Fi del robot con sus cuatro partes, y las flechas del camino de un comando y del video. En cada flecha, escribí el protocolo.</div></li>
-          <li><b class="act__letra">b)</b><div>Explicá el recorrido de un comando en tres pasos, desde que tocás el botón «adelante» hasta que se mueven los motores. ¿A qué endpoint va el <code>fetch</code> y qué JSON manda?</div></li>
-          <li><b class="act__letra">c)</b><div>Copiá y completá el cuadro: qué protocolo viaja en cada tramo del comando y en qué puerto.
-            <table class="act-tabla">
-              <caption class="sr-only">Cuadro para completar con el protocolo y el puerto de cada tramo</caption>
-              <thead><tr><th scope="col">Tramo</th><th scope="col">Protocolo</th><th scope="col">Puerto</th></tr></thead>
-              <tbody>
-                <tr><th scope="row">App → servidor</th><td></td><td></td></tr>
-                <tr><th scope="row">Servidor → broker</th><td></td><td></td></tr>
-                <tr><th scope="row">Broker → robot</th><td></td><td></td></tr>
-              </tbody>
-            </table></div></li>
-          <li><b class="act__letra">d)</b><div>¿Por qué camino llega el video a la app y con qué protocolo? ¿Por qué no pasa por el servidor?</div></li>
-        </ol>
-      </li>
-    </ol>
 
     <footer class="pie">
       <span class="pie__linea"></span>

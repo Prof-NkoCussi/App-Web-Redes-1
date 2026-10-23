@@ -135,7 +135,7 @@ Copiar la estructura de `_fuente/modelo-tp01.html` hasta que exista el primer TP
    - Secciones numeradas `N- Tema`, desde 1 en cada TP.
    - Incisos `a)`, `b)`, `c)` con la letra destacada.
    - Cuadros comparativos para completar (`.act-tabla`).
-   - **Un punto por lámina + un caso integrador.** En una sola hoja (dos en el TP7 y en el TP8). Más cortas que en Base de Datos: no se suman 2 o 3 puntos extra. El TP9 y el TP10 no llevan caso integrador; el TP10 tiene un solo punto, sobre la lámina 31.
+   - **Un punto por lámina + un caso integrador.** En una sola hoja (dos en el TP7 y en el TP8). Más cortas que en Base de Datos: no se suman 2 o 3 puntos extra. El TP9 no lleva caso integrador. (23/10) **El TP10 no tiene actividades en la carpeta:** es todo práctica.
    - Sin cierre: no llevan `REALIZAR EN LA CARPETA.` ni `Fecha límite`.
    - Sin corrección automática.
 5. **Actividades para hacer en la computadora** (`article.lamina--compu#actividades-2`), solo en los TP8, TP9 y TP10: pasos numerados y un recuadro "Entrega" con la lista de lo que se entrega, con viñetas (10/10: sin casillas; en el TP9, una sola línea, sin lista).
@@ -154,7 +154,7 @@ Reglas fijas:
 
 Antes de entregar, revisar inciso por inciso: ¿dónde está la respuesta? Si no está, se agrega al contenido o se saca el inciso. Por eso "investigá" pasa a "explicá con el material".
 
-(22/10) En el TP10 la regla vale también para las preguntas de la defensa: cada una se responde con la lámina 31 y "Para profundizar" (y lo que retoman de los TP7 a TP9). La única excepción es "¿Qué hiciste vos, cuál fue tu rol en el grupo?", que se responde con el trabajo de cada uno.
+(22/10) En el TP10 (que no tiene actividades en la carpeta) la regla vale para las preguntas de la defensa: cada una se responde con la lámina 31 y "Para profundizar" (y lo que retoman de los TP7 a TP9). La única excepción es "¿Qué hiciste vos, cuál fue tu rol en el grupo?", que se responde con el trabajo de cada uno.
 
 ## Componentes nuevos
 
@@ -330,7 +330,7 @@ El contenido ya está escrito y verificado. Fuente: las diapositivas de Gamma (e
 - **TP9.** (C, 9/10) Carpeta: un punto por lámina, sin caso integrador (10/10: se sacó la planilla de configuración). Computadora, individual: configurar el router en el simulador del panel (10/10), como práctica para el proyecto final. Reset de fábrica si ya se usó; entrar al panel y crear la contraseña de administrador; SSID y clave con WPA/WPA2 Personal; ver el rango DHCP y los dispositivos; reservar una IP para la PC y comprobarla con `ipconfig`; poner una IP fija en Windows; copia de seguridad. Entrega por Classroom: la captura del resumen del simulador, con todos los pasos en ✓.
 - **TP10.** (C, 22/10: reemplaza el texto del 13/10; sale de la guía `_fuente/tp10/TP10-YoLo-guia.md`, que es texto de Nicolás: se pasa al formato del cuadernillo y se avisa antes de cambiar algo)
   - Una sola lámina, el mapa del proyecto. Es el trabajo final de Redes I y de Software II (un proyecto, una entrega, una defensa); articula con Programación II. En grupos de 2.
-  - Carpeta: un punto sobre la lámina 31, sin caso integrador: el esquema de red, el recorrido de un comando y qué protocolo y qué puerto hay en cada tramo (y el camino del video).
+  - Sin actividades en la carpeta (C, 23/10: se sacó el punto sobre la lámina 31). El TP10 es para practicar, no teoría en la carpeta.
   - Computadora, en grupo: la ruta de trabajo de la guía, una etapa por bloque, con lo que hacen y su entregable. 1 · Arranque (grupo y roles, esquema de red, kit y app, tablero de Trello); 2 · La red (router, `ping`, ambiente de desarrollo); 3 · La app (HTML y CSS, repositorio con una rama por integrante); 4 · Integración (`fetch` de los botones, video, pull requests); 5 · Documentación (README, informe, script `.bat`, bitácora); 6 · Defensa. Al final de cada clase, una entrada en `BITACORA.md`, que también se evalúa.
   - Hoja "Entrega y evaluación" (dos partes, porque no entra en una A4): qué reciben y qué hacen; el desafío opcional `GET /api/estado`; el checklist de entrega (repositorio en GitHub, README.md y otros entregables), **con casillas, tal cual la guía**; cómo se evalúa (Redes I mira tres cosas; Software II: producto 40 %, proceso 35 %, defensa 25 %); las preguntas de la defensa; reglas y cuidados.
   - (23/10) La guía cambió: grupos de 2; el objetivo 2 sin `ping`; el 5, solo "commits claros"; el checklist de GitHub con un solo ítem, sin el script `.bat` ni las capturas del `ping`; la última pregunta de la defensa es "¿Qué hiciste vos, cuál fue tu rol en el grupo?". El cuadernillo sigue la guía nueva.
@@ -384,6 +384,7 @@ TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primer
 - Excepción del TP10: el checklist de entrega va con casillas, como en la guía.
 - Sin fechas en el cuadernillo: van en Classroom.
 - La versión paso a paso del TP10 (`tp10-pasos.html`) se hace más adelante, cuando Nicolás lo pida.
+- (23/10) El TP10 no lleva actividades en la carpeta: es para practicar, no teoría en la carpeta. Quedan la lámina 31, "Para profundizar", la práctica en la compu y "Entrega y evaluación".
 
 ## Pendientes a consultar con Nicolás
 

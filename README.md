@@ -15,7 +15,7 @@ Una versión web del cuadernillo de Redes I, pensada para leer desde la computad
 1. **Láminas** con la teoría, una por tema.
 2. **Simulador** (en los TPs que lo tienen): una parte interactiva para probar lo que se ve en las láminas.
 3. **Para profundizar**: una página que amplía cada lámina con ejemplos.
-4. **Actividades para hacer en la carpeta** y, en los TP8, TP9 y TP10, también **en la computadora**.
+4. **Actividades para hacer en la carpeta** y, en los TP8 y TP9, también **en la computadora**. El TP10, el proyecto final, es solo práctica en la computadora.
 5. **Paso a paso**: el mismo tema en formato guiado, un paso por pantalla.
 
 ## Cómo se usa
