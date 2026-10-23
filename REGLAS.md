@@ -235,6 +235,7 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - **Simplificaciones acordadas:** DNS y DHCP usan UDP; HTTP, HTTPS, FTP, SSH, SMTP, POP3 e IMAP usan TCP. No entrar en excepciones (DNS sobre TCP, HTTP/3).
 - **Seguridad:** el TP11 es de soporte y puede no darse. Lo mínimo va antes: HTTPS en el TP7; credenciales por defecto y WPA2/WPA3 en el TP9.
 - Palabras: "celular", "notebook", "puerta de enlace" (y `gateway` entre paréntesis la primera vez), "contraseña".
+- **Grupos en los ejemplos** (23/10): cuando una actividad o un ejemplo nombra un grupo, va siempre **"GRUPO 1"**. Nunca un nombre inventado (como "grupo Faro").
 
 ## Plan del cuadernillo
 
