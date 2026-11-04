@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TP N°10 B — Seguridad en redes · Redes I</title>
+  <meta name="description" content="TP N°10 B de Redes I: amenazas (sniffing, spoofing, Man-in-the-Middle y DoS), firewall, DMZ y VPN, HTTPS y certificados digitales, Wi-Fi con WPA2 y WPA3 y los riesgos de una Wi-Fi pública. Prof. Nicolás A. Cussi.">
+  <meta name="theme-color" content="#26C9A1">
+  <link rel="preload" href="../assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/barlow-semi-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/estilos.css">
+</head>
+<body data-tp="11">
+
+<!-- ====== Íconos (SVG simples) ====== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Red en estrella: tres equipos conectados a un nodo central -->
+    <symbol id="i-red-solido" viewBox="0 0 48 48">
+      <path d="M24 24V15M24 24L9 36M24 24l15 12" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round"/>
+      <g style="fill:currentColor;stroke:none">
+        <circle cx="24" cy="24" r="5"/>
+        <rect x="17" y="1" width="14" height="10" rx="2"/>
+        <path d="M22.5 10.5h3V13h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+        <rect x="2" y="31" width="14" height="10" rx="2"/>
+        <path d="M7.5 40.5h3V43h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+        <rect x="32" y="31" width="14" height="10" rx="2"/>
+        <path d="M37.5 40.5h3V43h2.75a1.25 1.25 0 0 1 0 2.5h-8.5a1.25 1.25 0 0 1 0-2.5h2.75z"/>
+      </g>
+    </symbol>
+    <symbol id="i-foco" viewBox="0 0 48 48">
+      <path d="M24 2.5v4M10 8.5l2.8 2.8M38 8.5l-2.8 2.8M4 22h4M40 22h4"/>
+      <path d="M24 12a10 10 0 0 0-6.2 17.8c1.4 1.2 2.2 2.6 2.2 4.2v1h8v-1c0-1.6.8-3 2.2-4.2A10 10 0 0 0 24 12z" style="fill:var(--ac)"/>
+      <path d="M20 39h8M21.5 43h5"/>
+    </symbol>
+    <symbol id="i-escudo" viewBox="0 0 48 48">
+      <path d="M24 4 8 10v12c0 10 7 17.5 16 21 9-3.5 16-11 16-21V10z" style="fill:var(--ac)"/>
+      <path d="M17 23.5l5 5 9-10"/>
+    </symbol>
+    <!-- Sniffing: un ojo que mira el tráfico -->
+    <symbol id="i-ojo" viewBox="0 0 48 48">
+      <path d="M3 24S11 11 24 11s21 13 21 13-8 13-21 13S3 24 3 24z" style="fill:var(--blanco)"/>
+      <circle cx="24" cy="24" r="7.5" style="fill:var(--ac)"/>
+      <circle cx="24" cy="24" r="2.6" style="fill:currentColor;stroke:none"/>
+    </symbol>
+    <!-- Spoofing: un antifaz -->
+    <symbol id="i-antifaz" viewBox="0 0 48 48">
+      <path d="M4 16c6-3.5 13.5-3.5 20 0 6.5-3.5 14-3.5 20 0 0 11-5 18-11.5 18-4.5 0-5.5-4.5-8.5-4.5s-4 4.5-8.5 4.5C9 34 4 27 4 16z" style="fill:var(--ac)"/>
+      <path d="M11 22.5c2.4-2.2 5.6-2.2 8 0M29 22.5c2.4-2.2 5.6-2.2 8 0"/>
+    </symbol>
+    <!-- Man-in-the-Middle: alguien en el medio de dos equipos -->
+    <symbol id="i-medio" viewBox="0 0 48 48">
+      <rect x="2" y="15" width="10" height="16" rx="2" style="fill:var(--blanco)"/>
+      <rect x="36" y="15" width="10" height="16" rx="2" style="fill:var(--blanco)"/>
+      <path d="M12 23h4.5M31.5 23H36"/>
+      <circle cx="24" cy="15" r="5.5" style="fill:var(--ac)"/>
+      <path d="M15.5 37c0-6 3.8-10.5 8.5-10.5s8.5 4.5 8.5 10.5z" style="fill:var(--ac)"/>
+    </symbol>
+    <!-- DoS: muchos pedidos contra un servidor -->
+    <symbol id="i-saturar" viewBox="0 0 48 48">
+      <rect x="29" y="7" width="16" height="34" rx="2" style="fill:var(--ac)"/>
+      <path d="M34 15h6M34 22h6M34 29h6"/>
+      <path d="M3 11l19 7.5M3 24h19M3 37l19-7.5"/>
+      <path d="M16.5 13.5l5.5 5-7.5 1.5M17 19.5l5 4.5-5 4.5M14.5 28l7.5 1.5-5.5 5"/>
+    </symbol>
+    <!-- Firewall: un muro de ladrillos -->
+    <symbol id="i-muro" viewBox="0 0 48 48">
+      <rect x="4" y="9" width="40" height="30" rx="2" style="fill:var(--ac)"/>
+      <path d="M4 19h40M4 29h40M17 9v10M31 9v10M10 19v10M24 19v10M38 19v10M17 29v10M31 29v10"/>
+    </symbol>
+    <symbol id="i-servidor" viewBox="0 0 48 48">
+      <rect x="8" y="5" width="32" height="11" rx="2" style="fill:var(--blanco)"/>
+      <rect x="8" y="18.5" width="32" height="11" rx="2" style="fill:var(--blanco)"/>
+      <rect x="8" y="32" width="32" height="11" rx="2" style="fill:var(--blanco)"/>
+      <g style="fill:var(--ac);stroke:none"><circle cx="14" cy="10.5" r="2.2"/><circle cx="14" cy="24" r="2.2"/><circle cx="14" cy="37.5" r="2.2"/></g>
+      <path d="M22 10.5h12M22 24h12M22 37.5h12"/>
+    </symbol>
+    <!-- VPN: la entrada de un túnel -->
+    <symbol id="i-tunel" viewBox="0 0 48 48">
+      <path d="M5 41V27a19 19 0 0 1 38 0v14z" style="fill:var(--ac)"/>
+      <path d="M14 41V28a10 10 0 0 1 20 0v13z" style="fill:var(--blanco)"/>
+      <path d="M2 41h44"/>
+    </symbol>
+    <symbol id="i-candado" viewBox="0 0 48 48">
+      <path d="M15 21v-6a9 9 0 0 1 18 0v6"/>
+      <rect x="9" y="21" width="30" height="22" rx="3" style="fill:var(--ac)"/>
+      <path d="M24 29v6"/>
+    </symbol>
+    <symbol id="i-wifi" viewBox="0 0 48 48">
+      <path d="M5 19a27 27 0 0 1 38 0M11 26a18 18 0 0 1 26 0M17 33a9 9 0 0 1 14 0"/>
+      <circle cx="24" cy="39.5" r="3" style="fill:var(--ac)"/>
+    </symbol>
+    <symbol id="i-importante" viewBox="0 0 48 48">
+      <path d="M24 5 3 42h42z" style="fill:var(--ac)"/>
+      <path d="M24 18v12M24 35.5v.5" style="stroke:var(--blanco)"/>
+    </symbol>
+    <symbol id="i-consejo" viewBox="0 0 48 48">
+      <circle cx="24" cy="24" r="19" style="fill:var(--ac)"/>
+      <path d="M15 24.5l6 6 12-13" style="stroke:var(--blanco)"/>
+    </symbol>
+    <symbol id="i-pc" viewBox="0 0 48 48">
+      <rect x="4" y="7" width="40" height="27" rx="3"/>
+      <rect x="8.5" y="11.5" width="31" height="18" rx="1" style="fill:var(--ac);stroke:none"/>
+      <path d="M24 34v6M16 41h16"/>
+    </symbol>
+    <symbol id="i-lapiz" viewBox="0 0 48 48">
+      <path d="M33 6l9 9-25 25-9-9z" style="fill:var(--ac)"/>
+      <path d="M8 31 5.5 42.5 17 40z" style="fill:var(--blanco)"/>
+      <path d="M27 12l9 9"/>
+    </symbol>
+    <symbol id="i-descarga" viewBox="0 0 24 24">
+      <path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>
+    </symbol>
+    <symbol id="i-atras" viewBox="0 0 24 24">
+      <path d="M20 12H5M11 6l-6 6 6 6"/>
+    </symbol>
+    <symbol id="i-afuera" viewBox="0 0 24 24">
+      <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>
+    </symbol>
+  </defs>
+</svg>
+
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header class="barra">
+  <div class="barra__fila">
+    <a class="boton barra__volver" href="../indice.html"><svg aria-hidden="true" focusable="false"><use href="#i-atras"/></svg><span>Índice</span></a>
+    <span class="barra__titulo">TP N°10 B — Seguridad en redes</span>
+    <button class="boton" type="button" data-imprimir aria-label="Guardar en PDF">
+      <svg aria-hidden="true" focusable="false"><use href="#i-descarga"/></svg><span><span class="boton__largo">Guardar </span>PDF</span>
+    </button>
+  </div>
+  <nav class="partes" aria-label="Partes del TP N°10 B">
+    <a href="#pag-32">32 · Amenazas</a>
+    <a href="#pag-33">33 · Firewall, DMZ y VPN</a>
+    <a href="#pag-34">34 · HTTPS y Wi-Fi</a>
+    <a href="#profundizar">Para profundizar</a>
+    <a href="#actividades">Actividades</a>
+    <a href="#actividades-2">En la compu</a>
+  </nav>
+</header>
+
+<main id="contenido" class="laminas">
+  <h1 class="sr-only">TP N°10 B — Seguridad en redes</h1>
+
+  <!-- =================== LÁMINA 32 =================== -->
+  <article class="lamina lamina--densa lamina--compacta lamina--apretada" id="pag-32" aria-labelledby="t32">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10 B</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t32"><span class="tit__num">32.</span> Amenazas</h2>
+      <p class="tit__sub">Cómo atacan una red y cómo se defiende</p>
+    </div>
+
+    <p class="texto">Una <strong>amenaza</strong> es algo que puede dañar una red o los datos que viajan por ella: leerlos, cambiarlos o cortar el servicio. Contra cada una hay defensas, también llamadas <strong>contramedidas</strong>.</p>
+
+    <ul class="amenazas">
+      <li class="amenaza">
+        <h3 class="amenaza__tit"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-ojo"/></svg><span>Sniffing <small>espiar el tráfico</small></span></h3>
+        <p><strong>Cómo funciona:</strong> captura los paquetes que pasan por la red con un analizador, como Wireshark (TP7), y lee lo que viaja sin cifrar. En una Wi-Fi sin clave, le alcanza con estar cerca.</p>
+        <p class="amenaza__dano"><strong>Qué daño causa:</strong> roba contraseñas y mensajes que viajan sin cifrar; por ejemplo, con HTTP o FTP (TP7).</p>
+        <p class="amenaza__defensa"><strong>Cómo se defiende:</strong> cifrando lo que viaja: HTTPS, Wi-Fi con WPA2 o WPA3 (lámina 34) y VPN (lámina 33).</p>
+      </li>
+      <li class="amenaza">
+        <h3 class="amenaza__tit"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-antifaz"/></svg><span>Spoofing <small>hacerse pasar por otro</small></span></h3>
+        <p><strong>Cómo funciona:</strong> falsifica un dato que identifica a otro: la IP, la MAC, el remitente de un correo o la respuesta del DNS (TP7). Así parece alguien de confianza.</p>
+        <p class="amenaza__dano"><strong>Qué daño causa:</strong> entra donde no tiene permiso, copiando la MAC de un equipo permitido, o lleva a un sitio falso para robar contraseñas.</p>
+        <p class="amenaza__defensa"><strong>Cómo se defiende:</strong> pidiendo una contraseña, y no solo la IP o la MAC; revisando el certificado del sitio (lámina 34) y desconfiando de los correos que piden contraseñas.</p>
+      </li>
+      <li class="amenaza">
+        <h3 class="amenaza__tit"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-medio"/></svg><span>Man-in-the-Middle <small>el intermediario</small></span></h3>
+        <p><strong>Cómo funciona:</strong> se mete en el medio de una comunicación, como entre un celular y el servidor: recibe todo, lo lee y lo reenvía, sin que los dos se den cuenta. A diferencia del sniffing, que solo escucha, puede cambiar lo que pasa.</p>
+        <p class="amenaza__dano"><strong>Qué daño causa:</strong> roba contraseñas y cambia datos en el camino. Un caso típico: una Wi-Fi falsa con el nombre de la del bar (lámina 34).</p>
+        <p class="amenaza__defensa"><strong>Cómo se defiende:</strong> con HTTPS y un certificado válido y, en una Wi-Fi pública, con una VPN (lámina 33).</p>
+      </li>
+      <li class="amenaza">
+        <h3 class="amenaza__tit"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-saturar"/></svg><span>DoS <small>denegación de servicio</small></span></h3>
+        <p><strong>Cómo funciona:</strong> envía muchísimos pedidos falsos a un servidor hasta saturarlo: ya no puede atender a los usuarios reales. Desde miles de equipos a la vez, se llama <strong>DDoS</strong> (DoS distribuido).</p>
+        <p class="amenaza__dano"><strong>Qué daño causa:</strong> el servicio se cae; por ejemplo, el aula virtual no carga el día de la entrega. No roba datos: corta el servicio.</p>
+        <p class="amenaza__defensa"><strong>Cómo se defiende:</strong> con un firewall que filtra y limita el tráfico (lámina 33) y con la protección contra DoS del proveedor.</p>
+      </li>
+    </ul>
+
+    <div class="columnas columnas--ataque">
+      <figure class="esquema esquema--ataque">
+        <svg viewBox="0 0 330 120" role="img" aria-labelledby="sn-t sn-d">
+          <title id="sn-t">Sniffing: el atacante escucha</title>
+          <desc id="sn-d">El celular envía datos al servidor. El atacante no está en el camino: copia y lee lo que viaja, sin tocarlo.</desc>
+          <defs>
+            <marker id="sn-fp" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path class="esq-pide" d="M0 0 10 5 0 10z" style="stroke:none"/></marker>
+            <marker id="sn-fa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path class="esq-ataque" d="M0 0 10 5 0 10z" style="stroke:none"/></marker>
+          </defs>
+          <text class="esq-rot" x="165" y="14" text-anchor="middle">Sniffing: escucha</text>
+          <rect class="esq-caja-pide" x="2" y="26" width="84" height="34" rx="6"/>
+          <text class="esq-rot" x="44" y="48" text-anchor="middle">Celular</text>
+          <rect class="esq-caja-responde" x="244" y="26" width="84" height="34" rx="6"/>
+          <text class="esq-rot" x="286" y="48" text-anchor="middle">Servidor</text>
+          <path class="esq-pide" d="M88 43H238" style="stroke-width:3" marker-end="url(#sn-fp)"/>
+          <text class="esq-txt" x="165" y="37" text-anchor="middle">lo que viaja</text>
+          <path class="esq-ataque esq-sub" d="M165 46V78" marker-end="url(#sn-fa)"/>
+          <text class="esq-txt" x="173" y="68">copia y lee</text>
+          <rect class="esq-caja-ataque" x="115" y="84" width="100" height="32" rx="6"/>
+          <text class="esq-rot" x="165" y="105" text-anchor="middle">Atacante</text>
+        </svg>
+      </figure>
+      <figure class="esquema esquema--ataque">
+        <svg viewBox="0 0 330 120" role="img" aria-labelledby="mm-t mm-d">
+          <title id="mm-t">Man-in-the-Middle: el atacante en el medio</title>
+          <desc id="mm-d">El celular le envía los datos al atacante, que está en el medio. El atacante los recibe, los lee, los puede cambiar y los reenvía al servidor. El celular y el servidor creen que hablan solos.</desc>
+          <defs>
+            <marker id="mm-fp" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path class="esq-pide" d="M0 0 10 5 0 10z" style="stroke:none"/></marker>
+            <marker id="mm-fa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path class="esq-ataque" d="M0 0 10 5 0 10z" style="stroke:none"/></marker>
+          </defs>
+          <text class="esq-rot" x="165" y="14" text-anchor="middle">Man-in-the-Middle: en el medio</text>
+          <rect class="esq-caja-pide" x="2" y="26" width="84" height="34" rx="6"/>
+          <text class="esq-rot" x="44" y="48" text-anchor="middle">Celular</text>
+          <rect class="esq-caja-ataque" x="117" y="26" width="96" height="34" rx="6"/>
+          <text class="esq-rot" x="165" y="48" text-anchor="middle">Atacante</text>
+          <rect class="esq-caja-responde" x="244" y="26" width="84" height="34" rx="6"/>
+          <text class="esq-rot" x="286" y="48" text-anchor="middle">Servidor</text>
+          <path class="esq-pide" d="M88 43H111" style="stroke-width:3" marker-end="url(#mm-fp)"/>
+          <path class="esq-ataque" d="M215 43H238" style="stroke-width:3" marker-end="url(#mm-fa)"/>
+          <text class="esq-txt" x="165" y="80" text-anchor="middle">recibe, lee, puede cambiar</text>
+          <text class="esq-txt" x="165" y="95" text-anchor="middle">y reenvía</text>
+          <text class="esq-txt esq-txt--nota" x="165" y="115" text-anchor="middle">El celular y el servidor creen que hablan solos.</text>
+        </svg>
+      </figure>
+    </div>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> el sniffing escucha, el spoofing engaña, el Man-in-the-Middle se mete en el medio y el DoS satura. Casi todas se frenan cifrando y controlando quién entra.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 32">32</span>
+    </footer>
+  </article>
+
+  <!-- =================== LÁMINA 33 =================== -->
+  <article class="lamina lamina--densa lamina--compacta" id="pag-33" aria-labelledby="t33">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10 B</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t33"><span class="tit__num">33.</span> Firewall, DMZ y VPN</h2>
+      <p class="tit__sub">Qué hace cada uno y dónde se ubica en la red</p>
+    </div>
+
+    <p class="texto">Tres defensas contra las amenazas de la lámina 32. En el esquema, dónde va cada una en la red de un colegio.</p>
+
+    <div class="red-segura">
+      <figure class="esquema esquema--red">
+        <svg viewBox="0 0 400 346" role="img" aria-labelledby="rs-t rs-d">
+          <title id="rs-t">Dónde se ubican el firewall, la DMZ y la VPN</title>
+          <desc id="rs-d">Arriba, Internet y un docente en su casa, con el cliente VPN. En el medio, el firewall, que también es el servidor VPN: separa Internet de la red del colegio. El docente llega al firewall por un túnel VPN, cifrado, que pasa por Internet. Abajo a la izquierda, la DMZ, con los servidores públicos: el servidor web, www.redesdelaula.com, y el servidor de correo. Abajo a la derecha, la red interna, 192.168.1.0/24, con las PC del laboratorio, la impresora y los celulares por Wi-Fi. Las reglas del firewall: 1, de Internet al servidor web pasa. 2, de la red interna a Internet pasa. 3, de Internet a la red interna, si nadie de adentro lo pidió, no pasa. 4, de la DMZ a la red interna, no pasa.</desc>
+          <defs>
+            <marker id="rs-f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path class="sg-punta" d="M0 0 10 5 0 10z"/></marker>
+            <marker id="rs-fn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path class="sg-punta sg-punta--no" d="M0 0 10 5 0 10z"/></marker>
+          </defs>
+          <!-- Docente en su casa y el túnel VPN -->
+          <rect class="sg-cliente" x="4" y="6" width="120" height="44" rx="7"/>
+          <text class="sg-rot" x="64" y="24" text-anchor="middle">Docente en su casa</text>
+          <text class="sg-txt" x="64" y="40" text-anchor="middle">cliente VPN</text>
+          <rect class="sg-tunel" x="48" y="50" width="32" height="60"/>
+          <path class="sg-candado" d="M59.5 80v-4a4.5 4.5 0 0 1 9 0v4"/>
+          <rect class="sg-candado-cuerpo" x="56" y="80" width="16" height="12" rx="2"/>
+          <text class="sg-rot" x="87" y="76">Túnel VPN</text>
+          <text class="sg-txt" x="87" y="91">cifrado, por Internet</text>
+          <!-- Internet -->
+          <path class="sg-nube" d="M246 72a18 18 0 0 1 2-36 26 26 0 0 1 49-12 20 20 0 0 1 32 12 18 18 0 0 1 4 36z"/>
+          <text class="sg-tit" x="289" y="58" text-anchor="middle">Internet</text>
+          <path class="sg-linea" d="M270 72V110"/>
+          <path class="sg-flecha sg-flecha--no" d="M336 54H372V104" marker-end="url(#rs-fn)"/>
+          <circle class="sg-n sg-n--no" cx="385" cy="80" r="9"/><text class="sg-n-txt" x="385" y="84" text-anchor="middle">3</text>
+          <!-- Firewall -->
+          <rect class="sg-muro" x="4" y="110" width="392" height="32" rx="3"/>
+          <path class="sg-ladrillo" d="M4 126h392M36 110v16M84 110v16M132 110v16M180 110v16M228 110v16M276 110v16M324 110v16M372 110v16M60 126v16M108 126v16M156 126v16M204 126v16M252 126v16M300 126v16M348 126v16"/>
+          <rect class="sg-muro-rot" x="122" y="115" width="156" height="22" rx="11"/>
+          <text class="sg-rot" x="200" y="130.5" text-anchor="middle">Firewall y servidor VPN</text>
+          <!-- Reglas 1 y 2 -->
+          <path class="sg-flecha" d="M100 142V172" marker-end="url(#rs-f)"/>
+          <circle class="sg-n sg-n--si" cx="118" cy="160" r="9"/><text class="sg-n-txt" x="118" y="164" text-anchor="middle">1</text>
+          <path class="sg-flecha" d="M300 178V148" marker-end="url(#rs-f)"/>
+          <circle class="sg-n sg-n--si" cx="318" cy="160" r="9"/><text class="sg-n-txt" x="318" y="164" text-anchor="middle">2</text>
+          <!-- DMZ -->
+          <rect class="sg-zona sg-zona--dmz" x="4" y="180" width="178" height="162" rx="8"/>
+          <text class="sg-tit" x="16" y="201">DMZ</text>
+          <text class="sg-txt" x="16" y="217">servidores públicos</text>
+          <rect class="sg-equipo sg-equipo--dmz" x="14" y="228" width="158" height="46" rx="5"/>
+          <text class="sg-rot" x="23" y="247">Servidor web</text>
+          <text class="esq-mono" x="23" y="264">www.redesdelaula.com</text>
+          <rect class="sg-equipo sg-equipo--dmz" x="14" y="284" width="158" height="46" rx="5"/>
+          <text class="sg-rot" x="23" y="303">Servidor de correo</text>
+          <text class="sg-txt" x="23" y="320">el correo del colegio</text>
+          <!-- Red interna -->
+          <rect class="sg-zona sg-zona--red" x="218" y="180" width="178" height="162" rx="8"/>
+          <text class="sg-tit" x="230" y="201">Red interna</text>
+          <text class="esq-mono" x="230" y="217">192.168.1.0/24</text>
+          <rect class="sg-equipo sg-equipo--red" x="228" y="228" width="158" height="30" rx="5"/>
+          <text class="sg-rot" x="237" y="247.5">PC del laboratorio</text>
+          <rect class="sg-equipo sg-equipo--red" x="228" y="264" width="158" height="30" rx="5"/>
+          <text class="sg-rot" x="237" y="283.5">Impresora</text>
+          <rect class="sg-equipo sg-equipo--red" x="228" y="300" width="158" height="30" rx="5"/>
+          <text class="sg-rot" x="237" y="319.5">Celulares (Wi-Fi)</text>
+          <!-- Regla 4 -->
+          <path class="sg-flecha sg-flecha--no" d="M183 284H212" marker-end="url(#rs-fn)"/>
+          <circle class="sg-n sg-n--no" cx="200" cy="266" r="9"/><text class="sg-n-txt" x="200" y="270" text-anchor="middle">4</text>
+        </svg>
+        <figcaption>Línea llena: el firewall deja pasar. Punteada: lo bloquea. Cada número es una regla del firewall.</figcaption>
+        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p>El firewall está en <span class="menu">Advanced</span> › <span class="menu">Security</span> › <span class="menu">Firewall &amp; DoS Protection</span> <span class="menu-trad">(Seguridad › Firewall y protección DoS)</span>.</p></div>
+      </figure>
+
+      <section class="panel medida" aria-labelledby="fw33">
+        <div class="medida__cab">
+          <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-muro"/></svg>
+          <h3 class="subtitulo" id="fw33">Firewall <span>cortafuegos</span></h3>
+        </div>
+        <p><strong>Qué hace:</strong> revisa cada paquete que entra o sale y lo deja pasar o lo bloquea, según sus <strong>reglas</strong>: la IP de origen y de destino, el puerto y el protocolo (TP7).</p>
+        <p><strong>Dónde se ubica:</strong> en el borde, entre Internet y la red. El router de casa trae uno, y cada PC puede tener el suyo.</p>
+        <h4 class="medida__sub" id="rg33">Las reglas del esquema</h4>
+        <ol class="lista-pasos reglas-fw" aria-labelledby="rg33">
+          <li class="grupo grupo--ok"><b>1</b><span>Internet → servidor web, puerto 443 (HTTPS): <strong>pasa</strong>.</span></li>
+          <li class="grupo grupo--ok"><b>2</b><span>Red interna → Internet: <strong>pasa</strong>.</span></li>
+          <li class="grupo grupo--error"><b>3</b><span>Internet → red interna, si nadie de adentro lo pidió: <strong>no pasa</strong>.</span></li>
+          <li class="grupo grupo--error"><b>4</b><span>DMZ → red interna: <strong>no pasa</strong>.</span></li>
+        </ol>
+      </section>
+    </div>
+
+    <div class="columnas">
+      <section class="panel medida" aria-labelledby="dmz33">
+        <div class="medida__cab">
+          <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-servidor"/></svg>
+          <h3 class="subtitulo" id="dmz33">DMZ <span>zona desmilitarizada</span></h3>
+        </div>
+        <p><strong>Qué hace:</strong> aparta del resto de la red los servidores que atienden desde Internet, como el servidor web o el de correo. Si un atacante entra a un servidor de la DMZ, el firewall no lo deja pasar a la red interna (regla 4).</p>
+        <p><strong>Dónde se ubica:</strong> es una red aparte, detrás del firewall, entre Internet y la red interna.</p>
+      </section>
+      <section class="panel medida" aria-labelledby="vpn33">
+        <div class="medida__cab">
+          <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-tunel"/></svg>
+          <h3 class="subtitulo" id="vpn33">VPN <span>red privada virtual</span></h3>
+        </div>
+        <p><strong>Qué hace:</strong> arma un <strong>túnel cifrado</strong> por Internet entre un equipo de afuera y la red. Nadie puede leer lo que viaja por el túnel, y el equipo trabaja como si estuviera adentro.</p>
+        <p><strong>Dónde se ubica:</strong> el servidor VPN, en el borde de la red (en el firewall o el router); el cliente VPN, en el equipo de afuera. Por ejemplo, un docente que desde su casa usa una carpeta compartida del colegio (TP6).</p>
+      </section>
+    </div>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> el firewall decide qué pasa y qué no; la DMZ aparta los servidores públicos de la red interna; la VPN lleva los datos cifrados por Internet.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 33">33</span>
+    </footer>
+  </article>
+
+  <!-- =================== LÁMINA 34 =================== -->
+  <article class="lamina lamina--densa lamina--compacta lamina--apretada lamina--seg" id="pag-34" aria-labelledby="t34">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10 B</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="t34"><span class="tit__num">34.</span> HTTPS y Wi-Fi</h2>
+      <p class="tit__sub">Certificados digitales, WPA2 y WPA3, y la Wi-Fi pública</p>
+    </div>
+
+    <div class="columnas">
+      <section class="panel" aria-labelledby="https34">
+        <div class="panel__cab">
+          <h3 class="subtitulo" id="https34">HTTP y HTTPS</h3>
+          <p class="panel__nota">HTTPS es HTTP<br>cifrado (TP7)</p>
+        </div>
+        <ul class="comparar comparar--compacto comparar--apilado">
+          <li class="grupo"><div><h4>HTTP · puerto 80</h4><p>Viaja <strong>sin cifrar</strong>: quien captura el tráfico lo lee. No tiene certificado; el navegador dice «No seguro».</p></div></li>
+          <li class="grupo grupo--naranja"><div><h4>HTTPS · puerto 443</h4><p>Viaja <strong>cifrado</strong>: quien lo captura ve datos sin sentido. Tiene certificado; el navegador muestra el candado.</p></div></li>
+        </ul>
+      </section>
+
+      <section class="panel" aria-labelledby="cert34">
+        <div class="panel__cab">
+          <h3 class="subtitulo" id="cert34">El certificado digital</h3>
+          <svg class="ico ico--s" aria-hidden="true" focusable="false"><use href="#i-candado"/></svg>
+        </div>
+        <p>Es como el DNI de un sitio web: prueba que el servidor es el de ese dominio. Lo emite una <strong>autoridad de certificación</strong>, en la que confía el navegador. Tiene el dominio, quién lo emitió y hasta cuándo vale.</p>
+        <div class="nota nota--importante">
+          <h4><svg class="ico tit-ico" aria-hidden="true" focusable="false"><use href="#i-importante"/></svg>Si no es válido, no sigas</h4>
+          <p>Si es falso, venció o es de otro dominio, el navegador avisa «La conexión no es privada»: puede ser un Man-in-the-Middle (lámina 32).</p>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel" aria-labelledby="wpa34">
+      <div class="panel__cab">
+        <h3 class="subtitulo" id="wpa34">WPA2 y WPA3</h3>
+        <p class="panel__nota">La seguridad<br>del Wi-Fi (TP9)</p>
+      </div>
+      <p>Las dos cifran con <strong>AES</strong> lo que viaja por el aire. En la versión <strong>Personal</strong>, todos usan la misma clave: por eso se llama <strong>WPA2-PSK</strong> (<em>pre-shared key</em>, clave compartida). WPA2 es lo mínimo; WPA3 es la más nueva.</p>
+      <table class="tabla-comp tabla-comp--http tabla-comp--seg">
+        <caption class="sr-only">Comparación entre WPA2 y WPA3</caption>
+        <thead>
+          <tr><th scope="col">Aspecto</th><th scope="col" class="grupo">WPA2</th><th scope="col" class="grupo grupo--naranja">WPA3</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Adivinar la clave</th><td>Con una captura de la conexión, se prueban millones de claves en una PC.</td><td>Cada prueba obliga a conectarse a la red: adivinar es muy lento.</td></tr>
+          <tr><th scope="row">Si otro sabe la clave</th><td>Puede llegar a leer lo que mandan los demás.</td><td>No puede: cada equipo cifra con su propia clave.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div class="columnas">
+      <section class="panel" aria-labelledby="wifi34">
+        <div class="panel__cab">
+          <h3 class="subtitulo" id="wifi34">Wi-Fi: el estándar 802.11</h3>
+          <svg class="ico ico--s" aria-hidden="true" focusable="false"><use href="#i-wifi"/></svg>
+        </div>
+        <p><strong>Wi-Fi</strong> es el nombre de las redes inalámbricas del estándar <strong>IEEE 802.11</strong> (TP1). Cada versión es más rápida: 802.11n (Wi-Fi 4), 802.11ac (Wi-Fi 5) y 802.11ax (Wi-Fi 6). La banda de <strong>2,4 GHz</strong> llega más lejos y atraviesa mejor las paredes; la de <strong>5 GHz</strong> es más rápida, pero llega menos.</p>
+        <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p><strong>TL-WR850N v3:</strong> 802.11b/g/n, solo 2,4 GHz; sin WPA3 (TP9).</p></div>
+      </section>
+
+      <section class="panel" aria-labelledby="pub34">
+        <div class="panel__cab"><h3 class="subtitulo" id="pub34">Riesgos de una Wi-Fi pública</h3></div>
+        <ul class="pf__lista riesgos" aria-labelledby="pub34">
+          <li><strong>Red abierta:</strong> sin clave, nada se cifra: cualquiera cerca hace sniffing.</li>
+          <li><strong>Red falsa:</strong> con el nombre de la del bar, para hacer un Man-in-the-Middle.</li>
+          <li><strong>Equipos a la vista:</strong> los demás ven tu PC y sus carpetas compartidas (TP6).</li>
+        </ul>
+        <div class="nota nota--consejo">
+          <h4><svg class="ico tit-ico" aria-hidden="true" focusable="false"><use href="#i-consejo"/></svg>Recomendación</h4>
+          <p>Solo HTTPS, nada de contraseñas importantes; mejor, datos del celular o VPN. En Windows, «Red pública». Al irte, olvidá la red.</p>
+        </div>
+      </section>
+    </div>
+
+    <aside class="idea" aria-label="Idea clave">
+      <span class="idea__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-foco"/></svg></span>
+      <p><strong>Idea clave:</strong> HTTPS cifra lo que viaja y el certificado prueba quién es el sitio. En el Wi-Fi, WPA2 es lo mínimo y WPA3, lo mejor. La Wi-Fi pública puede ser abierta o falsa.</p>
+    </aside>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num" aria-label="Lámina 34">34</span>
+    </footer>
+  </article>
+
+  <!-- =================== PARA PROFUNDIZAR =================== -->
+  <article class="lamina lamina--pf" id="profundizar" aria-labelledby="tpf">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10 B</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <div class="tit">
+      <h2 class="tit__h" id="tpf"><span class="tit__num">+</span> Para profundizar</h2>
+      <p class="tit__sub">Engaños, la DMZ del router, el certificado y las contraseñas</p>
+    </div>
+
+    <div class="pf-grid">
+      <section class="pf" aria-labelledby="pf32">
+        <p class="pf__etiqueta">Lámina 32</p>
+        <h3 class="pf__titulo" id="pf32">Phishing: el engaño por correo</h3>
+        <div class="pf__cols">
+          <div class="pf__texto">
+            <p>Muchos ataques no son técnicos: engañan a una persona. El <strong>phishing</strong> es un correo o un mensaje falso, con el logo de un banco o del colegio, que pide la contraseña o lleva a un sitio falso. Es un spoofing del remitente.</p>
+            <p>Pistas: el apuro («tu cuenta se cierra hoy»), los errores de escritura y un link a otro dominio.</p>
+          </div>
+          <div class="pf__caja">
+            <h4>DDoS con cámaras y routers</h4>
+            <p>Muchos DDoS usan miles de equipos infectados: cámaras y routers que siguen con la contraseña de fábrica (TP9). El dueño no se entera. Por eso, lo primero es cambiarla.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="pf" aria-labelledby="pf33">
+        <p class="pf__etiqueta">Lámina 33</p>
+        <h3 class="pf__titulo" id="pf33">La DMZ del router de casa</h3>
+        <div class="pf__cols">
+          <div class="pf__texto">
+            <p>Muchos routers tienen una opción DMZ: todo lo que llega a la IP pública va a un solo equipo de la red. No es una DMZ de verdad: ese equipo queda expuesto a Internet, sin el firewall.</p>
+            <p>El port forwarding (TP9) abre un solo puerto. Para entrar desde afuera, una <strong>VPN</strong> es más segura que abrir puertos: un puerto abierto deja un equipo a la vista de todo Internet; la VPN pide clave y cifra todo.</p>
+          </div>
+          <div class="pf__caja">
+            <h4>El firewall de Windows</h4>
+            <p>Windows trae el suyo, el Firewall de Windows Defender. Si un programa quiere recibir conexiones, avisa que «bloqueó algunas características de esta aplicación» y pregunta en qué redes permitirlo: mejor, solo en las privadas.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="pf" aria-labelledby="pf34">
+        <p class="pf__etiqueta">Lámina 34</p>
+        <h3 class="pf__titulo" id="pf34">Ver el certificado de un sitio</h3>
+        <div class="pf__cols">
+          <div class="pf__texto">
+            <p>En Chrome, el candado es un ícono de ajustes, a la izquierda de la dirección: tocalo › «La conexión es segura» › «El certificado es válido». Muestra para quién se emitió, quién lo emitió y el período de validez.</p>
+          </div>
+          <div class="pf__caja">
+            <h4>WEP, TKIP y WPS</h4>
+            <p><strong>WEP</strong>, el cifrado más viejo, se rompe en minutos; <strong>TKIP</strong>, el del primer WPA, también es débil: conviene AES. <strong>WPS</strong> conecta con un botón o un PIN de 8 números, que se adivina probando: conviene desactivarlo.</p>
+            <div class="lab"><h4 class="lab__tit">En el router del laboratorio</h4> <p>Un toque corto al botón WPS/RESET activa WPS.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pf" aria-labelledby="pf-capas">
+        <p class="pf__etiqueta">Láminas 32 a 34</p>
+        <h3 class="pf__titulo" id="pf-capas">Ninguna defensa alcanza sola</h3>
+        <div class="pf__cols">
+          <div class="pf__texto">
+            <p>Cada defensa frena algo distinto. Por eso se usan juntas, en capas:</p>
+            <ul class="pf__lista">
+              <li><strong>El router:</strong> la contraseña de administrador y el firmware al día (TP9).</li>
+              <li><strong>El Wi-Fi:</strong> WPA2 o WPA3, con una clave larga.</li>
+              <li><strong>El borde de la red:</strong> el firewall.</li>
+              <li><strong>Lo que viaja:</strong> HTTPS y, desde afuera, una VPN.</li>
+              <li><strong>Las personas:</strong> no dar contraseñas por correo y hacer caso a los avisos del navegador.</li>
+            </ul>
+          </div>
+          <div class="pf__caja pf__caja--consejo">
+            <h4>Una contraseña segura</h4>
+            <p>Larga, de 12 caracteres o más: una frase de varias palabras se recuerda fácil y es difícil de adivinar. Distinta en cada cuenta, nunca la de fábrica y sin compartirla.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 10 B</span>
+    </footer>
+  </article>
+
+  <!-- =================== ACTIVIDADES EN LA CARPETA =================== -->
+  <article class="lamina lamina--act lamina--densa lamina--apretada" id="actividades" aria-labelledby="act-1">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10 B</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <header class="act-banda">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-lapiz"/></svg>
+      <div>
+        <h2 id="act-1">Actividades para hacer en la carpeta</h2>
+        <p>TP N°10 B — Seguridad en redes</p>
+      </div>
+    </header>
+
+    <p class="consigna"><strong>Consigna:</strong> Respondé cada punto de forma completa, usando tus propias palabras. Podés apoyarte en las láminas y en “Para profundizar” del TP N°10 B.</p>
+
+    <ol class="acts">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">1-</span> Amenazas</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div><strong>En grupo:</strong> cada grupo toma una amenaza (sniffing, spoofing, Man-in-the-Middle o DoS) y se la explica al curso: cómo funciona, qué daño causa y cómo se defiende.</div></li>
+          <li><b class="act__letra">b)</b><div>Copiá el cuadro de amenazas y contramedidas y completalo con las cuatro amenazas.
+            <table class="act-tabla act-tabla--compacta act-tabla--baja">
+              <caption class="sr-only">Cuadro para completar con cada amenaza y sus contramedidas</caption>
+              <thead><tr><th scope="col">Amenaza</th><th scope="col">Cómo funciona</th><th scope="col">Qué daño causa</th><th scope="col">Contramedidas</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Sniffing</th><td></td><td></td><td></td></tr>
+                <tr><th scope="row">Spoofing</th><td></td><td></td><td></td></tr>
+                <tr><th scope="row">Man-in-the-Middle</th><td></td><td></td><td></td></tr>
+                <tr><th scope="row">DoS</th><td></td><td></td><td></td></tr>
+              </tbody>
+            </table></div></li>
+          <li><b class="act__letra">c)</b><div>¿Qué diferencia hay entre el sniffing y el Man-in-the-Middle?</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <ol class="acts acts--2col" start="2">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">2-</span> Firewall, DMZ y VPN</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Dibujá un diagrama con Internet, el firewall, la DMZ y la red interna de un colegio. Ubicá el servidor web, las PC y la VPN de un docente desde su casa.</div></li>
+          <li><b class="act__letra">b)</b><div>Explicá qué hace cada uno: firewall / DMZ / VPN.</div></li>
+          <li><b class="act__letra">c)</b><div>¿Por qué el servidor web va en la DMZ y no en la red interna?</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">3-</span> HTTPS y Wi-Fi</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>¿Qué diferencia hay entre HTTP y HTTPS? Indicá el puerto de cada uno y qué ve quien captura el tráfico.</div></li>
+          <li><b class="act__letra">b)</b><div>¿Qué es un certificado digital? ¿Qué datos tiene y qué pasa si no es válido?</div></li>
+          <li><b class="act__letra">c)</b><div>Compará WPA2 y WPA3: si alguien quiere adivinar la clave, y si otro la sabe.</div></li>
+          <li><b class="act__letra">d)</b><div>Nombrá los tres riesgos de una Wi-Fi pública y dos recomendaciones.</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <ol class="acts" start="4">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">4-</span> Caso integrador</h3>
+        <p class="act__caso">La red que configuraste en el TP9 (Configurando el router), ¿qué le falta para ser segura?</p>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>¿Qué configuraste en el TP9 que ya cuida la red? Explicá para qué sirve cada cosa.</div></li>
+          <li><b class="act__letra">b)</b><div>¿Qué le falta? Proponé tres defensas de este TP y justificá cada una.</div></li>
+          <li><b class="act__letra">c)</b><div>Un docente entra desde su casa: ¿le conviene el port forwarding o una VPN? ¿Por qué?</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 10 B</span>
+    </footer>
+  </article>
+
+  <!-- =================== ACTIVIDADES EN LA COMPUTADORA =================== -->
+  <article class="lamina lamina--act lamina--compu lamina--densa" id="actividades-2" aria-labelledby="act-2">
+    <div class="cab" aria-hidden="true">
+      <svg class="cab__logo"><use href="#i-red-solido"/></svg>
+      <div class="cab__marca"><b>REDES INFORMÁTICAS I</b><span>5.º AÑO</span></div>
+      <div class="cab__lema">TRABAJO PRÁCTICO <span class="cab__lema-n">N°10 B</span></div>
+      <span class="cab__raya"></span>
+    </div>
+
+    <header class="act-banda">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pc"/></svg>
+      <div>
+        <h2 id="act-2">Actividades para hacer en la computadora</h2>
+        <p>TP N°10 B — Seguridad en redes · Práctica individual</p>
+      </div>
+    </header>
+
+    <p class="consigna"><strong>Consigna:</strong> Revisá la seguridad de la red en el simulador del router, desde una computadora. Es el mismo simulador del TP9 (Configurando el router): la lista de la pestaña «Práctica» es la de ese TP, y en este no se usa.</p>
+
+    <p class="ir-sim">
+      <a class="boton boton--grande no-imprimir" href="https://prof-nkocussi.github.io/App-Router-Simulador/" target="_blank" rel="noopener"><svg aria-hidden="true" focusable="false"><use href="#i-afuera"/></svg><span>Entrá al simulador del router</span><span class="sr-only"> (se abre en otra pestaña)</span></a>
+      <span class="solo-papel">Simulador del router: <b>prof-nkocussi.github.io/App-Router-Simulador</b></span>
+    </p>
+
+    <ol class="acts acts--2col">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">1-</span> Contraseña de administrador</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>Entrá a <code>http://tplinkwifi.net</code> o a <code class="cod-ip">192.168.0.1</code>. Si no sabés la contraseña, tocá «Forgot password?» y hacé lo que indica. Después, creá la contraseña de administrador.</div></li>
+          <li><b class="act__letra">b)</b><div>En <span class="menu">Advanced</span> › <span class="menu">System Tools</span> › <span class="menu">Administration</span>, cambiala por una contraseña segura (“Para profundizar”).</div></li>
+          <li><b class="act__letra">c)</b><div>Cerrá la sesión con <span class="menu">Log out</span> y volvé a entrar con la contraseña nueva.</div></li>
+        </ol>
+      </li>
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">2-</span> Seguridad del Wi-Fi</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>En <span class="menu">Advanced</span> › <span class="menu">Wireless</span> › <span class="menu">Wireless Settings</span>, revisá que diga <span class="menu">WPA/WPA2 Personal</span>, con <span class="menu">WPA2-PSK</span> y <span class="menu">AES</span>.</div></li>
+          <li><b class="act__letra">b)</b><div>Cambiá la clave de fábrica (está en la etiqueta, en «Router») por una propia de 8 caracteres o más, y <span class="menu">Save</span>.</div></li>
+          <li><b class="act__letra">c)</b><div>En «Celular», buscá tu red: ¿tiene el candado? Conectate con la clave nueva.</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <ol class="acts" start="3">
+      <li class="act">
+        <h3 class="act__titulo"><span class="act__num">3-</span> Control de acceso</h3>
+        <ol class="act__items">
+          <li><b class="act__letra">a)</b><div>En <span class="menu">Advanced</span> › <span class="menu">Security</span> › <span class="menu">Access Control</span>, activá <span class="menu">Access Control</span> con <span class="menu">Blacklist</span> <span class="menu-trad">(lista negra)</span> y <span class="menu">Save</span>. En <span class="menu">Online Devices</span>, marcá el «Celular» y tocá <span class="menu">Block</span>.</div></li>
+          <li><b class="act__letra">b)</b><div>En «Celular», probá conectarte a tu red: ¿qué pasa? Después, en la lista negra, tocá <span class="menu">Delete</span>: ¿qué pasa con el celular?</div></li>
+        </ol>
+      </li>
+    </ol>
+
+    <section class="entrega" aria-labelledby="entrega11">
+      <h3 class="entrega__tit" id="entrega11">Entrega</h3>
+      <p>Una captura de cada paso <span class="sin-corte">(<kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>)</span>, en el documento ya creado en Classroom:</p>
+      <ul class="entrega__lista">
+        <li>El aviso «contraseña de administrador cambiada».</li>
+        <li><span class="menu">Wireless Settings</span>, con <span class="menu">WPA/WPA2 Personal</span>, <span class="menu">WPA2-PSK</span> y <span class="menu">AES</span>.</li>
+        <li>El «Celular» conectado a tu red.</li>
+        <li>El «Celular» bloqueado, con el aviso «No se pudo conectar a la red».</li>
+      </ul>
+    </section>
+
+    <footer class="pie">
+      <span class="pie__linea"></span>
+      <span>Redes I — Prof. Nicolás A. Cussi</span>
+      <span class="pie__linea"></span>
+      <span class="pie__num">TP 10 B</span>
+    </footer>
+  </article>
+</main>
+
+<script src="../assets/js/actividades.js"></script>
+</body>
+</html>

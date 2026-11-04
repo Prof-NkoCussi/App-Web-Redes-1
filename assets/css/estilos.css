@@ -509,7 +509,7 @@ button.boton { border: 0; font-family: inherit; line-height: inherit; cursor: po
 .act-tabla thead th { background: var(--acento-claro); font-weight: 700; color: var(--tinta); text-align: center; }
 .act-tabla tbody th { font-weight: 600; color: var(--tinta); }
 
-/* Actividades en la computadora (solo TP8, TP9 y TP10) */
+/* Actividades en la computadora (solo TP8, TP9, TP10 y TP11) */
 /* Mismo hilo de color que la carpeta: el acento, un tono más oscuro, con texto oscuro encima */
 .lamina--compu .act-banda { background: var(--acento-fuerte); }
 .lamina--compu .act__num { background: var(--acento-fuerte); }
@@ -1095,6 +1095,10 @@ a.tp:hover { border-color: var(--acento); }
 .tp__titulo { font-weight: 700; font-size: 17px; color: var(--tinta); }
 .tp__temas { font-size: 14.5px; line-height: 1.35; }
 .tp__meta { font-size: 12.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--gris); }
+/* TP N°10 B: el número lleva la letra y la tarjeta, una bajada (un renglón más) */
+.tp__num { white-space: nowrap; }
+.tp__bajada { font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--gris); }
+.tp__bajada ~ .tp__meta { grid-column: 2; }
 /* TP no activo: tarjeta "apagada" con colores, sin opacidad (así el texto mantiene 4,5:1) */
 .tp--pronto { background: transparent; border-color: var(--panel); box-shadow: inset 6px 0 0 var(--acento-claro); }
 .tp--pronto .tp__num { color: var(--gris-sub); }
@@ -1715,4 +1719,101 @@ code.cod-url { overflow-wrap: normal; }
   .ruta { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0 18px; }
   .lamina--entrega { gap: 3mm; }
   .lamina--entrega .act-banda h2 { font-size: 32px; }
+}
+
+/* ==========================================================
+   TP11 (se muestra como TP N°10 B): seguridad en redes
+   ========================================================== */
+/* Amenazas: una tarjeta por amenaza, con cómo funciona, el daño (rojo) y la defensa (verde) */
+.amenazas { display: grid; gap: 10px; }
+.amenaza { display: grid; gap: 5px; align-content: start; background: var(--panel); border-radius: var(--radio); padding: 10px 12px 12px; }
+.amenaza__tit { display: flex; align-items: center; gap: 10px; font-family: var(--fuente-titulo); font-weight: 700; font-size: 21px; line-height: 1.1; color: var(--tinta); }
+.amenaza__tit .ico { width: 40px; height: 40px; }
+.amenaza__tit small { display: block; font-family: var(--fuente); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gris); }
+.amenaza p { font-size: 15px; line-height: 1.36; }
+.amenaza__dano, .amenaza__defensa { background: var(--blanco); border-radius: 6px; padding: 4px 10px 5px 13px; }
+.amenaza__dano { box-shadow: inset 4px 0 0 var(--error); }
+.amenaza__defensa { box-shadow: inset 4px 0 0 var(--ok); }
+
+/* Esquemas del atacante: sniffing y Man-in-the-Middle */
+.esquema--ataque svg { max-width: 310px; }
+.esq-caja-ataque { fill: var(--error-claro); stroke: var(--error); stroke-width: 1.5; }
+.esq-ataque { stroke: var(--error); fill: var(--error); }
+.esquema .esq-txt--nota { font-style: italic; fill: var(--gris); }
+
+/* Firewall, DMZ y VPN: el esquema de la red y cada defensa */
+.red-segura { display: grid; gap: 12px; align-items: start; }
+.esquema--red { display: grid; gap: 4px; align-content: start; }
+.esquema--red svg { max-width: 420px; }
+.esquema--red figcaption { margin-top: 0; font-size: 13.5px; color: var(--gris); }
+.esquema .sg-tit { font-size: 15px; font-weight: 700; }
+.esquema .sg-rot { font-size: 12.5px; font-weight: 700; }
+.esquema .sg-txt { font-size: 12px; fill: var(--texto); }
+.sg-cliente { fill: var(--acento-claro); stroke: var(--acento); stroke-width: 1.5; }
+.sg-tunel { fill: var(--acento-claro); stroke: var(--acento-texto); stroke-width: 1.5; stroke-dasharray: 5 3; }
+.sg-candado { fill: none; stroke: var(--tinta); stroke-width: 2; }
+.sg-candado-cuerpo { fill: var(--tinta); }
+.sg-nube { fill: var(--panel); stroke: var(--gris); stroke-width: 2; }
+.sg-linea { fill: none; stroke: var(--tinta); stroke-width: 2.5; }
+.sg-muro { fill: var(--panel-oscuro); stroke: var(--tinta); stroke-width: 1.5; }
+.sg-ladrillo { fill: none; stroke: var(--gris); stroke-width: 1.2; }
+.sg-muro-rot { fill: var(--blanco); stroke: var(--tinta); stroke-width: 1.2; }
+.sg-flecha { fill: none; stroke: var(--tinta); stroke-width: 2.5; }
+.sg-flecha--no { stroke: var(--error); stroke-dasharray: 5 4; }
+.sg-punta { fill: var(--tinta); }
+.sg-punta--no { fill: var(--error); }
+.sg-n--si { fill: var(--ok); }
+.sg-n--no { fill: var(--error); }
+.esquema .sg-n-txt { font-family: var(--fuente-titular); font-weight: 800; font-size: 12.5px; fill: var(--blanco); }
+.sg-zona { stroke-width: 2; }
+.sg-zona--dmz { fill: var(--naranja-claro); stroke: var(--naranja); }
+.sg-zona--red { fill: var(--acento-suave); stroke: var(--acento); }
+.sg-equipo { fill: var(--blanco); stroke-width: 1.2; }
+.sg-equipo--dmz { stroke: var(--naranja); }
+.sg-equipo--red { stroke: var(--acento); }
+.medida { display: grid; gap: 6px; align-content: start; }
+.medida__cab { display: flex; align-items: center; gap: 10px; }
+.medida__cab .ico { width: 40px; height: 40px; }
+.medida__cab .subtitulo span { font-family: var(--fuente); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gris); margin-left: 4px; }
+.medida p { font-size: 15px; line-height: 1.38; }
+.medida__sub { margin-top: 2px; font-family: var(--fuente-titulo); font-weight: 700; font-size: 16px; color: var(--tinta); }
+/* Reglas del firewall: pasa (verde) o no pasa (rojo); el número, en blanco */
+.lista-pasos.reglas-fw li { font-size: 14.5px; grid-template-columns: 28px 1fr; padding: 4px 10px 4px 5px; }
+.lista-pasos.reglas-fw b { height: 26px; font-size: 18px; color: var(--blanco); }
+.esquema--red .lab { margin-top: 6px; }
+/* Cuadro de la carpeta con filas más bajas */
+.act-tabla.act-tabla--baja td, .act-tabla.act-tabla--baja tbody th { height: 22px; }
+
+/* HTTPS y Wi-Fi: HTTP y HTTPS, una tarjeta debajo de la otra, y la tabla de WPA2 y WPA3 */
+.comparar.comparar--apilado { grid-template-columns: 1fr; gap: 6px; }
+.comparar--apilado li { background: var(--blanco); }
+.tabla-comp.tabla-comp--seg thead th:first-child, .tabla-comp.tabla-comp--seg tbody th { width: 22%; }
+.panel .tabla-comp--seg tbody th, .panel .tabla-comp--seg td { background: var(--blanco); }
+.lamina--seg .panel > .nota { margin-top: 2px; }
+.riesgos li { font-size: 15px; line-height: 1.36; }
+.lamina--apretada .act__items > li { line-height: 1.32; }
+.lamina--seg .panel > .nota h4 { font-size: 16.5px; }
+.nota--consejo h4 { color: var(--ok); }
+
+@media (min-width: 600px), print {
+  .amenazas { grid-template-columns: 1fr 1fr; }
+  .red-segura { grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); }
+}
+
+@media (min-width: 860px), print {
+  .amenaza { padding: 8px 12px 10px; gap: 4px; }
+  .amenaza p { font-size: 14px; line-height: 1.33; }
+  .amenaza__dano, .amenaza__defensa { padding: 3px 10px 4px 13px; }
+  .medida p { font-size: 14px; line-height: 1.35; }
+  .lamina--compacta .tabla-comp--seg th, .lamina--compacta .tabla-comp--seg td { font-size: 14px; padding: 4px 9px; line-height: 1.3; }
+  .lamina--compacta .tabla-comp--seg thead th { font-size: 15px; padding: 4px 8px; }
+  .lamina .lista-pasos.reglas-fw li { font-size: 13.5px; line-height: 1.28; padding: 3px 10px 3px 4px; }
+  .lamina .lista-pasos.reglas-fw b { height: 24px; font-size: 16px; }
+  .lamina--seg .panel > p, .lamina--seg .comparar--apilado p { font-size: 14px; line-height: 1.36; }
+  .lamina--seg .comparar.comparar--compacto li { padding: 6px 12px; }
+  .lamina--seg .comparar.comparar--compacto h4 { font-size: 17px; margin-bottom: 2px; }
+  .lamina--seg .nota { padding: 6px 12px 7px 16px; gap: 2px; }
+  .lamina--seg .nota p { font-size: 14px; line-height: 1.36; }
+  .lamina--seg .lab p { font-size: 13.5px; }
+  .lamina--seg .riesgos li { font-size: 14px; line-height: 1.36; }
 }

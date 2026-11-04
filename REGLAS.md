@@ -79,7 +79,7 @@ Cambios sobre el CSS de Base de Datos I:
 - Todo lo otro queda como está: sobre `--acento` sigue yendo texto oscuro (`--tinta`).
 
 Textos fijos:
-- **Cabecera de cada hoja:** `<b>REDES I</b><span>TÉCNICO EN PROGRAMACIÓN · 5.º AÑO</span>` y, a la derecha, `TRABAJO PRÁCTICO N°X` con la barra vertical. Mismas reglas de tamaño y de celular que el repo de origen; la bajada es más larga, verificar a 360 px. La portada no lleva "TRABAJO PRÁCTICO".
+- **Cabecera de cada hoja:** `<b>REDES I</b><span>TÉCNICO EN PROGRAMACIÓN · 5.º AÑO</span>` y, a la derecha, `TRABAJO PRÁCTICO N°X` con la barra vertical. Mismas reglas de tamaño y de celular que el repo de origen; la bajada es más larga, verificar a 360 px. La portada no lleva "TRABAJO PRÁCTICO". (4/11) En el TP11 dice `TRABAJO PRÁCTICO N°10 B` (ver "Numeración visible del TP11").
 - **Pie de cada hoja y de la portada:** `Redes I — Prof. Nicolás A. Cussi` + número de lámina (o `TP N` en profundizar y actividades). En `index.html`, sin número. Antes de "Prof." va guion largo (—).
 - **Portada (`index.html`),** con el formato de la de Programación y el nombre de la escuela:
   ```html
@@ -122,13 +122,14 @@ Cada color significa algo y nunca es el único dato: siempre va con texto o íco
 - **Código dentro del texto** (13/10): `<code>` va en **rojo rosado** (`--codigo-*`), no en el verde del acento. Va así todo lo que se escribe tal cual en la PC, el navegador o el código: comandos, IP, puertos, URL y dominios, rutas y endpoints, verbos con su ruta (`GET /libros/12`), JavaScript (`async function`, `respuesta.json()`), headers (`Access-Control-Allow-Origin`), JSON y XML (`<venta>1535</venta>`). Las clases `cod-cmd` y `cod-ip` quedan en el HTML, pero ya no cambian el color. `code.cod-archivo`, en ámbar, para carpetas y nombres de archivo.
 - **Recuadros:** `div.nota.nota--importante` (naranja) y `div.nota.nota--consejo` o `.pf__caja--consejo` ("Recomendación", verde), con su ícono delante del título (`#i-importante`, `#i-consejo`).
 - **Actividades:** en la carpeta, con el acento. En la computadora, `article.lamina--compu`, con `--acento-fuerte` (el acento un tono más oscuro, con texto oscuro encima), para seguir el mismo hilo de color (10/10).
-- **Portada:** cada tarjeta `.tp` lleva la franja izquierda del acento. Etiquetas en `.tp__meta`, antes de "Láminas": `etq--sim` ("Simulador", en los TPs que tienen uno) y `etq--compu` ("En la compu", verde, en los TP8, TP9 y TP10).
+- **Portada:** cada tarjeta `.tp` lleva la franja izquierda del acento. Etiquetas en `.tp__meta`, antes de "Láminas": `etq--sim` ("Simulador", en los TPs que tienen uno) y `etq--compu` ("En la compu", verde, en los TP8, TP9, TP10 y TP11).
+- **Amenazas (TP11, 4/11):** en cada tarjeta de amenaza, "Qué daño causa" lleva la franja roja (`--error`, falla) y "Cómo se defiende", la verde (`--ok`, recomendación). En los esquemas, el atacante va en rojo. En el esquema de la red, las reglas del firewall que dejan pasar van en verde con línea llena, y las que bloquean, en rojo con línea punteada.
 
 ## Formato de cada TP
 
 Copiar la estructura de `_fuente/modelo-tp01.html` hasta que exista el primer TP de Redes; después, la de ese TP.
 
-1. **Barra superior** (`header.barra`): botón "Índice" · "TP N°X — nombre del TP" · botón PDF (`data-imprimir`). Debajo, `nav.partes` con accesos a cada lámina, al simulador, a "Para profundizar", a "Actividades" y a "Paso a paso" (este último, solo cuando la página existe). En el TP10, también a "Entrega y evaluación". Verificar a 360 px (el TP7 tiene nombre largo).
+1. **Barra superior** (`header.barra`): botón "Índice" · "TP N°X — nombre del TP" (en el TP11, "TP N°10 B — Seguridad en redes") · botón PDF (`data-imprimir`). Debajo, `nav.partes` con accesos a cada lámina, al simulador, a "Para profundizar", a "Actividades" y a "Paso a paso" (este último, solo cuando la página existe). En el TP10, también a "Entrega y evaluación". Verificar a 360 px (el TP7 tiene nombre largo).
 2. **Láminas** (`article.lamina#pag-N`): `.cab` → `.tit` (número + título + subtítulo) → bloques → `.idea` (Idea clave) → `.pie`. **3 láminas por TP**; el TP7 tiene 5, el TP8 4 y el TP10 1.
 3. **Para profundizar** (`article.lamina.lamina--pf#profundizar`): `.pf-grid` de 2×2, un bloque `.pf` por lámina (texto + recuadro `.pf__caja`). Con 3 láminas, el cuarto bloque integra. En el TP7 puede usar dos hojas; en el TP8 (4 láminas, un bloque por lámina), también. (22/10) En el TP10 (una lámina), dos hojas con un bloque por pregunta de la defensa: F12 › Red y los puertos; las IP y el video. (23/10: se sacó la hoja de `ping`.)
 4. **Actividades para hacer en la carpeta** (`article.lamina.lamina--act#actividades`), con la estructura de los .docx de la materia:
@@ -138,7 +139,8 @@ Copiar la estructura de `_fuente/modelo-tp01.html` hasta que exista el primer TP
    - **Un punto por lámina + un caso integrador.** En una sola hoja (dos en el TP7 y en el TP8). Más cortas que en Base de Datos: no se suman 2 o 3 puntos extra. El TP9 no lleva caso integrador. (23/10) **El TP10 no tiene actividades en la carpeta:** es todo práctica.
    - Sin cierre: no llevan `REALIZAR EN LA CARPETA.` ni `Fecha límite`.
    - Sin corrección automática.
-5. **Actividades para hacer en la computadora** (`article.lamina--compu#actividades-2`), solo en los TP8, TP9 y TP10: pasos numerados y un recuadro "Entrega" con la lista de lo que se entrega, con viñetas (10/10: sin casillas; en el TP9, una sola línea, sin lista).
+5. **Actividades para hacer en la computadora** (`article.lamina--compu#actividades-2`), solo en los TP8, TP9, TP10 y TP11: pasos numerados y un recuadro "Entrega" con la lista de lo que se entrega, con viñetas (10/10: sin casillas; en el TP9, una sola línea, sin lista).
+   - (4/11) **TP11:** una sola hoja, corta, en el simulador del router: contraseña de administrador, seguridad del Wi-Fi y control de acceso. "Entrega" con viñetas: una captura por paso.
    - (22/10) **TP10:** dos hojas. La primera: la consigna, "¿Qué es el TP final?", "El objetivo" y la bitácora. La segunda: la ruta de trabajo, una etapa por bloque, cada una con lo que hacen y su entregable, y el recuadro "Entrega". Después va "Entrega y evaluación" (`#entrega`, dos partes, porque no entra en una A4): qué reciben y qué hacen y el checklist de entrega; cómo se evalúa, las preguntas de la defensa y las reglas y cuidados.
    - **Excepción del TP10:** el checklist de entrega va **con casillas**, tal como está en la guía de Nicolás.
 6. **Mini-juego:** si el TP tiene juego en la app Redes I Games, cierra con el botón "Jugar el mini-juego de este TP". Ver "Componentes nuevos".
@@ -186,6 +188,7 @@ El repo de origen no tiene nada interactivo. Lo que sigue se crea en el TP donde
   - Los pasos de «Práctica» (`assets/js/practica.js`) llevan las mismas palabras que las actividades en la compu del TP9: si se cambia una, se cambia la otra.
   - La entrega es solo la captura del resumen, que trae un código y muestra cada paso con ✓ (10/10: sin el `config.bin`).
   - Pantallas provisorias, armadas sin captura del router real: Backup & Restore, el formulario Add de Address Reservation, Administration y el formulario Add de Access Control. Se corrigen cuando Nicolás mande las capturas.
+  - (4/11) **El TP11 también usa el simulador,** solo con pantallas que ya tiene: el ingreso («Forgot password?»), `Advanced › System Tools › Administration`, `Advanced › Wireless › Wireless Settings` (WPA/WPA2 Personal, WPA2-PSK, AES), `Advanced › Security › Access Control` (Blacklist, Online Devices, Block, Delete), «Celular» y «Router». La pestaña «Práctica» es la del TP9 y en el TP11 no se usa. `Firewall & DoS Protection` figura en el menú, pero sin pantalla ("Esta opción no se usa en la práctica"): por eso no está en la práctica del TP11.
 - **Diagramas:** todos en SVG simple, con `role="img"` y texto alternativo: topologías, recorrido de un paquete, handshake, encapsulación, cliente-servidor, capas, publicar/suscribirse de MQTT, arquitectura del YoLo. Si hace falta una foto real (rack, patch panel), dejar un marcador visible: `[FOTO: qué mostrar]`.
 - **Botón del mini-juego:** enlace a la app ya publicada (`https://prof-nkocussi.github.io/App-redes-games/`, repo `Prof-NkoCussi/App-redes-games`, un juego por carpeta `games/tpN/`). Confirmar la URL de cada juego en ese repo. Hoy hay juego de los TP1 a TP5. El botón va solo en los TPs que tienen juego. El cuadernillo linkea a la app: no se fusionan.
 - **Código JavaScript** (TP8 y TP10): `let` y `const`, `===`, punto y coma, comillas dobles, textos unidos con `+`. Las peticiones se escriben con `async function` y `await fetch()`, como receta fija; `.then()` solo se nombra en "Para profundizar". Al lado de cada ejemplo va escrita la salida esperada.
@@ -233,7 +236,7 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - **No adelantar temas de TPs posteriores.** Sí retomar los anteriores, nombrando el TP.
 - **Windows:** `ipconfig` en el TP9. (23/10) `ping` no va en el TP10, ni en la teoría ni en las actividades: queda para Redes II, con `tracert`, `nslookup` y `netstat`. El equivalente de Linux (`ifconfig`) se nombra solo en "Para profundizar".
 - **Simplificaciones acordadas:** DNS y DHCP usan UDP; HTTP, HTTPS, FTP, SSH, SMTP, POP3 e IMAP usan TCP. No entrar en excepciones (DNS sobre TCP, HTTP/3).
-- **Seguridad:** el TP11 es de soporte y puede no darse. Lo mínimo va antes: HTTPS en el TP7; credenciales por defecto y WPA2/WPA3 en el TP9.
+- **Seguridad:** (4/11) el TP11 es la alternativa al proyecto integrador, para los cursos que no lo hacen con Software II. Lo mínimo va antes: HTTPS en el TP7; credenciales por defecto y WPA2/WPA3 en el TP9.
 - Palabras: "celular", "notebook", "puerta de enlace" (y `gateway` entre paréntesis la primera vez), "contraseña".
 - **Grupos en los ejemplos** (23/10): cuando una actividad o un ejemplo nombra un grupo, va siempre **"GRUPO 1"**. Nunca un nombre inventado (como "grupo Faro").
 
@@ -255,7 +258,7 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 | 8 | APIs REST y MQTT | 24–27 | cliente-servidor, recursos y endpoints · verbos HTTP y códigos de respuesta · JSON y `fetch` · MQTT: broker, publisher, subscriber y tópicos | Petición real |
 | 9 | Configurando el router | 28–30 | la IP de la PC: `ipconfig` e IP fija en Windows · cómo funciona un router y cómo se entra · configurar el router: Wi-Fi, DHCP e IP fijas | Simulador del panel, app aparte |
 | 10 | Proyecto integrador YoLo | 31 | mapa del proyecto: app web → servidor → broker MQTT → robot (ESP32-CAM), el protocolo y el puerto de cada tramo, y el video directo a la app. El resto es práctica en la compu (6 etapas) y la hoja "Entrega y evaluación" | — |
-| 11 | Seguridad en redes (de soporte) | 32–34 | amenazas (sniffing, spoofing, Man-in-the-Middle, DoS) · firewall, DMZ y VPN · HTTPS, certificados y Wi-Fi (WPA2, WPA3, redes públicas) | — |
+| 11 | Seguridad en redes (se muestra como "TP N°10 B") | 32–34 | amenazas (sniffing, spoofing, Man-in-the-Middle, DoS) · firewall, DMZ y VPN · HTTPS, certificados y Wi-Fi (WPA2, WPA3, redes públicas) | — |
 
 ### Detalle de los TP7 a TP11 (texto nuevo)
 
@@ -303,11 +306,15 @@ Cada TP tiene además `unidades/tpNN-pasos.html`: el mismo tema en formato guiad
 - **El cuadernillo no publica la solución.**
 - **Datos que no están en la guía y se supusieron** (22/10, a confirmar con Nicolás): el servidor y el broker corren en la misma PC (la guía solo pide `ping` al robot y al servidor); la IP del robot se reserva en el router por su MAC, porque el robot no se abre; la PC del servidor lleva IP fija o reservada; para el video, el robot atiende como servidor HTTP y la app lo pide a la IP del robot; el código del ejemplo de F12 › Red es `200`. IP de ejemplo, con los datos del cuadernillo: router `192.168.1.1`, PC del servidor `192.168.1.10`, robot `192.168.1.20`, PC con la app `192.168.1.25`.
 
-**TP11 · Seguridad en redes**
-- L32 **Amenazas:** sniffing, spoofing, Man-in-the-Middle y DoS: cómo funciona cada una, qué daño causa y cómo se defiende.
-- L33 **Firewall, DMZ y VPN:** qué hace cada uno y en qué parte de la red se ubica.
-- L34 **HTTPS y Wi-Fi:** HTTP y HTTPS, certificados digitales; WPA2 y WPA3; riesgos de una red Wi-Fi pública.
-- Caso integrador: el propio YoLo. ¿Qué le falta para ser seguro?
+**TP11 · Seguridad en redes** (C, 4/11)
+- **Es un TP normal, de 3 láminas, con la estructura de los anteriores.** No es trabajo final y no se articula con el TP10: en ninguna parte del TP11 se nombra al YoLo ni al proyecto.
+- **Numeración visible del TP11:** se muestra como **"TP N°10 B · Seguridad en redes"**, porque es la alternativa al proyecto integrador (TP10) para los cursos que no lo hacen con Software II. Cambia solo el texto visible: la barra ("TP N°10 B — Seguridad en redes"), la cabecera de cada hoja ("TRABAJO PRÁCTICO N°10 B"), el `<title>`, la banda de las actividades, la consigna, el pie ("TP 10 B") y la tarjeta del índice (número "10 B" y la bajada "Para los cursos que no hacen el proyecto integrador"). En el README, la fila dice "10 B". Por dentro sigue siendo el TP11: `unidades/tp11.html`, `data-tp="11"`, la clave `redes:tp-visto-11` y las láminas 32 a 34.
+- L32 **Amenazas:** sniffing, spoofing, Man-in-the-Middle y DoS: cómo funciona cada una, qué daño causa y cómo se defiende (también llamadas contramedidas). Dos esquemas SVG: el sniffing escucha y el Man-in-the-Middle se mete en el medio.
+- L33 **Firewall, DMZ y VPN:** qué hace cada uno y dónde se ubica en la red, con un esquema SVG de la red de un colegio (Internet, el docente en su casa con el túnel VPN, el firewall con el servidor VPN, la DMZ con el servidor web y el de correo, y la red interna) y las cuatro reglas del firewall del esquema.
+- L34 **HTTPS y Wi-Fi:** HTTP y HTTPS (retoma el TP7) y el certificado digital; WPA2 y WPA3 (AES, WPA2-PSK); Wi-Fi, el estándar IEEE 802.11 (802.11n, ac y ax; 2,4 y 5 GHz); los riesgos de una Wi-Fi pública y la recomendación.
+- "Para profundizar", un bloque por lámina y uno que integra: phishing y los DDoS con equipos que siguen con la contraseña de fábrica; la DMZ del router de casa, port forwarding o VPN, y el Firewall de Windows Defender; ver el certificado en Chrome, y WEP, TKIP y WPS; "Ninguna defensa alcanza sola" y una contraseña segura.
+- Caso integrador: "La red que configuraste en el TP9 (Configurando el router), ¿qué le falta para ser segura?".
+- Sin simulador dentro de la página: la práctica en la compu se hace en el simulador del router, con las pantallas que ya tiene.
 
 ### TP1 a TP6: migración
 
@@ -338,11 +345,14 @@ El contenido ya está escrito y verificado. Fuente: las diapositivas de Gamma (e
   - (23/10) La guía cambió: grupos de 2; el objetivo 2 sin `ping`; el 5, solo "commits claros"; el checklist de GitHub con un solo ítem, sin el script `.bat` ni las capturas del `ping`; la última pregunta de la defensa es "¿Qué hiciste vos, cuál fue tu rol en el grupo?". El cuadernillo sigue la guía nueva.
   - Sin fechas: la guía dice "miércoles 11/11" y "2/12 o 4/12"; en el cuadernillo no van, porque se reusa todos los años. Las fechas van en Classroom.
   - (C) "Identificar vulnerabilidades" pasa al TP11.
-- **TP11.** Trabajo grupal: cada grupo toma una amenaza (sniffing, spoofing, Man-in-the-Middle, DoS) y explica cómo funciona, qué daño causa y qué defensas existen. Cuadro general de amenazas y contramedidas. Diagrama con la ubicación de firewall, DMZ y VPN. Diferencia entre HTTP y HTTPS y qué son los certificados digitales. WPA2, WPA3 y riesgos de las redes Wi-Fi públicas. (C) "Investigación" pasa a "explicación con el material". (C) Caso integrador sobre el YoLo.
+- **TP11.** Trabajo grupal: cada grupo toma una amenaza (sniffing, spoofing, Man-in-the-Middle, DoS) y explica cómo funciona, qué daño causa y qué defensas existen. Cuadro general de amenazas y contramedidas. Diagrama con la ubicación de firewall, DMZ y VPN. Diferencia entre HTTP y HTTPS y qué son los certificados digitales. WPA2, WPA3 y riesgos de las redes Wi-Fi públicas. (C) "Investigación" pasa a "explicación con el material". (C, 4/11) Caso integrador: "La red que configuraste en el TP9, ¿qué le falta para ser segura?", nombrando el TP9 por su nombre (reemplaza el caso del YoLo).
+  - Carpeta: un punto por lámina + el caso integrador, en una hoja.
+  - (4/11) Computadora, individual y corta, en el simulador del router: 1. Contraseña de administrador (entrar; si no se sabe, «Forgot password?» y reset de fábrica; crearla; cambiarla en Administration; Log out y volver a entrar). 2. Seguridad del Wi-Fi (WPA/WPA2 Personal, WPA2-PSK y AES; cambiar la clave de fábrica de la etiqueta; conectar el «Celular»). 3. Control de acceso (Access Control con Blacklist; bloquear el «Celular» desde Online Devices, probar y sacarlo con Delete).
+  - Entrega, con viñetas: una captura por paso en el documento ya creado en Classroom (el aviso «contraseña de administrador cambiada»; Wireless Settings con WPA/WPA2 Personal, WPA2-PSK y AES; el «Celular» conectado; el «Celular» bloqueado con «No se pudo conectar a la red»).
 
 ## Orden de producción
 
-TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primero los TP7 a TP10; el TP11 solo si sobra tiempo; los TP1 a TP6 se migran después, porque los alumnos ya los tienen en .docx. Mientras tanto, en el índice los TP1 a TP6 figuran con "Material en Classroom" y los demás con "Próximamente".
+TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primero los TP7 a TP10; el TP11 (visible como TP N°10 B), en los cursos que no hacen el proyecto integrador; los TP1 a TP6 se migran después, porque los alumnos ya los tienen en .docx. Mientras tanto, en el índice los TP1 a TP6 figuran con "Material en Classroom" y los demás con "Próximamente".
 
 ## Decisiones confirmadas (4/10)
 
@@ -389,7 +399,20 @@ TP7 → TP8 → TP9 → TP10 → TP11 → TP1 a TP6. Este ciclo se dictan primer
 - La versión paso a paso del TP10 (`tp10-pasos.html`) se hace más adelante, cuando Nicolás lo pida.
 - (23/10) El TP10 no lleva actividades en la carpeta: es para practicar, no teoría en la carpeta. Quedan la lámina 31, "Para profundizar", la práctica en la compu y "Entrega y evaluación".
 
+## Decisiones confirmadas (4/11)
+
+- **TP11 · Seguridad en redes:** TP normal de 3 láminas (32 a 34), con la estructura de los anteriores. No es trabajo final ni se articula con el TP10: no se nombra al YoLo ni al proyecto.
+- Se muestra como **"TP N°10 B"**: es la alternativa al proyecto integrador para los cursos que no lo hacen con Software II. Por dentro sigue siendo el TP11 (archivo, `data-tp`, `localStorage` y láminas).
+- Caso integrador: la red que configuraron en el TP9 (Configurando el router), ¿qué le falta para ser segura?
+- Práctica en la compu, corta, en el simulador del router, solo con las pantallas que ya tiene. Entrega con viñetas.
+- La versión paso a paso (`tp11-pasos.html`) se hace más adelante, cuando Nicolás lo pida.
+
 ## Pendientes a consultar con Nicolás
+
+- **TP11:** versión paso a paso (`tp11-pasos.html`), cuando Nicolás lo pida.
+- **TP11:** confirmar en el panel real la ruta `Advanced › Security › Firewall & DoS Protection` (lámina 33): sale del menú del simulador, no de una captura. Si se quiere un paso de firewall en la compu, el simulador necesita esa pantalla.
+- **TP11:** crear en Classroom el documento para las capturas de la práctica en la compu ("en el documento ya creado en Classroom").
+- **Simulador del router:** al crear la contraseña de administrador, el aviso «"admin" es una contraseña de fábrica» nunca aparece: antes salta el de "al menos 8 caracteres", porque «admin» tiene 5.
 
 - **TP8:** probar desde el colegio DolarAPI (simulador y ejemplos), Open-Meteo y PokéAPI, y el modelo: descargar el `.zip`, descomprimirlo y abrir `index.html` con doble clic.
 - **TP8:** versión paso a paso (`tp08-pasos.html`), después de que Nicolás apruebe el texto. Solo conceptos, sin programar.
